@@ -1,0 +1,35 @@
+name: Calmaria Android
+
+on:
+  push:
+    paths:
+      - "calmaria/**"
+      - ".github/workflows/calmaria-android.yml"
+  pull_request:
+    paths:
+      - "calmaria/**"
+      - ".github/workflows/calmaria-android.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: calmaria
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Test and build release APK
+        run: ./gradlew --no-daemon :app:testDebugUnitTest :app:assembleRelease
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: calmaria-apk
+          path: calmaria/app/build/outputs/apk/release/app-release.apk

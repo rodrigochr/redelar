@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Calmaria</string>
+
+    <!-- Navigation -->
+    <string name="tab_sounds">Sounds</string>
+    <string name="tab_journeys">Journeys</string>
+    <string name="tab_favorites">Favorites</string>
+    <string name="tab_alarm">Alarm</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Categories -->
+    <string name="cat_rain">Rain &amp; water</string>
+    <string name="cat_nature">Nature &amp; forest</string>
+    <string name="cat_city">City &amp; home</string>
+    <string name="cat_noise">Noise</string>
+    <string name="cat_meditation">Meditation &amp; music</string>
+
+    <!-- Sounds -->
+    <string name="s_rain_light">Light rain</string>
+    <string name="s_rain_medium">Rain</string>
+    <string name="s_rain_heavy">Heavy rain</string>
+    <string name="s_rain_thunder">Thunderstorm</string>
+    <string name="s_rain_umbrella">Rain on umbrella</string>
+    <string name="s_rain_roof">Rain on roof</string>
+    <string name="s_rain_window">Rain on window</string>
+    <string name="s_rain_leaves">Rain on leaves</string>
+    <string name="s_rain_tent">Rain on tent</string>
+    <string name="s_water_drops">Water drops</string>
+    <string name="s_ocean">Ocean waves</string>
+    <string name="s_shore">Gentle shore</string>
+    <string name="s_stream">Stream</string>
+    <string name="s_river">River</string>
+    <string name="s_waterfall">Waterfall</string>
+    <string name="s_underwater">Underwater</string>
+    <string name="s_wind">Wind</string>
+    <string name="s_wind_trees">Wind in trees</string>
+    <string name="s_howling_wind">Howling wind</string>
+    <string name="s_blizzard">Snowstorm</string>
+    <string name="s_thunder">Thunder</string>
+    <string name="s_forest_birds">Forest birds</string>
+    <string name="s_morning_birds">Morning birds</string>
+    <string name="s_doves">Doves</string>
+    <string name="s_owl">Owl</string>
+    <string name="s_crickets">Crickets</string>
+    <string name="s_cicadas">Cicadas</string>
+    <string name="s_frogs">Frogs</string>
+    <string name="s_campfire">Campfire</string>
+    <string name="s_night_forest">Night forest</string>
+    <string name="s_city">City traffic</string>
+    <string name="s_train">Train</string>
+    <string name="s_airplane">Airplane cabin</string>
+    <string name="s_car">Car ride</string>
+    <string name="s_cafe">Café</string>
+    <string name="s_keyboard">Keyboard</string>
+    <string name="s_clock">Clock</string>
+    <string name="s_fan">Fan</string>
+    <string name="s_air_conditioner">Air conditioner</string>
+    <string name="s_washing_machine">Washing machine</string>
+    <string name="s_hair_dryer">Hair dryer</string>
+    <string name="s_fireplace">Fireplace</string>
+    <string name="s_white_noise">White noise</string>
+    <string name="s_pink_noise">Pink noise</string>
+    <string name="s_brown_noise">Brown noise</string>
+    <string name="s_deep_brown">Deep brown noise</string>
+    <string name="s_green_noise">Green noise</string>
+    <string name="s_heartbeat">Heartbeat</string>
+    <string name="s_womb">Womb</string>
+    <string name="s_shush">Shush</string>
+    <string name="s_singing_bowl">Singing bowl</string>
+    <string name="s_wind_chimes">Wind chimes</string>
+    <string name="s_om">Om drone</string>
+    <string name="s_pad">Ambient pad</string>
+    <string name="s_kalimba">Kalimba</string>
+    <string name="s_piano">Soft piano</string>
+    <string name="s_music_box">Music box</string>
+    <string name="s_binaural_delta">Delta waves</string>
+    <string name="s_binaural_theta">Theta waves</string>
+    <string name="s_binaural_alpha">Alpha waves</string>
+
+    <!-- Mixer -->
+    <string name="mixer_play">Play</string>
+    <string name="mixer_pause">Pause</string>
+    <string name="mixer_timer">Sleep timer</string>
+    <string name="mixer_favorite">Save to favorites</string>
+    <string name="mixer_unfavorite">Remove from favorites</string>
+    <string name="mixer_collapse">Collapse mixer</string>
+    <string name="mixer_expand">Expand mixer</string>
+    <string name="mixer_remove">Remove %1$s</string>
+    <string name="mixer_volume">%1$s volume</string>
+    <string name="mix_limit">You can mix up to %1$d sounds</string>
+
+    <!-- Timer -->
+    <string name="timer_title">Sleep timer</string>
+    <string name="timer_off">Off</string>
+    <string name="timer_minutes">%1$d min</string>
+    <string name="timer_hours">%1$d h</string>
+    <string name="timer_hours_minutes">%1$d h %2$d min</string>
+    <string name="timer_fade_hint">Sounds fade out gently when the timer ends.</string>
+
+    <!-- Favorites -->
+    <string name="fav_dialog_title">Save mix</string>
+    <string name="fav_name">Name</string>
+    <string name="fav_default_name">My mix %1$d</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_empty_title">No favorites yet</string>
+    <string name="favorites_empty_body">Build a mix on the Sounds tab and tap ♥ to keep it here.</string>
+    <string name="fav_saved">Saved to favorites</string>
+    <string name="fav_removed">Removed from favorites</string>
+    <string name="play_item">Play %1$s</string>
+    <string name="more_options">More options</string>
+
+    <!-- Journeys -->
+    <string name="journeys_title">Journeys</string>
+    <string name="journeys_subtitle">Soundscapes that slowly change through the night.</string>
+    <string name="journey_meta">%1$d stages · %2$d min, then stays</string>
+    <string name="journey_meta_single">One scene · all night</string>
+    <string name="journey_playing">Playing</string>
+    <string name="journey_stage">%1$s · stage %2$d of %3$d</string>
+    <string name="j_storm_cabin">Cabin in the storm</string>
+    <string name="j_storm_cabin_desc">A crackling fireplace as a storm rolls over the roof, then settles into soft rain.</string>
+    <string name="j_forest_night">Forest at nightfall</string>
+    <string name="j_forest_night_desc">Birdsong by a stream gives way to crickets, a campfire and a distant owl.</string>
+    <string name="j_beach">Night at the beach</string>
+    <string name="j_beach_desc">Big waves and sea breeze, calming into a quiet shoreline.</string>
+    <string name="j_night_train">Night train</string>
+    <string name="j_night_train_desc">The steady rhythm of the rails with rain on the window.</string>
+    <string name="j_rainy_cafe">Rainy café</string>
+    <string name="j_rainy_cafe_desc">Murmurs and soft piano while it pours outside, then just the rain and a warm fire.</string>
+    <string name="j_temple">Mountain temple</string>
+    <string name="j_temple_desc">Singing bowls, wind chimes and a mountain stream, drifting into a low Om.</string>
+    <string name="j_camping">Camping by the lake</string>
+    <string name="j_camping_desc">Fire, frogs and crickets, until rain starts tapping on the tent.</string>
+    <string name="j_flight">Overnight flight</string>
+    <string name="j_flight_desc">The deep, even hum of a long-haul cabin.</string>
+    <string name="j_deep_sleep">Deep sleep</string>
+    <string name="j_deep_sleep_desc">Rain and brown noise with gentle delta waves, getting deeper over time.</string>
+    <string name="j_baby">Lullaby for baby</string>
+    <string name="j_baby_desc">Womb sounds, a soft shush and a music box, then just a calm hum.</string>
+
+    <!-- Alarm -->
+    <string name="alarm_title">Alarm</string>
+    <string name="alarm_subtitle">Wake up gently with nature instead of a beep.</string>
+    <string name="alarm_off">Alarm is off</string>
+    <string name="alarm_rings_in">Rings in %1$s</string>
+    <string name="alarm_in_hm">%1$d h %2$d min</string>
+    <string name="alarm_in_m">%1$d min</string>
+    <string name="alarm_repeat">Repeat</string>
+    <string name="alarm_once">Only once</string>
+    <string name="alarm_every_day">Every day</string>
+    <string name="alarm_sound">Wake-up sound</string>
+    <string name="alarm_gradual">Rise gradually</string>
+    <string name="alarm_gradual_desc">Starts quietly and grows over a minute.</string>
+    <string name="alarm_from_favorites">Your favorites</string>
+    <string name="alarm_perm_exact">Allow alarms &amp; reminders so it rings on time.</string>
+    <string name="alarm_perm_notifications">Allow notifications so you can stop the alarm.</string>
+    <string name="alarm_perm_full_screen">Allow full-screen alarms on the lock screen.</string>
+    <string name="allow">Allow</string>
+    <string name="alarm_ringing_title">Good morning</string>
+    <string name="alarm_stop">Stop</string>
+    <string name="alarm_snooze">Snooze 10 min</string>
+    <string name="alarm_set_time">Set time</string>
+    <string name="ok">OK</string>
+    <string name="wake_birds">Birds at dawn</string>
+    <string name="wake_chimes">Wind chimes</string>
+    <string name="wake_waves">Morning waves</string>
+    <string name="wake_bowl">Singing bowl</string>
+    <string name="wake_piano">Soft piano</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="set_section_playback">Playback</string>
+    <string name="set_mix">Play alongside other apps</string>
+    <string name="set_mix_desc">Keeps playing while Spotify, YouTube, podcasts or games play audio. Turn off to pause whenever another app starts playing.</string>
+    <string name="set_calls">Pause during calls</string>
+    <string name="set_calls_desc">Resumes by itself when the call ends.</string>
+    <string name="set_noisy">Pause when headphones disconnect</string>
+    <string name="set_noisy_desc">Avoids suddenly playing through the speaker.</string>
+    <string name="set_fade">Fade out when the timer ends</string>
+    <string name="set_fade_desc">Lowers the volume over the last minute.</string>
+    <string name="set_section_device">Keep playing all night</string>
+    <string name="set_battery">Battery optimization</string>
+    <string name="set_battery_desc">Some phones (Samsung, Xiaomi…) stop background audio to save battery. Excluding Calmaria keeps it playing until morning.</string>
+    <string name="set_battery_ok">Calmaria is already excluded from battery optimization.</string>
+    <string name="set_section_about">About</string>
+    <string name="set_about_body">All %1$d sounds are synthesized live on your phone: no downloads, no internet and no audible loops.</string>
+    <string name="set_version">Version %1$s</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_playback">Playback</string>
+    <string name="notif_channel_alarm">Alarm</string>
+    <string name="notif_playing">Playing</string>
+    <string name="notif_paused">Paused</string>
+    <string name="notif_alarm_text">Tap to stop or snooze</string>
+    <string name="notif_close">Close</string>
+    <string name="notif_more">%1$s + %2$d more</string>
+</resources>
