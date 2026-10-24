@@ -329,7 +329,8 @@ class Player(private val context: Context, private val store: Store) {
         for (item in valid) applyItem(item, 0)
         _state.value = PlayerState(items = valid, playing = true, alarmRinging = true)
         ensureForeground()
-        if (gradual && !engine.isRunning) engine.mixer.resetMaster(0f)
+        // Start from silence even if sleep sounds were still playing when the alarm went off.
+        if (gradual) engine.mixer.resetMaster(0f)
         // Alarms deliberately take transient focus so music pauses while you wake up.
         audioManager.requestAudioFocus(alarmFocusRequest)
         engine.start(AudioAttributes.USAGE_ALARM, if (gradual) ALARM_RISE_MS else 1500)

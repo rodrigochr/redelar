@@ -29,16 +29,21 @@ class Mixer(private val sampleRate: Int) {
     @Volatile
     private var masterStep = 1f
 
-    /** Current master gain, read by the output thread to know when a fade-out has finished. */
+    /** Current master fade position (0..1), read by the output thread to know when a fade-out has finished. */
     @Volatile
     var master = 0f
         private set
+
+    /** A jump requested by [resetMaster], applied by the audio thread so it can't be overwritten mid-block. */
+    @Volatile
+    private var pendingMaster = Float.NaN
 
     private var limiterEnv = 0f
     private val limiterRelease = exp(-1f / (0.15f * sampleRate))
     private val scratch = FloatArray(MAX_FRAMES * 2)
 
-    private fun stepFor(fadeMs: Int): Float = 1f / max(1, fadeMs * sampleRate / 1000)
+    // Long math: a one-minute fade at 48 kHz is 2.88 billion samples' worth of ms * Hz, past Int range.
+    private fun stepFor(fadeMs: Int): Float = 1f / max(1L, fadeMs.toLong() * sampleRate / 1000)
 
     /** Sets a sound's gain, creating its generator with [create] if it is not already in the mix. */
     fun set(id: String, gain: Float, fadeMs: Int, create: () -> SoundGenerator) {
@@ -71,8 +76,9 @@ class Mixer(private val sampleRate: Int) {
 
     /** Jumps the master gain without a ramp, e.g. to start an alarm from silence. */
     fun resetMaster(value: Float) {
-        master = value
         masterTarget = value
+        master = value
+        pendingMaster = value
     }
 
     fun render(out: FloatArray, frames: Int) {
@@ -107,13 +113,19 @@ class Mixer(private val sampleRate: Int) {
         }
         if (finished) dropFinished()
 
+        val reset = pendingMaster
+        if (!reset.isNaN()) {
+            pendingMaster = Float.NaN
+            master = reset
+        }
         var m = master
         val mt = masterTarget
         val ms = masterStep
         var env = limiterEnv
         for (i in 0 until frames) {
             if (m < mt) m = min(mt, m + ms) else if (m > mt) m = max(mt, m - ms)
-            val g = m * OUTPUT_GAIN
+            // Squared so fades sound even to the ear: a linear ramp is loud almost at once.
+            val g = m * m * OUTPUT_GAIN
             var l = out[2 * i] * g
             var r = out[2 * i + 1] * g
             val a = max(abs(l), abs(r))

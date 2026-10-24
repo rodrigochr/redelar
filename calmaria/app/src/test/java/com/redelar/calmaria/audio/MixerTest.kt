@@ -14,7 +14,7 @@ class MixerTest {
 
     private fun Mixer.run(ms: Int): FloatArray {
         val buf = FloatArray(MAX_FRAMES * 2)
-        var left = ms * sr / 1000
+        var left = (ms.toLong() * sr / 1000).toInt()
         while (left > 0) {
             val n = minOf(left, 960)
             render(buf, n)
@@ -62,6 +62,32 @@ class MixerTest {
         m.setMaster(0f, 300)
         m.run(400)
         assertEquals(0f, m.master, 0f)
+    }
+
+    @Test
+    fun minuteLongAlarmRiseStartsQuietAndGrowsGradually() {
+        val m = Mixer(sr)
+        m.set("a", 1f, 0) { Constant(sr, 0.4f) }
+        m.resetMaster(0f)
+        m.setMaster(1f, 60_000)
+        val full = 0.4f * Mixer.OUTPUT_GAIN
+        val after1s = m.run(1_000).last()
+        val after30s = m.run(29_000).last()
+        val after61s = m.run(31_000).last()
+        assertTrue("too loud after 1 s: $after1s", after1s < full * 0.01f)
+        assertTrue("not gradual at 30 s: $after30s", after30s > full * 0.15f && after30s < full * 0.4f)
+        assertEquals(full, after61s, 1e-4f)
+    }
+
+    @Test
+    fun longFadesDoNotOverflow() {
+        val m = Mixer(sr)
+        m.resetMaster(1f)
+        m.set("a", 1f, 0) { Constant(sr, 0.1f) }
+        m.run(10)
+        m.setMaster(0f, 120_000)
+        m.run(60_000)
+        assertTrue("fade ended early or jumped: ${m.master}", m.master in 0.4f..0.6f)
     }
 
     @Test
