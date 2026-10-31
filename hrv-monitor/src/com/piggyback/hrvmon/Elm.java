@@ -29,15 +29,53 @@ final class Elm {
     }
 
     String cmd(String c, long timeoutMs) throws IOException {
-        // Descarta sobras de uma resposta anterior que chegou atrasada.
+        drain();
+        out.write((c + "\r").getBytes(StandardCharsets.US_ASCII));
+        out.flush();
+
+        long t0 = SystemClock.uptimeMillis();
+        StringBuilder sb = new StringBuilder(64);
+        if (!readUntilPrompt(sb, timeoutMs)) {
+            Session.log("→ " + c + "   ⏱ sem resposta em " + timeoutMs + " ms" + received(sb));
+            throw new Timeout("sem resposta para " + c);
+        }
+        Session.log("→ " + c + "   ← " + oneLine(sb) + "  (" + (SystemClock.uptimeMillis() - t0) + " ms)");
+        return sb.toString();
+    }
+
+    /**
+     * Depois de um timeout: espera mais um pouco pelo '>' e, se não vier, manda um caractere
+     * para interromper o adaptador (o ELM327 responde "STOPPED" e volta ao prompt).
+     */
+    void recover() throws IOException {
+        StringBuilder sb = new StringBuilder();
+        if (readUntilPrompt(sb, 1000)) {
+            Session.log("   recuperação: chegou atrasado" + received(sb));
+        } else {
+            // "ATI" e não só "\r": com o adaptador livre, "\r" sozinho repete o último comando.
+            out.write("ATI\r".getBytes(StandardCharsets.US_ASCII));
+            out.flush();
+            sb.setLength(0);
+            boolean ok = readUntilPrompt(sb, 1500);
+            Session.log("   recuperação: interrompido" + (ok ? "" : ", sem prompt") + received(sb));
+        }
+        try {
+            Thread.sleep(150);
+        } catch (InterruptedException e) {
+            throw new IOException("interrompido");
+        }
+        drain();
+    }
+
+    /** Descarta sobras de uma resposta anterior que chegou atrasada. */
+    private void drain() throws IOException {
         int pending;
         while ((pending = in.available()) > 0) {
             if (in.read(buf, 0, Math.min(pending, buf.length)) < 0) throw new IOException("conexão fechada");
         }
-        out.write((c + "\r").getBytes(StandardCharsets.US_ASCII));
-        out.flush();
+    }
 
-        StringBuilder sb = new StringBuilder(64);
+    private boolean readUntilPrompt(StringBuilder sb, long timeoutMs) throws IOException {
         long deadline = SystemClock.uptimeMillis() + timeoutMs;
         while (true) {
             int n = in.available();
@@ -46,11 +84,11 @@ final class Elm {
                 if (r < 0) throw new IOException("conexão fechada");
                 for (int i = 0; i < r; i++) {
                     char ch = (char) (buf[i] & 0xFF);
-                    if (ch == '>') return sb.toString();
+                    if (ch == '>') return true;
                     if (ch != 0) sb.append(ch);
                 }
             } else {
-                if (SystemClock.uptimeMillis() > deadline) throw new Timeout("sem resposta para " + c);
+                if (SystemClock.uptimeMillis() > deadline) return false;
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
@@ -58,6 +96,15 @@ final class Elm {
                 }
             }
         }
+    }
+
+    private static String oneLine(CharSequence s) {
+        String t = s.toString().trim().replaceAll("[\r\n]+", " | ");
+        return t.length() > 160 ? t.substring(0, 160) + "…" : t;
+    }
+
+    private static String received(CharSequence s) {
+        return s.toString().trim().isEmpty() ? "" : "; recebido: " + oneLine(s);
     }
 
     /**

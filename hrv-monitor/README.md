@@ -16,9 +16,11 @@ aceleração forte ("puxada").
 | Pressão do rail | 0x23 ou 0x59 | Limite da bomba de alta pressão |
 | Ar de admissão, motor, trims, etanol, carga, velocidade, MAF, pedal | vários | Contexto |
 
-O app pergunta à ECU quais PIDs ela suporta e só pede esses. Ele tenta vários PIDs por
-pedido (até 6), que é bem mais rápido; se a ECU não aceitar, passa a pedir um por vez.
-O pedido vai só para a ECU do motor (cabeçalho 7E0), para o câmbio não responder junto.
+O app pergunta à ECU quais PIDs ela suporta e só pede esses. Ele tenta 6 PIDs por pedido,
+que é bem mais rápido. Se o pedido travar o adaptador (comum em clones do ELM327) ou voltar
+vazio, cai para 3 e depois para 1 PID por pedido. PIDs que a ECU diz suportar mas nunca
+respondem saem da leitura. O pedido vai só para a ECU do motor (cabeçalho 7E0), para o
+câmbio não responder junto.
 
 ## Puxadas
 
@@ -39,7 +41,8 @@ avisa se:
    celular à rede dele antes e escolha a opção Wi-Fi.
 3. **Salvar log** grava um CSV e um resumo em `Downloads/HRV Monitor` e abre o
    compartilhamento.
-4. **Copiar relatório** copia o resumo (PIDs suportados e puxadas) para colar numa conversa.
+4. **Copiar relatório** copia o resumo (PIDs suportados, puxadas e o registro da
+   comunicação com o adaptador) para colar numa conversa.
 
 Não mexa no celular dirigindo: deixe gravando e confira depois.
 
@@ -49,7 +52,7 @@ Não usa Gradle. Com o Android SDK (`platforms;android-35` e `build-tools;35.0.1
 
 ```
 ./build.sh   # gera build/hrv-monitor.apk
-./test.sh    # roda a lógica contra um ELM327 simulado na JVM
+./test.sh    # roda a lógica contra um ELM327 simulado na JVM (inclui um clone que trava)
 ```
 
 O `debug.keystore` fica no repositório de propósito, para que cada versão nova instale

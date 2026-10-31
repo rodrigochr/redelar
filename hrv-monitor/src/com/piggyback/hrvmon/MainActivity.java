@@ -243,7 +243,7 @@ public final class MainActivity extends Activity {
             shownInfo = info;
             if (sup != null) {
                 StringBuilder b = new StringBuilder(info).append('\n')
-                        .append("Multi-PID: ").append(Session.multi ? "sim" : "não").append("\n\n");
+                        .append("PIDs por pedido: ").append(Session.pidsPerRequest).append("\n\n");
                 for (int pid = 1; pid < 256; pid++) {
                     if (!sup[pid] || pid % 0x20 == 0) continue;
                     b.append(Session.isUsed(pid) ? "★ " : "    ").append(Fmt.hex2(pid)).append("  ")

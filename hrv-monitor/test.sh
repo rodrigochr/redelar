@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Roda o app contra um ELM327 simulado na JVM, nos modos multi-PID, um-PID-por-pedido e com falhas simuladas.
+# Roda o app contra um ELM327 simulado na JVM, nos modos multi-PID, um-PID-por-pedido,
+# com falhas no motor e com um clone que trava em pedidos grandes.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -14,7 +15,7 @@ javac -encoding UTF-8 -Xlint:-options -classpath "$JAR" -d "$OUT" \
     $(find test -name '*.java') \
     src/com/piggyback/hrvmon/{Ch,Pids,Fmt,Elm,Links,Poller,DataStore,PullDetector,Session}.java
 
-for mode in multi single problemas; do
+for mode in multi single problemas clone; do
     echo "=== modo $mode ==="
     java -cp "$OUT:$JAR" com.piggyback.hrvmon.SimTest "$mode"
 done

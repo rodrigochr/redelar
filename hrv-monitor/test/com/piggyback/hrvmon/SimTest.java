@@ -12,8 +12,9 @@ import java.util.Locale;
 
 /**
  * Teste na JVM: um ELM327 simulado com uma ECU que responde como a de um 1.5 turbo,
- * incluindo respostas ISO-TP de vários quadros e uma puxada de 2 s a 6 s.
- * Uso: SimTest [multi|single|problemas]
+ * incluindo respostas ISO-TP de vários quadros e uma puxada de 4 s.
+ * Modos: multi (ECU aceita 6 PIDs por pedido), single (só 1), problemas (puxada com
+ * mistura pobre, queda de rail e de avanço), clone (adaptador trava com mais de 3 PIDs).
  */
 public final class SimTest {
     static final int[] SUPPORTED = {0x04, 0x05, 0x06, 0x07, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11,
@@ -23,7 +24,10 @@ public final class SimTest {
         String mode = args.length == 0 ? "multi" : args[0];
         final boolean multiCapable = !mode.equals("single");
         final boolean problems = mode.equals("problemas");
-        final Sim sim = new Sim(multiCapable, problems);
+        final boolean clone = mode.equals("clone");
+        // No modo clone a puxada começa mais tarde: o app perde alguns segundos se adaptando.
+        final float pullStart = clone ? 7f : 2f;
+        final Sim sim = new Sim(multiCapable, problems, clone, pullStart);
         Links.Factory f = new Links.Factory() {
             @Override
             public Links.Link open() {
@@ -40,7 +44,7 @@ public final class SimTest {
         Session.poller = p;
         Thread t = new Thread(p);
         t.start();
-        Thread.sleep(9000);
+        Thread.sleep((long) ((pullStart + 7f) * 1000));
         p.stop();
         t.join(2000);
 
@@ -49,7 +53,7 @@ public final class SimTest {
         System.out.println("amostras: " + rows.size() + " · leituras/s: " + Session.rateHz);
         System.out.println(Session.report());
         float[] mid = null;
-        for (float[] r : rows) if (r[0] > 4.5f) { mid = r; break; }
+        for (float[] r : rows) if (r[0] > pullStart + 2.5f) { mid = r; break; }
         if (mid != null) {
             StringBuilder b = new StringBuilder("amostra em t=" + mid[0] + ":");
             for (int i = 0; i < Ch.COUNT; i++) b.append(' ').append(Ch.CSV[i]).append('=').append(mid[i + 1]);
@@ -65,7 +69,9 @@ public final class SimTest {
         check(Math.abs(pull.lambdaMin - 0.80f) < 0.02f, "λ mín " + pull.lambdaMin);
         check(pull.rpmMax > 5500, "rpm máx " + pull.rpmMax);
         check(Math.abs(pull.railPeak - 200f) < 1f, "rail pico " + pull.railPeak);
-        check(Session.multi == multiCapable, "modo multi-PID " + Session.multi);
+        int expectedSize = clone ? 3 : multiCapable ? 6 : 1;
+        check(Session.pidsPerRequest == expectedSize, "PIDs por pedido " + Session.pidsPerRequest);
+        check(!Session.status.startsWith("Erro"), "desconectou: " + Session.status);
         if (problems) {
             check(pull.flags.size() == 3, "esperava 3 alertas (λ, rail, avanço): " + pull.flags);
         } else {
@@ -89,13 +95,18 @@ public final class SimTest {
         final PipedInputStream simIn;
         final boolean multiCapable;
         final boolean problems;
+        final boolean clone;
+        final float pullStart;
+        boolean hung;
         final long start = System.nanoTime();
         volatile boolean closed;
         boolean echo = true, spaces = true;
 
-        Sim(boolean multiCapable, boolean problems) throws IOException {
+        Sim(boolean multiCapable, boolean problems, boolean clone, float pullStart) throws IOException {
             this.multiCapable = multiCapable;
             this.problems = problems;
+            this.clone = clone;
+            this.pullStart = pullStart;
             simOut = new PipedOutputStream(appIn);
             simIn = new PipedInputStream(appOut, 1 << 16);
             Thread th = new Thread(this::serve);
@@ -131,7 +142,15 @@ public final class SimTest {
                     String req = cmd.toString().trim().toUpperCase(Locale.US);
                     cmd.setLength(0);
                     Thread.sleep(8);  // latência do Bluetooth + ECU
+                    if (hung) {
+                        // Como o ELM327: qualquer caractere interrompe e ele volta ao prompt.
+                        hung = false;
+                        simOut.write("STOPPED\r\r>".getBytes(StandardCharsets.US_ASCII));
+                        simOut.flush();
+                        continue;
+                    }
                     String resp = respond(req);
+                    if (resp == null) continue;  // travado: não responde nada
                     String out = (echo ? req + "\r" : "") + resp + "\r\r>";
                     simOut.write(out.getBytes(StandardCharsets.US_ASCII));
                     simOut.flush();
@@ -159,6 +178,10 @@ public final class SimTest {
             List<Integer> pids = new ArrayList<>();
             for (int i = 0; i + 2 <= body.length(); i += 2) pids.add(Integer.parseInt(body.substring(i, i + 2), 16));
             if (pids.size() > 1 && !multiCapable) return "NO DATA";
+            if (pids.size() > 3 && clone) {
+                hung = true;
+                return null;
+            }
             List<Integer> data = new ArrayList<>();
             data.add(0x41);
             for (int pid : pids) {
@@ -198,14 +221,15 @@ public final class SimTest {
 
         int[] value(int pid) {
             float t = (System.nanoTime() - start) / 1e9f;
-            boolean pull = t > 2f && t < 6f;
-            float k = pull ? Math.min(1f, (t - 2f) / 1.2f) : 0f;  // rampa da pressão
-            float rpm = pull ? 2000 + (t - 2f) * 950 : 1800;
+            float tp = t - pullStart;
+            boolean pull = tp > 0f && tp < 4f;
+            float k = pull ? Math.min(1f, tp / 1.2f) : 0f;  // rampa da pressão
+            float rpm = pull ? 2000 + tp * 950 : 1800;
             float map = pull ? 92 + k * 129 : 60;          // até 221 kPa = 1,29 bar com baro 92
-            float lambda = pull && t > 2.6f ? 0.80f : 1.0f;
+            float lambda = pull && tp > 0.6f ? 0.80f : 1.0f;
             float rail = pull ? 150 + k * 50 : 120;        // bar
             float timing = 12;
-            if (problems && pull && t > 4.5f) {
+            if (problems && pull && tp > 2.5f) {
                 lambda = 0.90f;   // empobreceu
                 rail = 160;       // bomba de alta não segurou
                 timing = 6;       // ECU tirou avanço

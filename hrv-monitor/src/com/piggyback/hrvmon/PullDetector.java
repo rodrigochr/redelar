@@ -17,6 +17,7 @@ final class PullDetector {
     private static final float START_AFTER = 0.8f;  // s acima de BOOST_START
     private static final float END_AFTER = 0.7f;    // s abaixo de BOOST_START
     private static final float MIN_DURATION = 1.5f;
+    private static final float TAIL_TRIM = 0.5f;    // s ignorados no fim para λ, rail e avanço
 
     static final class Pull {
         int number;
@@ -59,15 +60,17 @@ final class PullDetector {
     }
 
     private final List<Pull> done = new ArrayList<>();
+    private final List<float[]> pending = new ArrayList<>();
+    private final List<float[]> samples = new ArrayList<>();
     private Pull cur;
-    private float highSince = -1, lowSince = -1, rpmAtHigh = Float.NaN;
-    private float prevTiming = Float.NaN, prevRpm = Float.NaN;
+    private float highSince = -1, lowSince = -1;
 
     synchronized void clear() {
         done.clear();
+        pending.clear();
+        samples.clear();
         cur = null;
         highSince = lowSince = -1;
-        prevTiming = prevRpm = Float.NaN;
     }
 
     synchronized List<Pull> list() {
@@ -81,79 +84,43 @@ final class PullDetector {
     synchronized void feed(float t, float[] s) {
         float boost = s[Ch.BOOST];
         float load = s[Ch.LOAD];
-        float rpm = s[Ch.RPM];
         boolean high = Fmt.ok(boost) ? boost > BOOST_START : Fmt.ok(load) && load > 85f;
 
         if (cur == null) {
             if (high) {
                 if (highSince < 0) {
                     highSince = t;
-                    rpmAtHigh = rpm;
+                    pending.clear();
                 }
+                pending.add(sample(t, s));
                 if (t - highSince >= START_AFTER) {
                     cur = new Pull();
                     cur.t0 = highSince;
-                    cur.rpmStart = rpmAtHigh;
                     cur.wallStart = System.currentTimeMillis() - (long) ((t - highSince) * 1000);
+                    samples.clear();
+                    samples.addAll(pending);
                     lowSince = -1;
                 }
             } else {
                 highSince = -1;
             }
+            return;
         }
-        if (cur != null) {
-            // Só conta enquanto há carga; a folga do fim serve apenas para não partir a puxada em duas.
-            if (high) update(cur, t, s);
-            if (!high) {
-                if (lowSince < 0) lowSince = t;
-                if (t - lowSince >= END_AFTER) finish();
-            } else {
-                lowSince = -1;
-            }
+        // Só guarda amostras com carga; a folga do fim serve apenas para não partir a puxada em duas.
+        if (high) {
+            samples.add(sample(t, s));
+            lowSince = -1;
+        } else {
+            if (lowSince < 0) lowSince = t;
+            if (t - lowSince >= END_AFTER) finish();
         }
-        prevTiming = s[Ch.TIMING];
-        prevRpm = rpm;
     }
 
-    private void update(Pull p, float t, float[] s) {
-        float into = t - p.t0;
-        float rpm = s[Ch.RPM], boost = s[Ch.BOOST];
-        if (Fmt.ok(rpm)) p.rpmMax = Math.max(p.rpmMax, rpm);
-        if (Fmt.ok(boost)) p.boostMax = Math.max(p.boostMax, boost);
-        if (Fmt.ok(s[Ch.MAP])) p.mapMax = Math.max(p.mapMax, s[Ch.MAP]);
-        if (Fmt.ok(s[Ch.BOOST_CMD])) p.boostCmdMax = Math.max(p.boostCmdMax, s[Ch.BOOST_CMD]);
-        if (s[Ch.MAP_0B] >= 254.5f && !Fmt.ok(s[Ch.MAP_87]) && !Fmt.ok(s[Ch.MAP_70])) p.mapSaturated = true;
-
-        float lam = s[Ch.LAMBDA];
-        if (Fmt.ok(lam) && lam < 1.5f) {  // 2,0 = corte de combustível, não é mistura
-            p.lambdaMin = Math.min(p.lambdaMin, lam);
-            // O primeiro segundo é transição; depois disso a ECU já deveria estar rica.
-            if (into >= 1f && Fmt.ok(boost) && boost > 0.3f) p.lambdaMaxLoaded = Math.max(p.lambdaMaxLoaded, lam);
-        }
-        if (Fmt.ok(s[Ch.LAMBDA_CMD])) p.lambdaCmdMin = Math.min(p.lambdaCmdMin, s[Ch.LAMBDA_CMD]);
-
-        float timing = s[Ch.TIMING];
-        if (Fmt.ok(timing)) {
-            p.timingMin = Math.min(p.timingMin, timing);
-            p.timingMax = Math.max(p.timingMax, timing);
-            // Queda brusca com a rotação subindo = a ECU tirando avanço (detonação).
-            if (Fmt.ok(prevTiming) && timing < prevTiming - 3f && Fmt.ok(rpm) && Fmt.ok(prevRpm) && rpm >= prevRpm - 50f) {
-                p.timingDrops++;
-            }
-        }
-
-        float rail = s[Ch.RAIL];
-        if (Fmt.ok(rail)) {
-            if (rail > p.railPeak) {
-                p.railPeak = rail;
-                p.railMinAfterPeak = rail;
-            } else {
-                p.railMinAfterPeak = Math.min(p.railMinAfterPeak, rail);
-            }
-        }
-        if (Fmt.ok(s[Ch.IAT])) p.iatMax = Math.max(p.iatMax, s[Ch.IAT]);
-        if (Fmt.ok(s[Ch.ETHANOL])) p.ethanol = s[Ch.ETHANOL];
-        if (Fmt.ok(s[Ch.SPEED])) p.speedMax = Math.max(p.speedMax, s[Ch.SPEED]);
+    private static float[] sample(float t, float[] s) {
+        float[] r = new float[Ch.COUNT + 1];
+        r[0] = t;
+        System.arraycopy(s, 0, r, 1, Ch.COUNT);
+        return r;
     }
 
     private void finish() {
@@ -163,6 +130,57 @@ final class PullDetector {
         p.t1 = lowSince;
         lowSince = -1;
         if (p.t1 - p.t0 < MIN_DURATION) return;
+
+        // λ, rail e avanço ignoram o primeiro segundo (o turbo ainda está enchendo) e o último
+        // meio segundo (ao tirar o pé, cada leitura cai num instante diferente).
+        float coreStart = p.t0 + 1f, coreEnd = p.t1 - TAIL_TRIM;
+        float prevTiming = Float.NaN, prevRpm = Float.NaN;
+        for (float[] r : samples) {
+            float t = r[0];
+            float rpm = r[Ch.RPM + 1], boost = r[Ch.BOOST + 1];
+            if (!Fmt.ok(p.rpmStart)) p.rpmStart = rpm;
+            if (Fmt.ok(rpm)) p.rpmMax = Math.max(p.rpmMax, rpm);
+            if (Fmt.ok(boost)) p.boostMax = Math.max(p.boostMax, boost);
+            if (Fmt.ok(r[Ch.MAP + 1])) p.mapMax = Math.max(p.mapMax, r[Ch.MAP + 1]);
+            if (Fmt.ok(r[Ch.BOOST_CMD + 1])) p.boostCmdMax = Math.max(p.boostCmdMax, r[Ch.BOOST_CMD + 1]);
+            if (r[Ch.MAP_0B + 1] >= 254.5f && !Fmt.ok(r[Ch.MAP_87 + 1]) && !Fmt.ok(r[Ch.MAP_70 + 1])) p.mapSaturated = true;
+            if (Fmt.ok(r[Ch.IAT + 1])) p.iatMax = Math.max(p.iatMax, r[Ch.IAT + 1]);
+            if (Fmt.ok(r[Ch.ETHANOL + 1])) p.ethanol = r[Ch.ETHANOL + 1];
+            if (Fmt.ok(r[Ch.SPEED + 1])) p.speedMax = Math.max(p.speedMax, r[Ch.SPEED + 1]);
+            if (Fmt.ok(r[Ch.LAMBDA_CMD + 1])) p.lambdaCmdMin = Math.min(p.lambdaCmdMin, r[Ch.LAMBDA_CMD + 1]);
+
+            float lam = r[Ch.LAMBDA + 1];
+            if (Fmt.ok(lam) && lam < 1.5f) {  // 2,0 = corte de combustível, não é mistura
+                p.lambdaMin = Math.min(p.lambdaMin, lam);
+            }
+            float timing = r[Ch.TIMING + 1];
+            if (Fmt.ok(timing)) {
+                p.timingMin = Math.min(p.timingMin, timing);
+                p.timingMax = Math.max(p.timingMax, timing);
+            }
+            if (t > coreEnd) continue;
+
+            if (Fmt.ok(lam) && lam < 1.5f && t >= coreStart && Fmt.ok(boost) && boost > 0.3f) {
+                p.lambdaMaxLoaded = Math.max(p.lambdaMaxLoaded, lam);
+            }
+            // Queda brusca com a rotação subindo = a ECU tirando avanço (detonação).
+            if (Fmt.ok(timing) && Fmt.ok(prevTiming) && timing < prevTiming - 3f
+                    && Fmt.ok(rpm) && Fmt.ok(prevRpm) && rpm >= prevRpm - 50f) {
+                p.timingDrops++;
+            }
+            prevTiming = timing;
+            prevRpm = rpm;
+            float rail = r[Ch.RAIL + 1];
+            if (Fmt.ok(rail)) {
+                if (rail > p.railPeak) {
+                    p.railPeak = rail;
+                    p.railMinAfterPeak = rail;
+                } else {
+                    p.railMinAfterPeak = Math.min(p.railMinAfterPeak, rail);
+                }
+            }
+        }
+        samples.clear();
 
         if (p.lambdaMaxLoaded > LAMBDA_LEAN) {
             p.flags.add("⚠ Mistura empobreceu sob carga: λ máx " + Fmt.f(p.lambdaMaxLoaded, 2)
