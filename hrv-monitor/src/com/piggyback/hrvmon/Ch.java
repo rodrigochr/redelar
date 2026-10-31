@@ -26,13 +26,17 @@ final class Ch {
     static final int MAP_87 = 20;
     static final int MAP_70 = 21;
     static final int BOOST_CMD_ABS = 22;
-    static final int COUNT = 23;
+    static final int IAT2 = 23;         // °C, segundo sensor de ar (depois do intercooler)
+    static final int WG = 24;           // % posição real da wastegate
+    static final int WG_CMD = 25;       // % posição comandada da wastegate
+    static final int COUNT = 26;
 
     static final String[] CSV = {
         "rpm", "lambda", "lambda_cmd", "map_kpa", "boost_bar", "boost_cmd_bar", "timing_deg",
         "rail_bar", "throttle_pct", "pedal_pct", "load_pct", "iat_c", "ect_c", "stft_pct",
         "ltft_pct", "baro_kpa", "ethanol_pct", "speed_kmh", "maf_gs",
         "map_0b_kpa", "map_87_kpa", "map_70_kpa", "boost_cmd_abs_kpa",
+        "iat2_c", "wastegate_pct", "wastegate_cmd_pct",
     };
 
     private Ch() {}

@@ -12,8 +12,11 @@ import java.util.regex.Pattern;
 
 /**
  * Thread que conecta ao ELM327, descobre os PIDs suportados e lê os dados em laço.
- * Os PIDs rápidos (rotação, λ, MAP, avanço, rail) são lidos em toda volta; os lentos
- * (temperaturas, trims, etanol...) se revezam a cada 3 voltas.
+ * Os PIDs rápidos (rotação, λ, pressão do turbo, avanço, rail, wastegate) são lidos em toda
+ * volta; os lentos (temperaturas, trims, etanol...) se revezam a cada 3 voltas.
+ *
+ * Os pedidos vão só para a central do motor. Com o pedido para todos os módulos, câmbio e
+ * outros respondem junto, e clones do ELM327 embaralham as respostas de vários quadros.
  *
  * Pede até 6 PIDs por vez. Alguns clones do ELM327 travam ou voltam vazio com pedidos
  * grandes; nesse caso cai para 3 e depois para 1 PID por pedido.
@@ -21,8 +24,10 @@ import java.util.regex.Pattern;
 final class Poller implements Runnable {
     private static final int[] REQUEST_SIZES = {6, 3, 1};
     private static final int MAX_TIMEOUTS = 5;
-    private static final int[] FAST = {0x0C, -1 /* λ */, 0x0B, 0x87, 0x0E, -2 /* rail */, 0x11};
-    private static final int[] SLOW = {0x44, 0x70, 0x0F, 0x05, 0x06, 0x07, 0x33, 0x52, 0x0D, 0x04, 0x10, 0x49};
+    private static final int LAMBDA = -1, BOOST = -2, RAIL = -3;
+    private static final int[] FAST = {0x0C, LAMBDA, BOOST, 0x0E, RAIL, 0x72};
+    private static final int[] SLOW = {0x0B, 0x87, 0x44, 0x11, 0x49, 0x68, 0x0F, 0x67, 0x05, 0x06, 0x07,
+        0x33, 0x52, 0x0D, 0x04, 0x66, 0x10};
 
     private final Links.Factory factory;
     private volatile boolean running = true;
@@ -101,20 +106,22 @@ final class Poller implements Runnable {
         String dp = elm.cmd("ATDPN", 1500).replaceAll("[^0-9A-Fa-f]", "").toUpperCase(Locale.US);
         String proto = dp.isEmpty() ? "?" : dp.substring(dp.length() - 1);
 
-        // Endereça só a ECU do motor (7E0), assim o câmbio não responde junto.
-        String header = "7DF (todas as ECUs)";
-        if (proto.equals("6") || proto.equals("8")) {
-            elm.cmd("ATSH7E0", 1500);
-            if (probe(null, 3000)) {
-                header = "7E0 (motor)";
-            } else {
-                elm.cmd("ATSH7DF", 1500);
-            }
-        }
+        Session.status = "Procurando a central do motor…";
+        String header = selectEngineEcu(proto);
 
         Session.status = "Lendo PIDs suportados…";
         readSupported();
         buildGroups();
+        Pids.resetScale();
+        String scale = "";
+        if (sup[0x4F]) {
+            try {
+                query(new int[]{0x4F}, 1500);
+                scale = " · escala 0x4F: λ até " + Fmt.f(Pids.lambdaMax, 0) + ", MAP até " + Fmt.f(Pids.mapMax, 0) + " kPa";
+            } catch (Elm.Timeout e) {
+                elm.recover();
+            }
+        }
 
         try {
             List<int[]> r = Elm.parse(elm.cmd("010C1", 1500));
@@ -133,8 +140,63 @@ final class Poller implements Runnable {
             }
         }
 
-        Session.info = version + " · protocolo " + protoName(proto) + " · cabeçalho " + header;
+        Session.info = version + " · protocolo " + protoName(proto) + " · " + header + scale;
         Session.supported = sup.clone();
+    }
+
+    /**
+     * Liga os cabeçalhos, vê quem responde ao 0100 e passa a endereçar só a central do motor
+     * (7E8 → 7E0 em 11 bits; 18DAF110 → DA10F1 em 29 bits). Se não der, fica no endereço
+     * funcional e pede um PID por vez, porque aí as respostas de vários módulos vêm misturadas.
+     */
+    private String selectEngineEcu(String proto) throws IOException {
+        boolean ext = proto.equals("7") || proto.equals("9");
+        if (!ext && !proto.equals("6") && !proto.equals("8")) return "endereço padrão";
+        int hdrLen = ext ? 8 : 3;
+
+        String best = null;
+        int bestBits = -1;
+        int responders = 0;
+        elm.cmd("ATH1", 1500);
+        try {
+            String r = elm.cmd("0100", 3000);
+            for (String line : r.toUpperCase(Locale.US).replace(" ", "").split("[\r\n]+")) {
+                if (line.contains("4100")) responders++;
+                if (!line.matches("[0-9A-F]+") || line.length() < hdrLen + 14) continue;
+                String hdr = line.substring(0, hdrLen);
+                String data = line.substring(hdrLen + 2);  // pula o byte de tamanho (PCI)
+                if (!data.startsWith("4100")) continue;
+                int bits = Long.bitCount(Long.parseLong(data.substring(4, 12), 16));
+                boolean engine = hdr.equals("7E8") || hdr.equals("18DAF110");
+                if (engine) bits += 1000;
+                if (bits > bestBits) {
+                    bestBits = bits;
+                    best = hdr;
+                }
+            }
+        } catch (Elm.Timeout e) {
+            elm.recover();
+        }
+        elm.cmd("ATH0", 1500);
+
+        if (best != null) {
+            String target = ext ? "DA" + best.substring(6, 8) + "F1"
+                    : Integer.toHexString(Integer.parseInt(best, 16) - 8).toUpperCase(Locale.US);
+            elm.cmd("ATSH" + target, 1500);
+            if (probe(null, 3000)) {
+                Session.log("   central do motor: responde em " + best + ", pedidos para " + target);
+                return "central do motor " + target;
+            }
+            Session.log("   " + target + " não respondeu; voltando ao endereço funcional");
+        }
+        elm.cmd(ext ? "ATSHDB33F1" : "ATSH7DF", 1500);
+        if (responders <= 1) {
+            Session.log("   só um módulo responde; endereço funcional basta");
+            return "endereço funcional (um módulo responde)";
+        }
+        sizeIdx = REQUEST_SIZES.length - 1;
+        Session.log("   sem endereço da central do motor: um PID por pedido");
+        return "todos os módulos (um PID por pedido)";
     }
 
     private boolean probe(String protocolCmd, long timeoutMs) throws IOException {
@@ -171,11 +233,14 @@ final class Poller implements Runnable {
     private void buildGroups() {
         int lambda = sup[0x24] ? 0x24 : sup[0x34] ? 0x34 : 0;
         int rail = sup[0x23] ? 0x23 : sup[0x59] ? 0x59 : 0;
+        // Fonte da pressão do turbo: sensor de boost (0x70) > coletor faixa ampla (0x87) > coletor (0x0B).
+        int boost = sup[0x70] ? 0x70 : sup[0x87] ? 0x87 : 0x0B;
         fastPids.clear();
         slowPids.clear();
         for (int pid : FAST) {
-            if (pid == -1) pid = lambda;
-            if (pid == -2) pid = rail;
+            if (pid == LAMBDA) pid = lambda;
+            if (pid == BOOST) pid = boost;
+            if (pid == RAIL) pid = rail;
             addIfSupported(pid, fastPids);
         }
         for (int pid : SLOW) addIfSupported(pid, slowPids);

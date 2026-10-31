@@ -62,7 +62,7 @@ public final class MainActivity extends Activity {
     private Button connectBtn;
     private final Button[] windowBtns = new Button[3];
     private final float[] windowValues = {20f, 60f, 0f};
-    private Tile tRpm, tLambda, tBoost, tTiming, tRail, tLambdaCmd, tIat, tTrim, tEthanol;
+    private Tile tRpm, tLambda, tBoost, tTiming, tRail, tLambdaCmd, tIat, tTrim, tEthanol, tWg, tEct, tSpeed;
     private ChartView[] charts;
     private float window = 20f;
     private int shownPulls = -1;
@@ -139,9 +139,13 @@ public final class MainActivity extends Activity {
         tIat = new Tile("Ar admissão (°C)");
         tTrim = new Tile("Trim curto/longo");
         tEthanol = new Tile("Etanol (%)");
+        tWg = new Tile("Wastegate (%)");
+        tEct = new Tile("Motor (°C)");
+        tSpeed = new Tile("Velocidade");
         root.addView(row(tRpm, tLambda, tBoost), lp(10));
         root.addView(row(tTiming, tRail, tLambdaCmd), lp(6));
         root.addView(row(tIat, tTrim, tEthanol), lp(6));
+        root.addView(row(tWg, tEct, tSpeed), lp(6));
 
         LinearLayout wsel = hbox();
         wsel.setGravity(Gravity.CENTER_VERTICAL);
@@ -172,6 +176,8 @@ public final class MainActivity extends Activity {
                     new String[]{""}, 1).span(10f),
             new ChartView(this, "Pressão do rail (bar)", new int[]{Ch.RAIL}, new int[]{RED},
                     new String[]{""}, 0).span(20f),
+            new ChartView(this, "Wastegate (%)", new int[]{Ch.WG, Ch.WG_CMD}, new int[]{GREEN, AMBER},
+                    new String[]{"real", "cmd"}, 0).range(0f, 100f),
             new ChartView(this, "Rotação", new int[]{Ch.RPM}, new int[]{TEXT},
                     new String[]{""}, 0).range(0f, 7000f),
         };
@@ -211,11 +217,19 @@ public final class MainActivity extends Activity {
             tLambda.set(lam, 2, lean ? RED : BLUE, 0x24, 0x34);
         }
         tBoost.set(boost, 2, GREEN, 0x0B, 0x87, 0x70);
+        tWg.set(v(r, Ch.WG), 0, GREEN, 0x72);
+        tEct.set(v(r, Ch.ECT), 0, TEXT, 0x05, 0x67);
+        tSpeed.set(v(r, Ch.SPEED), 0, TEXT, 0x0D);
         tTiming.set(v(r, Ch.TIMING), 1, PURPLE, 0x0E);
         tRail.set(v(r, Ch.RAIL), 0, RED, 0x23, 0x59);
         tLambdaCmd.set(v(r, Ch.LAMBDA_CMD), 2, AMBER, 0x44);
-        float iat = v(r, Ch.IAT);
-        tIat.set(iat, 0, Fmt.ok(iat) && iat > 60 ? AMBER : TEXT, 0x0F);
+        float iat = v(r, Ch.IAT), iat2 = v(r, Ch.IAT2);
+        int iatColor = Math.max(Fmt.ok(iat) ? iat : -99, Fmt.ok(iat2) ? iat2 : -99) > 60 ? AMBER : TEXT;
+        if (Fmt.ok(iat2)) {
+            tIat.setText(Fmt.f(iat, 0) + " / " + Fmt.f(iat2, 0), iatColor);
+        } else {
+            tIat.set(iat, 0, iatColor, 0x0F, 0x68);
+        }
         if (unsupported(0x06)) {
             tTrim.setText("n/d", MUTED);
         } else {

@@ -11,16 +11,21 @@ aceleração forte ("puxada").
 | Rotação | 0x0C | Referência de todas as leituras |
 | λ medido (sonda 1, banda larga) | 0x24 ou 0x34 | Ver se a mistura empobrece sob turbo |
 | λ comandado | 0x44 | Comparar o que a ECU pediu com o que aconteceu |
-| Pressão do coletor | 0x87, 0x70 ou 0x0B | Pressão do turbo (o 0x0B vai só até 255 kPa) |
+| Pressão do turbo | 0x70, 0x87 ou 0x0B | Sensor de boost; o 0x0B usa a escala do 0x4F |
+| Wastegate | 0x72 | Posição real e comandada |
 | Avanço de ignição | 0x0E | Quedas bruscas indicam detonação |
 | Pressão do rail | 0x23 ou 0x59 | Limite da bomba de alta pressão |
-| Ar de admissão, motor, trims, etanol, carga, velocidade, MAF, pedal | vários | Contexto |
+| Ar de admissão (0x0F ou 0x68, até 2 sensores), motor (0x05 ou 0x67), trims, etanol, carga, velocidade, MAF, pedal | vários | Contexto |
 
 O app pergunta à ECU quais PIDs ela suporta e só pede esses. Ele tenta 6 PIDs por pedido,
 que é bem mais rápido. Se o pedido travar o adaptador (comum em clones do ELM327) ou voltar
 vazio, cai para 3 e depois para 1 PID por pedido. PIDs que a ECU diz suportar mas nunca
-respondem saem da leitura. O pedido vai só para a ECU do motor (cabeçalho 7E0), para o
-câmbio não responder junto.
+respondem saem da leitura.
+
+Os pedidos vão só para a central do motor. O app liga os cabeçalhos, vê quem responde ao
+0100 e passa a endereçar a central (7E8 → 7E0 em CAN 11 bits; 18DAF110 → DA10F1 em 29 bits,
+como no HR-V 2024). Sem isso, câmbio e outros módulos respondem junto e clones do ELM327
+embaralham as respostas de vários quadros.
 
 ## Puxadas
 

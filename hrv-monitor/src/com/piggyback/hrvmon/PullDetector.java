@@ -31,7 +31,9 @@ final class PullDetector {
         float timingMin = Float.POSITIVE_INFINITY, timingMax = Float.NEGATIVE_INFINITY;
         int timingDrops;
         float railPeak = Float.NEGATIVE_INFINITY, railMinAfterPeak = Float.POSITIVE_INFINITY;
-        float iatMax = Float.NEGATIVE_INFINITY, ethanol = Float.NaN, speedMax = Float.NEGATIVE_INFINITY;
+        float iatMax = Float.NEGATIVE_INFINITY, iat2Max = Float.NEGATIVE_INFINITY;
+        float ethanol = Float.NaN, speedMax = Float.NEGATIVE_INFINITY;
+        float wgMin = Float.POSITIVE_INFINITY, wgMax = Float.NEGATIVE_INFINITY;
         boolean mapSaturated;
         final List<String> flags = new ArrayList<>();
 
@@ -51,7 +53,12 @@ final class PullDetector {
                 b.append("Rail: pico ").append(Fmt.f(railPeak, 0)).append(" bar · mín depois do pico ")
                         .append(Fmt.f(railMinAfterPeak, 0)).append(" bar\n");
             }
-            b.append("Ar de admissão máx: ").append(Fmt.f(iatMax, 0)).append(" °C");
+            if (Fmt.ok(wgMax)) {
+                b.append("Wastegate: ").append(Fmt.f(wgMin, 0)).append("% a ").append(Fmt.f(wgMax, 0)).append("%\n");
+            }
+            b.append("Ar de admissão máx: ").append(Fmt.f(iatMax, 0));
+            if (Fmt.ok(iat2Max)) b.append(" / ").append(Fmt.f(iat2Max, 0)).append(" (2º sensor)");
+            b.append(" °C");
             if (Fmt.ok(ethanol)) b.append(" · etanol ").append(Fmt.f(ethanol, 0)).append('%');
             if (Fmt.ok(speedMax)) b.append(" · ").append(Fmt.f(speedMax, 0)).append(" km/h");
             for (String f : flags) b.append('\n').append(f);
@@ -143,8 +150,15 @@ final class PullDetector {
             if (Fmt.ok(boost)) p.boostMax = Math.max(p.boostMax, boost);
             if (Fmt.ok(r[Ch.MAP + 1])) p.mapMax = Math.max(p.mapMax, r[Ch.MAP + 1]);
             if (Fmt.ok(r[Ch.BOOST_CMD + 1])) p.boostCmdMax = Math.max(p.boostCmdMax, r[Ch.BOOST_CMD + 1]);
-            if (r[Ch.MAP_0B + 1] >= 254.5f && !Fmt.ok(r[Ch.MAP_87 + 1]) && !Fmt.ok(r[Ch.MAP_70 + 1])) p.mapSaturated = true;
+            if (r[Ch.MAP_0B + 1] >= Pids.mapMax - 0.5f && !Fmt.ok(r[Ch.MAP_87 + 1]) && !Fmt.ok(r[Ch.MAP_70 + 1])) {
+                p.mapSaturated = true;
+            }
             if (Fmt.ok(r[Ch.IAT + 1])) p.iatMax = Math.max(p.iatMax, r[Ch.IAT + 1]);
+            if (Fmt.ok(r[Ch.IAT2 + 1])) p.iat2Max = Math.max(p.iat2Max, r[Ch.IAT2 + 1]);
+            if (Fmt.ok(r[Ch.WG + 1])) {
+                p.wgMin = Math.min(p.wgMin, r[Ch.WG + 1]);
+                p.wgMax = Math.max(p.wgMax, r[Ch.WG + 1]);
+            }
             if (Fmt.ok(r[Ch.ETHANOL + 1])) p.ethanol = r[Ch.ETHANOL + 1];
             if (Fmt.ok(r[Ch.SPEED + 1])) p.speedMax = Math.max(p.speedMax, r[Ch.SPEED + 1]);
             if (Fmt.ok(r[Ch.LAMBDA_CMD + 1])) p.lambdaCmdMin = Math.min(p.lambdaCmdMin, r[Ch.LAMBDA_CMD + 1]);
@@ -194,7 +208,7 @@ final class PullDetector {
             p.flags.add("⚠ " + p.timingDrops + " queda(s) brusca(s) de avanço: possível correção de detonação");
         }
         if (p.mapSaturated) {
-            p.flags.add("ℹ MAP no limite do PID 0x0B (255 kPa): a pressão real pode ser maior");
+            p.flags.add("ℹ MAP no limite do PID 0x0B (" + Fmt.f(Pids.mapMax, 0) + " kPa): a pressão real pode ser maior");
         }
         if (p.flags.isEmpty()) p.flags.add("✓ Nada anormal nesta puxada");
         p.number = done.size() + 1;

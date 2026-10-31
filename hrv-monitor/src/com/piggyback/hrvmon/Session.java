@@ -9,7 +9,7 @@ import java.util.Locale;
 
 /** Estado da sessão, compartilhado entre a thread de leitura e a tela. */
 final class Session {
-    static final String VERSION = "0.1.1";
+    static final String VERSION = "0.1.2";
 
     static final DataStore store = new DataStore();
     static final PullDetector pulls = new PullDetector();
