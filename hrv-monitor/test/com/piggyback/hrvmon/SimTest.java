@@ -50,8 +50,9 @@ public final class SimTest {
         final boolean craSupported = !mode.equals("honda-velho") && !mode.equals("honda-sem-cabecalho");
         final boolean headersSupported = !mode.equals("honda-sem-cabecalho");
         final boolean physicalWorks = mode.equals("honda");
-        // Nos modos clone/honda a puxada começa mais tarde: o app gasta alguns segundos se adaptando.
-        final float pullStart = clone || honda ? 7f : 2f;
+        // Nos modos clone/honda a puxada começa mais tarde: o app gasta alguns segundos se adaptando
+        // (cada pedido grande que trava custa ~4 s).
+        final float pullStart = clone || honda ? 12f : 2f;
         final Sim sim = new Sim(multiCapable, problems, clone, honda, pullStart, craSupported, physicalWorks,
                 headersSupported);
         Links.Factory f = new Links.Factory() {
@@ -78,8 +79,14 @@ public final class SimTest {
         System.out.println("status: " + Session.status);
         System.out.println("amostras: " + rows.size() + " · leituras/s: " + Session.rateHz);
         System.out.println(Session.report());
+        // Amostra no platô da pressão (1,5 s depois de chegar a 1,28 bar), quando até os PIDs lentos
+        // já foram relidos com o turbo cheio. O relógio do app começa depois da inicialização.
+        float plateau = Float.NaN;
         float[] mid = null;
-        for (float[] r : rows) if (r[0] > pullStart + 2.5f) { mid = r; break; }
+        for (float[] r : rows) {
+            if (Float.isNaN(plateau) && r[Ch.BOOST + 1] >= 1.28f) plateau = r[0];
+            if (!Float.isNaN(plateau) && r[0] >= plateau + 1.5f) { mid = r; break; }
+        }
         check(mid != null, "sem amostra no meio da puxada");
         StringBuilder b = new StringBuilder("amostra em t=" + mid[0] + ":");
         for (int i = 0; i < Ch.COUNT; i++) b.append(' ').append(Ch.CSV[i]).append('=').append(mid[i + 1]);
@@ -110,10 +117,17 @@ public final class SimTest {
                     : craSupported ? "ouvindo só a central 18DAF110"
                     : headersSupported ? "separando os quadros da central 18DAF110" : "um PID por pedido";
             check(Session.info.contains(expected), "endereçamento: " + Session.info);
+            if (headersSupported) {
+                check(Session.info.contains("tempo limite 100 ms"), "tempo limite não ajustado: " + Session.info);
+            }
             check(Pids.mapMax == MAP_MAX_TENS * 10f, "escala do MAP " + Pids.mapMax);
-            check(Math.abs(mid[Ch.MAP_0B + 1] - mid[Ch.MAP_70 + 1]) < 1.5f,
-                    "MAP 0x0B com escala errada: " + mid[Ch.MAP_0B + 1] + " vs " + mid[Ch.MAP_70 + 1]);
-            check(mid[Ch.IAT2 + 1] == 48f && mid[Ch.IAT + 1] == 31f, "temperaturas do ar " + mid[Ch.IAT + 1] + "/" + mid[Ch.IAT2 + 1]);
+            // Com um PID por pedido os lentos (0x0B, 0x68) levam ~10 s para serem relidos.
+            if (Session.pidsPerRequest > 1) {
+                check(Math.abs(mid[Ch.MAP_0B + 1] - mid[Ch.MAP_70 + 1]) < 1.5f,
+                        "MAP 0x0B com escala errada: " + mid[Ch.MAP_0B + 1] + " vs " + mid[Ch.MAP_70 + 1]);
+                check(mid[Ch.IAT2 + 1] == 48f, "2º sensor de ar " + mid[Ch.IAT2 + 1]);
+            }
+            check(mid[Ch.IAT + 1] == 31f, "1º sensor de ar " + mid[Ch.IAT + 1]);
             check(mid[Ch.ECT + 1] == 90f, "temperatura do motor " + mid[Ch.ECT + 1]);
             check(Math.abs(mid[Ch.WG + 1] - 78.4f) < 0.5f, "wastegate " + mid[Ch.WG + 1]);
             boolean[] sup = Session.supported;
@@ -157,6 +171,7 @@ public final class SimTest {
         final long start = System.nanoTime();
         volatile boolean closed;
         boolean echo = true, spaces = true, headers, physical, hung;
+        int timeoutMs = 200;
         String protocol = "0";
 
         Sim(boolean multiCapable, boolean problems, boolean clone, boolean honda, float pullStart,
@@ -211,7 +226,9 @@ public final class SimTest {
                     }
                     String req = cmd.toString().trim().toUpperCase(Locale.US);
                     cmd.setLength(0);
-                    Thread.sleep(8);  // latência do Bluetooth + ECU
+                    // Latência do Bluetooth + ECU; no HR-V o adaptador ainda espera o tempo limite
+                    // depois da última resposta, porque vários módulos respondem.
+                    Thread.sleep(8 + (honda ? timeoutMs / 4 : 0));
                     if (hung) {
                         // Como o ELM327: qualquer caractere interrompe e ele volta ao prompt.
                         hung = false;
@@ -238,6 +255,8 @@ public final class SimTest {
             List<Integer> pids = new ArrayList<>();
             for (int i = 0; i + 2 <= body.length(); i += 2) pids.add(Integer.parseInt(body.substring(i, i + 2), 16));
             if (pids.size() > 1 && !multiCapable) return "NO DATA";
+            // A central do HR-V leva ~70 ms para responder vários PIDs; tempo limite menor corta a resposta.
+            if (honda && pids.size() > 1 && timeoutMs < 70) return "NO DATA";
             // Clone v2.1: pedido direto à central sem o filtro certo não volta nada.
             if (honda && physical && !(physicalWorks && "18DAF110".equals(cra))) return "NO DATA";
             List<Ecu> heard = new ArrayList<>();
@@ -288,6 +307,7 @@ public final class SimTest {
                 case "DPN": return honda ? (protocol.equals("6") ? "6" : "A7") : "A6";
                 default:
                     if (c.startsWith("SP")) protocol = c.substring(2);
+                    if (c.startsWith("ST")) timeoutMs = Integer.parseInt(c.substring(2), 16) * 4;
                     if (c.startsWith("CRA")) {
                         if (!craSupported) return "?";
                         cra = c.length() > 3 ? c.substring(3) : null;

@@ -23,7 +23,9 @@ import java.util.regex.Pattern;
  * grandes; nesse caso cai para 3 e depois para 1 PID por pedido.
  */
 final class Poller implements Runnable {
-    private static final int[] REQUEST_SIZES = {6, 3, 1};
+    private static final int[] REQUEST_SIZES = {6, 4, 3, 1};
+    /** Tempos limite testados (× 4 ms), do menor para o maior; o padrão do ELM327 é 0x32 = 200 ms. */
+    private static final int[] TIMEOUTS = {0x10, 0x19};
     private static final int MAX_TIMEOUTS = 5;
     private static final int LAMBDA = -1, BOOST = -2, RAIL = -3;
     private static final int[] FAST = {0x0C, LAMBDA, 0x44, BOOST, 0x0E, RAIL, 0x72, 0x11};
@@ -341,6 +343,7 @@ final class Poller implements Runnable {
             List<int[]> sl = slow;
             if (!sl.isEmpty() && cycle % 3 == 0) request(sl.get(slowIdx++ % sl.size()));
             cycle++;
+            if (cycle == 15) tuneTimeout();
             derive();
             float t = now();
             Session.store.add(t, state);
@@ -388,6 +391,45 @@ final class Poller implements Runnable {
             slowPids.remove(Integer.valueOf(pid));
             regroup();
         }
+    }
+
+    /**
+     * Com vários módulos respondendo, o adaptador espera o tempo limite inteiro depois de cada
+     * resposta (no HR-V, ~170 ms por pedido). Testa tempos menores e fica com o menor que ainda
+     * traz o pedido completo da central em todas as tentativas.
+     */
+    private void tuneTimeout() throws IOException {
+        if (fast.isEmpty()) return;
+        int[] g = fast.get(0);
+        long base = timeQuery(g);
+        if (base < 0) return;
+        if (elm.cmd("ATAT0", 1500).contains("?")) return;
+        for (int st : TIMEOUTS) {
+            if (elm.cmd("ATST" + Fmt.hex2(st), 1500).contains("?")) break;
+            long ms = timeQuery(g);
+            if (ms > 0 && ms < base * 0.8f) {
+                Session.log("   tempo limite " + st * 4 + " ms: " + ms + " ms por pedido (antes " + base + ")");
+                Session.info += " · tempo limite " + st * 4 + " ms";
+                return;
+            }
+        }
+        elm.cmd("ATST32", 1500);
+        elm.cmd("ATAT2", 1500);
+        Session.log("   tempo limite padrão mantido (" + base + " ms por pedido)");
+    }
+
+    /** Tempo médio de 6 pedidos completos do grupo, ou -1 se algum vier incompleto. */
+    private long timeQuery(int[] g) throws IOException {
+        long t = SystemClock.uptimeMillis();
+        for (int i = 0; i < 6; i++) {
+            try {
+                if (query(g, 1500) < g.length) return -1;
+            } catch (Elm.Timeout e) {
+                elm.recover();
+                return -1;
+            }
+        }
+        return (SystemClock.uptimeMillis() - t) / 6;
     }
 
     private void shrink() {

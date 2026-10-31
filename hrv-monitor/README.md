@@ -19,8 +19,10 @@ aceleração forte ("puxada").
 
 O app pergunta à ECU quais PIDs ela suporta e só pede esses. Ele tenta 6 PIDs por pedido,
 que é bem mais rápido. Se o pedido travar o adaptador (comum em clones do ELM327) ou voltar
-vazio, cai para 3 e depois para 1 PID por pedido. PIDs que a ECU diz suportar mas nunca
-respondem saem da leitura.
+vazio, cai para 4, 3 e depois 1 PID por pedido. PIDs que a ECU diz suportar mas nunca
+respondem saem da leitura. Depois de estabilizar, testa tempos limite menores (`ATST`)
+e fica com o menor que ainda traz o pedido completo: com vários módulos respondendo, o
+adaptador espera o tempo limite inteiro depois de cada resposta.
 
 Os pedidos vão só para a central do motor. O app liga os cabeçalhos, vê quem responde ao
 0100 e passa a endereçar a central (7E8 → 7E0 em CAN 11 bits; 18DAF110 → DA10F1 em 29 bits,
