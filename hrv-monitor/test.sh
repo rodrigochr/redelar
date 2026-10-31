@@ -15,7 +15,7 @@ javac -encoding UTF-8 -Xlint:-options -classpath "$JAR" -d "$OUT" \
     $(find test -name '*.java') \
     src/com/piggyback/hrvmon/{Ch,Pids,Fmt,Elm,Links,Poller,DataStore,PullDetector,Session}.java
 
-for mode in multi single problemas clone honda; do
+for mode in multi single problemas clone honda honda-filtro honda-velho honda-sem-cabecalho; do
     echo "=== modo $mode ==="
     java -cp "$OUT:$JAR" com.piggyback.hrvmon.SimTest "$mode"
 done

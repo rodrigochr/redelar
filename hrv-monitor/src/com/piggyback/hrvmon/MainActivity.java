@@ -167,7 +167,7 @@ public final class MainActivity extends Activity {
             new ChartView(this, "Lambda", new int[]{Ch.LAMBDA, Ch.LAMBDA_CMD}, new int[]{BLUE, AMBER},
                     new String[]{"medido", "cmd"}, 2)
                     .range(0.6f, 1.2f)
-                    .refs(new float[]{1f, PullDetector.LAMBDA_LEAN}, new int[]{MUTED, RED}),
+                    .refs(new float[]{1f}, new int[]{MUTED}),
             new ChartView(this, "Pressão do turbo (bar)", new int[]{Ch.BOOST, Ch.BOOST_CMD}, new int[]{GREEN, AMBER},
                     new String[]{"real", "alvo"}, 2)
                     .span(1.5f)
@@ -210,7 +210,9 @@ public final class MainActivity extends Activity {
 
         tRpm.set(v(r, Ch.RPM), 0, TEXT, 0x0C);
         float lam = v(r, Ch.LAMBDA), boost = v(r, Ch.BOOST);
-        boolean lean = Fmt.ok(lam) && lam < 1.5f && Fmt.ok(boost) && boost > 0.3f && lam > PullDetector.LAMBDA_LEAN;
+        float lamCmd = v(r, Ch.LAMBDA_CMD);
+        boolean lean = Fmt.ok(lam) && lam < 1.5f && Fmt.ok(lamCmd) && lamCmd < 1.5f && Fmt.ok(boost) && boost > 0.3f
+                && lam - lamCmd > PullDetector.LEAN_DEVIATION;
         if (Fmt.ok(lam) && lam >= 1.5f) {
             tLambda.setText("corte", MUTED);
         } else {

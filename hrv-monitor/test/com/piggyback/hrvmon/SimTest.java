@@ -20,7 +20,12 @@ import java.util.Locale;
  *   clone      adaptador trava com mais de 3 PIDs por pedido
  *   honda      como o HR-V 2024 real: CAN 29 bits, três módulos respondendo ao endereço
  *              funcional, clone v2.1 que embaralha quadros de módulos diferentes e mostra o
- *              preenchimento 55, PIDs 0x4F/0x67/0x68/0x70/0x72
+ *              preenchimento 55, PIDs 0x4F/0x67/0x68/0x70/0x72. O pedido direto à central
+ *              só funciona com o filtro de recepção (ATCRA) ajustado
+ *   honda-filtro    igual, mas o pedido direto nunca funciona; só "pedir para todos e ouvir a central"
+ *   honda-velho     igual, mas o adaptador não aceita ATCRA: o app separa os quadros pelos cabeçalhos
+ *   honda-sem-cabecalho  nem ATCRA nem cabeçalhos: um PID por pedido
+ * Em todos, ao fim da puxada a borboleta fecha e o rail cai enquanto o turbo ainda está cheio.
  */
 public final class SimTest {
     static final int[] ECM_BASIC = {0x04, 0x05, 0x06, 0x07, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11,
@@ -41,10 +46,14 @@ public final class SimTest {
         final boolean multiCapable = !mode.equals("single");
         final boolean problems = mode.equals("problemas");
         final boolean clone = mode.equals("clone");
-        final boolean honda = mode.equals("honda");
+        final boolean honda = mode.startsWith("honda");
+        final boolean craSupported = !mode.equals("honda-velho") && !mode.equals("honda-sem-cabecalho");
+        final boolean headersSupported = !mode.equals("honda-sem-cabecalho");
+        final boolean physicalWorks = mode.equals("honda");
         // Nos modos clone/honda a puxada começa mais tarde: o app gasta alguns segundos se adaptando.
         final float pullStart = clone || honda ? 7f : 2f;
-        final Sim sim = new Sim(multiCapable, problems, clone, honda, pullStart);
+        final Sim sim = new Sim(multiCapable, problems, clone, honda, pullStart, craSupported, physicalWorks,
+                headersSupported);
         Links.Factory f = new Links.Factory() {
             @Override
             public Links.Link open() {
@@ -87,7 +96,9 @@ public final class SimTest {
         check(pull.rpmMax > 5500, "rpm máx " + pull.rpmMax);
         check(Math.abs(pull.railPeak - 200f) < 1f, "rail pico " + pull.railPeak);
         check(Math.abs(mid[Ch.TIMING + 1] - (problems ? 6f : 12f)) < 0.01f, "avanço " + mid[Ch.TIMING + 1]);
-        int expectedSize = clone ? 3 : multiCapable ? 6 : 1;
+        // Separando pelos cabeçalhos, os três módulos respondem e o clone trava com mais de 3 PIDs.
+        int expectedSize = clone || (honda && !craSupported && headersSupported) ? 3
+                : !multiCapable || !headersSupported ? 1 : 6;
         check(Session.pidsPerRequest == expectedSize, "PIDs por pedido " + Session.pidsPerRequest);
         if (problems) {
             check(pull.flags.size() == 3, "esperava 3 alertas (λ, rail, avanço): " + pull.flags);
@@ -95,7 +106,10 @@ public final class SimTest {
             check(pull.flags.size() == 1 && pull.flags.get(0).startsWith("✓"), "alertas inesperados: " + pull.flags);
         }
         if (honda) {
-            check(Session.info.contains("DA10F1"), "não endereçou a central do motor: " + Session.info);
+            String expected = physicalWorks ? "central do motor DA10F1"
+                    : craSupported ? "ouvindo só a central 18DAF110"
+                    : headersSupported ? "separando os quadros da central 18DAF110" : "um PID por pedido";
+            check(Session.info.contains(expected), "endereçamento: " + Session.info);
             check(Pids.mapMax == MAP_MAX_TENS * 10f, "escala do MAP " + Pids.mapMax);
             check(Math.abs(mid[Ch.MAP_0B + 1] - mid[Ch.MAP_70 + 1]) < 1.5f,
                     "MAP 0x0B com escala errada: " + mid[Ch.MAP_0B + 1] + " vs " + mid[Ch.MAP_70 + 1]);
@@ -103,7 +117,7 @@ public final class SimTest {
             check(mid[Ch.ECT + 1] == 90f, "temperatura do motor " + mid[Ch.ECT + 1]);
             check(Math.abs(mid[Ch.WG + 1] - 78.4f) < 0.5f, "wastegate " + mid[Ch.WG + 1]);
             boolean[] sup = Session.supported;
-            check(sup[0x4F] && !sup[0x41], "PIDs suportados misturaram outros módulos");
+            check(sup[0x4F] && (!headersSupported || !sup[0x41]), "PIDs suportados misturaram outros módulos");
         }
         System.out.println("OK");
     }
@@ -136,24 +150,30 @@ public final class SimTest {
         final PipedOutputStream simOut;
         final PipedOutputStream appOut = new PipedOutputStream();
         final PipedInputStream simIn;
-        final boolean multiCapable, problems, clone, honda;
+        final boolean multiCapable, problems, clone, honda, craSupported, physicalWorks, headersSupported;
         final float pullStart;
+        String cra;
         final List<Ecu> ecus = new ArrayList<>();
         final long start = System.nanoTime();
         volatile boolean closed;
         boolean echo = true, spaces = true, headers, physical, hung;
         String protocol = "0";
 
-        Sim(boolean multiCapable, boolean problems, boolean clone, boolean honda, float pullStart) throws IOException {
+        Sim(boolean multiCapable, boolean problems, boolean clone, boolean honda, float pullStart,
+                boolean craSupported, boolean physicalWorks, boolean headersSupported) throws IOException {
+            this.headersSupported = headersSupported;
+            this.craSupported = craSupported;
+            this.physicalWorks = physicalWorks;
             this.multiCapable = multiCapable;
             this.problems = problems;
             this.clone = clone;
             this.honda = honda;
             this.pullStart = pullStart;
             if (honda) {
-                ecus.add(new Ecu(0x18, 1, ECU_B_HONDA, false));
+                // Endereços que o HR-V real mostrou com ATH1.
+                ecus.add(new Ecu(0xEF, 1, ECU_B_HONDA, false));
                 ecus.add(new Ecu(0x10, 0, ECM_HONDA, true));
-                ecus.add(new Ecu(0x1A, 2, ECU_C_HONDA, false));
+                ecus.add(new Ecu(0x1E, 2, ECU_C_HONDA, false));
             } else {
                 ecus.add(new Ecu(0x10, 0, ECM_BASIC, true));
             }
@@ -218,15 +238,22 @@ public final class SimTest {
             List<Integer> pids = new ArrayList<>();
             for (int i = 0; i + 2 <= body.length(); i += 2) pids.add(Integer.parseInt(body.substring(i, i + 2), 16));
             if (pids.size() > 1 && !multiCapable) return "NO DATA";
-            if (pids.size() > 3 && (clone || (honda && !physical))) {
+            // Clone v2.1: pedido direto à central sem o filtro certo não volta nada.
+            if (honda && physical && !(physicalWorks && "18DAF110".equals(cra))) return "NO DATA";
+            List<Ecu> heard = new ArrayList<>();
+            for (Ecu e : ecus) {
+                if (physical && !e.engine) continue;
+                if (cra != null && !cra.equals(responseId(e))) continue;
+                heard.add(e);
+            }
+            if (pids.size() > 3 && (clone || (honda && heard.size() > 1))) {
                 hung = true;
                 return null;
             }
 
             List<Ecu> who = new ArrayList<>();
             List<List<Integer>> answers = new ArrayList<>();
-            for (Ecu e : ecus) {
-                if (physical && !e.engine) continue;
+            for (Ecu e : heard) {
                 List<Integer> data = new ArrayList<>();
                 data.add(0x41);
                 for (int pid : pids) {
@@ -251,18 +278,27 @@ public final class SimTest {
                     spaces = true;
                     headers = false;
                     physical = false;
+                    cra = null;
                     return "\rELM327 " + (honda ? "v2.1" : "v1.5");
                 case "I": return "ELM327 " + (honda ? "v2.1" : "v1.5");
                 case "E0": echo = false; return "OK";
                 case "S0": spaces = false; return "OK";
                 case "H0": headers = false; return "OK";
-                case "H1": headers = true; return "OK";
+                case "H1": headers = headersSupported; return "OK";
                 case "DPN": return honda ? (protocol.equals("6") ? "6" : "A7") : "A6";
                 default:
                     if (c.startsWith("SP")) protocol = c.substring(2);
+                    if (c.startsWith("CRA")) {
+                        if (!craSupported) return "?";
+                        cra = c.length() > 3 ? c.substring(3) : null;
+                    }
                     if (c.startsWith("SH")) physical = c.substring(2).equals(honda ? "DA10F1" : "7E0");
                     return "OK";
             }
+        }
+
+        String responseId(Ecu e) {
+            return honda ? String.format("18DAF1%02X", e.addr) : String.format("%03X", 0x7E8 + e.index);
         }
 
         /** Monta os quadros CAN (8 bytes, preenchimento 0x55) de uma resposta. */
@@ -307,8 +343,7 @@ public final class SimTest {
             StringBuilder b = new StringBuilder();
             if (headers) {
                 for (int e = 0; e < who.size(); e++) {
-                    String hdr = honda ? String.format("18DAF1%02X", who.get(e).addr)
-                            : String.format("%03X", 0x7E8 + who.get(e).index);
+                    String hdr = responseId(who.get(e));
                     for (int[] f : all.get(e)) b.append(hdr).append(sep).append(hex(f, 0, 8, sep)).append('\r');
                 }
                 return b.toString().trim();
@@ -360,11 +395,13 @@ public final class SimTest {
             float t = (System.nanoTime() - start) / 1e9f;
             float tp = t - pullStart;
             boolean pull = tp > 0f && tp < 4f;
+            // Tirou o pé: a borboleta fecha e o rail cai na hora, mas o turbo leva 0,6 s para esvaziar.
+            boolean lift = tp >= 4f && tp < 4.6f;
             float k = pull ? Math.min(1f, tp / 1.2f) : 0f;  // rampa da pressão
             float rpm = pull ? 2000 + tp * 950 : 1800;
-            float map = pull ? BARO + k * 129 : 60;        // até 221 kPa = 1,29 bar
+            float map = pull ? BARO + k * 129 : lift ? BARO + 129 * (1 - (tp - 4f) / 0.6f) : 60;
             float lambda = pull && tp > 0.6f ? 0.80f : 1.0f;
-            float rail = pull ? 150 + k * 50 : 120;        // bar
+            float rail = pull ? 150 + k * 50 : lift ? 50 : 120;  // bar
             float timing = 12;
             if (problems && pull && tp > 2.5f) {
                 lambda = 0.90f;   // empobreceu
@@ -382,7 +419,7 @@ public final class SimTest {
                 case 0x0E: return new int[]{Math.round((timing + 64) * 2)};
                 case 0x0F: return new int[]{35 + 40};
                 case 0x10: return u16(Math.round((pull ? 90 : 12) * 100));
-                case 0x11: return new int[]{pull ? 230 : 40};
+                case 0x11: return new int[]{pull ? 230 : 40};  // 90% / 16%
                 case 0x23: return u16(Math.round(rail * 10));
                 case 0x24: {
                     int[] l = u16(Math.round(lambda * 32768));

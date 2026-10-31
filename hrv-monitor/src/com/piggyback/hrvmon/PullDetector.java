@@ -8,16 +8,21 @@ import java.util.Locale;
 
 /**
  * Detecta "puxadas" (aceleração forte com turbo) e resume o que importa em cada uma:
- * pressão máxima, λ sob carga, avanço e pressão do rail.
+ * pressão máxima, λ medido contra o pedido pela central, avanço e pressão do rail.
+ *
+ * Recebe só leituras recentes (valores velhos chegam como NaN). λ, rail e avanço são
+ * avaliados no "miolo" da puxada: depois do primeiro segundo e antes de a borboleta fechar.
  */
 final class PullDetector {
-    /** Acima disso, sob turbo, a mistura está mais pobre que o original (~0,80). */
-    static final float LAMBDA_LEAN = 0.86f;
+    /** Medido acima do pedido por mais que isso, sob turbo, é mistura mais pobre que a planejada. */
+    static final float LEAN_DEVIATION = 0.05f;
     static final float BOOST_START = 0.25f;  // bar
     private static final float START_AFTER = 0.8f;  // s acima de BOOST_START
     private static final float END_AFTER = 0.7f;    // s abaixo de BOOST_START
     private static final float MIN_DURATION = 1.5f;
-    private static final float TAIL_TRIM = 0.5f;    // s ignorados no fim para λ, rail e avanço
+    private static final float TAIL_TRIM = 0.5f;    // s ignorados no fim, mesmo sem dado da borboleta
+    private static final float LIFT_RATIO = 0.6f;   // borboleta abaixo disso do máximo = tirou o pé
+    private static final float MAX_GAP = 0.35f;     // s entre leituras para comparar avanço
 
     static final class Pull {
         int number;
@@ -28,26 +33,33 @@ final class PullDetector {
         float boostCmdMax = Float.NEGATIVE_INFINITY;
         float lambdaMin = Float.POSITIVE_INFINITY, lambdaMaxLoaded = Float.NEGATIVE_INFINITY;
         float lambdaCmdMin = Float.POSITIVE_INFINITY;
+        float leanDevMax = Float.NEGATIVE_INFINITY;
+        int leanRun;
         float timingMin = Float.POSITIVE_INFINITY, timingMax = Float.NEGATIVE_INFINITY;
         int timingDrops;
         float railPeak = Float.NEGATIVE_INFINITY, railMinAfterPeak = Float.POSITIVE_INFINITY;
         float iatMax = Float.NEGATIVE_INFINITY, iat2Max = Float.NEGATIVE_INFINITY;
         float ethanol = Float.NaN, speedMax = Float.NEGATIVE_INFINITY;
         float wgMin = Float.POSITIVE_INFINITY, wgMax = Float.NEGATIVE_INFINITY;
+        int samples;
         boolean mapSaturated;
         final List<String> flags = new ArrayList<>();
 
         String summary() {
             StringBuilder b = new StringBuilder();
             b.append("Puxada #").append(number).append(" · ").append(Fmt.f(t1 - t0, 1)).append(" s · ")
+                    .append(samples).append(" leituras · ")
                     .append(new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date(wallStart))).append('\n');
             b.append("Rotação: ").append(Fmt.f(rpmStart, 0)).append(" → ").append(Fmt.f(rpmMax, 0)).append(" rpm\n");
             b.append("Turbo máx: ").append(Fmt.f(boostMax, 2)).append(" bar (MAP ").append(Fmt.f(mapMax, 0)).append(" kPa)");
             if (Fmt.ok(boostCmdMax)) b.append(" · alvo ").append(Fmt.f(boostCmdMax, 2)).append(" bar");
             b.append('\n');
-            b.append("λ: mín ").append(Fmt.f(lambdaMin, 2)).append(" · máx sob carga ").append(Fmt.f(lambdaMaxLoaded, 2));
-            if (Fmt.ok(lambdaCmdMin)) b.append(" · comandado mín ").append(Fmt.f(lambdaCmdMin, 2));
+            b.append("λ medido: mín ").append(Fmt.f(lambdaMin, 2)).append(" · máx com turbo ").append(Fmt.f(lambdaMaxLoaded, 2));
+            if (Fmt.ok(lambdaCmdMin)) b.append(" · pedido mín ").append(Fmt.f(lambdaCmdMin, 2));
             b.append('\n');
+            if (Fmt.ok(leanDevMax)) {
+                b.append("λ medido − pedido, máx: ").append(leanDevMax >= 0 ? "+" : "").append(Fmt.f(leanDevMax, 2)).append('\n');
+            }
             b.append("Avanço: ").append(Fmt.f(timingMin, 1)).append("° a ").append(Fmt.f(timingMax, 1)).append("°\n");
             if (Fmt.ok(railPeak)) {
                 b.append("Rail: pico ").append(Fmt.f(railPeak, 0)).append(" bar · mín depois do pico ")
@@ -88,6 +100,7 @@ final class PullDetector {
         return done.size();
     }
 
+    /** {@code s} traz só leituras recentes; valores velhos vêm como NaN. */
     synchronized void feed(float t, float[] s) {
         float boost = s[Ch.BOOST];
         float load = s[Ch.LOAD];
@@ -108,7 +121,7 @@ final class PullDetector {
                     samples.addAll(pending);
                     lowSince = -1;
                 }
-            } else {
+            } else if (Fmt.ok(boost) || Fmt.ok(load)) {
                 highSince = -1;
             }
             return;
@@ -117,7 +130,7 @@ final class PullDetector {
         if (high) {
             samples.add(sample(t, s));
             lowSince = -1;
-        } else {
+        } else if (Fmt.ok(boost) || Fmt.ok(load)) {
             if (lowSince < 0) lowSince = t;
             if (t - lowSince >= END_AFTER) finish();
         }
@@ -130,6 +143,10 @@ final class PullDetector {
         return r;
     }
 
+    private static float v(float[] r, int ch) {
+        return r[ch + 1];
+    }
+
     private void finish() {
         Pull p = cur;
         cur = null;
@@ -138,53 +155,73 @@ final class PullDetector {
         lowSince = -1;
         if (p.t1 - p.t0 < MIN_DURATION) return;
 
-        // λ, rail e avanço ignoram o primeiro segundo (o turbo ainda está enchendo) e o último
-        // meio segundo (ao tirar o pé, cada leitura cai num instante diferente).
+        // Miolo: depois do primeiro segundo (turbo enchendo) e antes de tirar o pé.
         float coreStart = p.t0 + 1f, coreEnd = p.t1 - TAIL_TRIM;
-        float prevTiming = Float.NaN, prevRpm = Float.NaN;
+        float thrMax = Float.NEGATIVE_INFINITY;
+        for (float[] r : samples) {
+            float thr = v(r, Ch.THROTTLE);
+            if (!Fmt.ok(thr)) continue;
+            if (thrMax > 20f && thr < thrMax * LIFT_RATIO) {
+                coreEnd = Math.min(coreEnd, r[0] - 0.01f);
+                break;
+            }
+            thrMax = Math.max(thrMax, thr);
+        }
+
+        float prevT = Float.NaN, prevTiming = Float.NaN, prevRpm = Float.NaN;
+        int run = 0;
         for (float[] r : samples) {
             float t = r[0];
-            float rpm = r[Ch.RPM + 1], boost = r[Ch.BOOST + 1];
+            float rpm = v(r, Ch.RPM), boost = v(r, Ch.BOOST);
+            p.samples++;
             if (!Fmt.ok(p.rpmStart)) p.rpmStart = rpm;
             if (Fmt.ok(rpm)) p.rpmMax = Math.max(p.rpmMax, rpm);
             if (Fmt.ok(boost)) p.boostMax = Math.max(p.boostMax, boost);
-            if (Fmt.ok(r[Ch.MAP + 1])) p.mapMax = Math.max(p.mapMax, r[Ch.MAP + 1]);
-            if (Fmt.ok(r[Ch.BOOST_CMD + 1])) p.boostCmdMax = Math.max(p.boostCmdMax, r[Ch.BOOST_CMD + 1]);
-            if (r[Ch.MAP_0B + 1] >= Pids.mapMax - 0.5f && !Fmt.ok(r[Ch.MAP_87 + 1]) && !Fmt.ok(r[Ch.MAP_70 + 1])) {
+            if (Fmt.ok(v(r, Ch.MAP))) p.mapMax = Math.max(p.mapMax, v(r, Ch.MAP));
+            if (Fmt.ok(v(r, Ch.BOOST_CMD))) p.boostCmdMax = Math.max(p.boostCmdMax, v(r, Ch.BOOST_CMD));
+            if (v(r, Ch.MAP_0B) >= Pids.mapMax - 0.5f && !Fmt.ok(v(r, Ch.MAP_87)) && !Fmt.ok(v(r, Ch.MAP_70))) {
                 p.mapSaturated = true;
             }
-            if (Fmt.ok(r[Ch.IAT + 1])) p.iatMax = Math.max(p.iatMax, r[Ch.IAT + 1]);
-            if (Fmt.ok(r[Ch.IAT2 + 1])) p.iat2Max = Math.max(p.iat2Max, r[Ch.IAT2 + 1]);
-            if (Fmt.ok(r[Ch.WG + 1])) {
-                p.wgMin = Math.min(p.wgMin, r[Ch.WG + 1]);
-                p.wgMax = Math.max(p.wgMax, r[Ch.WG + 1]);
+            if (Fmt.ok(v(r, Ch.IAT))) p.iatMax = Math.max(p.iatMax, v(r, Ch.IAT));
+            if (Fmt.ok(v(r, Ch.IAT2))) p.iat2Max = Math.max(p.iat2Max, v(r, Ch.IAT2));
+            if (Fmt.ok(v(r, Ch.WG))) {
+                p.wgMin = Math.min(p.wgMin, v(r, Ch.WG));
+                p.wgMax = Math.max(p.wgMax, v(r, Ch.WG));
             }
-            if (Fmt.ok(r[Ch.ETHANOL + 1])) p.ethanol = r[Ch.ETHANOL + 1];
-            if (Fmt.ok(r[Ch.SPEED + 1])) p.speedMax = Math.max(p.speedMax, r[Ch.SPEED + 1]);
-            if (Fmt.ok(r[Ch.LAMBDA_CMD + 1])) p.lambdaCmdMin = Math.min(p.lambdaCmdMin, r[Ch.LAMBDA_CMD + 1]);
+            if (Fmt.ok(v(r, Ch.ETHANOL))) p.ethanol = v(r, Ch.ETHANOL);
+            if (Fmt.ok(v(r, Ch.SPEED))) p.speedMax = Math.max(p.speedMax, v(r, Ch.SPEED));
 
-            float lam = r[Ch.LAMBDA + 1];
-            if (Fmt.ok(lam) && lam < 1.5f) {  // 2,0 = corte de combustível, não é mistura
-                p.lambdaMin = Math.min(p.lambdaMin, lam);
-            }
-            float timing = r[Ch.TIMING + 1];
+            // 2,0 = corte de combustível, não é mistura.
+            float lam = v(r, Ch.LAMBDA), cmd = v(r, Ch.LAMBDA_CMD);
+            boolean lamOk = Fmt.ok(lam) && lam < 1.5f, cmdOk = Fmt.ok(cmd) && cmd < 1.5f;
+            if (lamOk) p.lambdaMin = Math.min(p.lambdaMin, lam);
+            if (cmdOk) p.lambdaCmdMin = Math.min(p.lambdaCmdMin, cmd);
+            float timing = v(r, Ch.TIMING);
             if (Fmt.ok(timing)) {
                 p.timingMin = Math.min(p.timingMin, timing);
                 p.timingMax = Math.max(p.timingMax, timing);
             }
-            if (t > coreEnd) continue;
+            if (t < coreStart || t > coreEnd) continue;
 
-            if (Fmt.ok(lam) && lam < 1.5f && t >= coreStart && Fmt.ok(boost) && boost > 0.3f) {
-                p.lambdaMaxLoaded = Math.max(p.lambdaMaxLoaded, lam);
+            boolean loaded = Fmt.ok(boost) && boost > 0.3f;
+            if (lamOk && loaded) p.lambdaMaxLoaded = Math.max(p.lambdaMaxLoaded, lam);
+            if (lamOk && cmdOk && loaded) {
+                float dev = lam - cmd;
+                p.leanDevMax = Math.max(p.leanDevMax, dev);
+                run = dev > LEAN_DEVIATION ? run + 1 : 0;
+                p.leanRun = Math.max(p.leanRun, run);
             }
-            // Queda brusca com a rotação subindo = a ECU tirando avanço (detonação).
-            if (Fmt.ok(timing) && Fmt.ok(prevTiming) && timing < prevTiming - 3f
+            // Queda brusca entre leituras próximas, com a rotação subindo = a central tirando avanço.
+            if (Fmt.ok(timing) && Fmt.ok(prevTiming) && t - prevT <= MAX_GAP && timing < prevTiming - 3f
                     && Fmt.ok(rpm) && Fmt.ok(prevRpm) && rpm >= prevRpm - 50f) {
                 p.timingDrops++;
             }
-            prevTiming = timing;
-            prevRpm = rpm;
-            float rail = r[Ch.RAIL + 1];
+            if (Fmt.ok(timing)) {
+                prevT = t;
+                prevTiming = timing;
+                prevRpm = rpm;
+            }
+            float rail = v(r, Ch.RAIL);
             if (Fmt.ok(rail)) {
                 if (rail > p.railPeak) {
                     p.railPeak = rail;
@@ -196,19 +233,22 @@ final class PullDetector {
         }
         samples.clear();
 
-        if (p.lambdaMaxLoaded > LAMBDA_LEAN) {
-            p.flags.add("⚠ Mistura empobreceu sob carga: λ máx " + Fmt.f(p.lambdaMaxLoaded, 2)
-                    + " (limite " + Fmt.f(LAMBDA_LEAN, 2) + ")");
+        if (p.leanRun >= 2) {
+            p.flags.add("⚠ Mistura mais pobre que a pedida pela central: λ medido até "
+                    + Fmt.f(p.leanDevMax, 2) + " acima do pedido");
         }
         if (Fmt.ok(p.railPeak) && p.railPeak > 0 && p.railMinAfterPeak < p.railPeak * 0.85f) {
             p.flags.add("⚠ Pressão do rail caiu " + Fmt.f((1 - p.railMinAfterPeak / p.railPeak) * 100, 0)
-                    + "% durante a puxada (" + Fmt.f(p.railPeak, 0) + " → " + Fmt.f(p.railMinAfterPeak, 0) + " bar)");
+                    + "% com o pé no fundo (" + Fmt.f(p.railPeak, 0) + " → " + Fmt.f(p.railMinAfterPeak, 0) + " bar)");
         }
         if (p.timingDrops > 0) {
             p.flags.add("⚠ " + p.timingDrops + " queda(s) brusca(s) de avanço: possível correção de detonação");
         }
         if (p.mapSaturated) {
             p.flags.add("ℹ MAP no limite do PID 0x0B (" + Fmt.f(Pids.mapMax, 0) + " kPa): a pressão real pode ser maior");
+        }
+        if (p.samples < 8) {
+            p.flags.add("ℹ Poucas leituras (" + p.samples + "): os alertas desta puxada são pouco confiáveis");
         }
         if (p.flags.isEmpty()) p.flags.add("✓ Nada anormal nesta puxada");
         p.number = done.size() + 1;

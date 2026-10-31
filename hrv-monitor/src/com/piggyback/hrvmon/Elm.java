@@ -136,6 +136,41 @@ final class Elm {
         return msgs;
     }
 
+    /**
+     * Com cabeçalhos ligados (ATH1): cada linha é um quadro CAN cru, com o ID de quem mandou e
+     * o byte de controle ISO-TP. Monta as mensagens só do módulo {@code only}, mesmo que os
+     * quadros de vários módulos venham intercalados.
+     */
+    static List<int[]> parseFrames(String raw, String only) {
+        List<int[]> msgs = new ArrayList<>();
+        int hdrLen = only.length();
+        int[] buf = null;
+        int len = 0, have = 0;
+        for (String line : raw.toUpperCase(Locale.US).replace(" ", "").split("[\r\n]+")) {
+            if (!line.startsWith(only) || !line.matches("[0-9A-F]+") || line.length() < hdrLen + 4) continue;
+            int[] f = bytes(line.substring(hdrLen), -1);
+            int type = f[0] >> 4;
+            if (type == 0) {  // quadro único
+                int n = Math.min(f[0] & 0x0F, f.length - 1);
+                int[] m = new int[n];
+                System.arraycopy(f, 1, m, 0, n);
+                msgs.add(m);
+            } else if (type == 1 && f.length >= 2) {  // primeiro de vários
+                len = ((f[0] & 0x0F) << 8) | f[1];
+                buf = new int[len];
+                have = 0;
+                for (int i = 2; i < f.length && have < len; i++) buf[have++] = f[i];
+            } else if (type == 2 && buf != null) {  // continuação
+                for (int i = 1; i < f.length && have < len; i++) buf[have++] = f[i];
+                if (have == len) {
+                    msgs.add(buf);
+                    buf = null;
+                }
+            }
+        }
+        return msgs;
+    }
+
     private static int[] bytes(CharSequence hex, int limit) {
         int n = hex.length() / 2;
         if (limit >= 0) n = Math.min(n, limit);

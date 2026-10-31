@@ -12,8 +12,9 @@ import java.util.regex.Pattern;
 
 /**
  * Thread que conecta ao ELM327, descobre os PIDs suportados e lê os dados em laço.
- * Os PIDs rápidos (rotação, λ, pressão do turbo, avanço, rail, wastegate) são lidos em toda
- * volta; os lentos (temperaturas, trims, etanol...) se revezam a cada 3 voltas.
+ * Os PIDs rápidos (rotação, λ medido e pedido, pressão do turbo, avanço, rail, wastegate,
+ * borboleta) são lidos em toda volta; os lentos (temperaturas, trims, etanol...) se revezam a
+ * cada 3 voltas.
  *
  * Os pedidos vão só para a central do motor. Com o pedido para todos os módulos, câmbio e
  * outros respondem junto, e clones do ELM327 embaralham as respostas de vários quadros.
@@ -25,9 +26,11 @@ final class Poller implements Runnable {
     private static final int[] REQUEST_SIZES = {6, 3, 1};
     private static final int MAX_TIMEOUTS = 5;
     private static final int LAMBDA = -1, BOOST = -2, RAIL = -3;
-    private static final int[] FAST = {0x0C, LAMBDA, BOOST, 0x0E, RAIL, 0x72};
-    private static final int[] SLOW = {0x0B, 0x87, 0x44, 0x11, 0x49, 0x68, 0x0F, 0x67, 0x05, 0x06, 0x07,
+    private static final int[] FAST = {0x0C, LAMBDA, 0x44, BOOST, 0x0E, RAIL, 0x72, 0x11};
+    private static final int[] SLOW = {0x0B, 0x87, 0x49, 0x68, 0x0F, 0x67, 0x05, 0x06, 0x07,
         0x33, 0x52, 0x0D, 0x04, 0x66, 0x10};
+    /** Valores mais velhos que isso não entram na análise das puxadas. */
+    private static final float STALE_S = 2f;
 
     private final Links.Factory factory;
     private volatile boolean running = true;
@@ -36,6 +39,10 @@ final class Poller implements Runnable {
     private Elm elm;
 
     private final float[] state = new float[Ch.COUNT];
+    private final float[] stamp = new float[Ch.COUNT];      // quando cada canal foi lido (s)
+    private final float[] decoded = new float[Ch.COUNT];
+    private final float[] fresh = new float[Ch.COUNT];
+    private long t0 = SystemClock.elapsedRealtime();
     private final boolean[] sup = new boolean[256];
     private final List<Integer> fastPids = new ArrayList<>();
     private final List<Integer> slowPids = new ArrayList<>();
@@ -47,6 +54,8 @@ final class Poller implements Runnable {
     private int emptyAtSize;
     private int timeouts;
     private boolean countSuffix;
+    // Com cabeçalhos ligados, ID da central do motor cujos quadros o app separa dos demais.
+    private String frameFilter;
     private final int[] pidOk = new int[256];
     private final int[] pidEmpty = new int[256];
 
@@ -124,7 +133,7 @@ final class Poller implements Runnable {
         }
 
         try {
-            List<int[]> r = Elm.parse(elm.cmd("010C1", 1500));
+            List<int[]> r = messages(elm.cmd("010C1", 1500));
             countSuffix = !r.isEmpty() && r.get(0).length >= 2 && r.get(0)[0] == 0x41 && r.get(0)[1] == 0x0C;
         } catch (Elm.Timeout e) {
             countSuffix = false;
@@ -145,9 +154,10 @@ final class Poller implements Runnable {
     }
 
     /**
-     * Liga os cabeçalhos, vê quem responde ao 0100 e passa a endereçar só a central do motor
-     * (7E8 → 7E0 em 11 bits; 18DAF110 → DA10F1 em 29 bits). Se não der, fica no endereço
-     * funcional e pede um PID por vez, porque aí as respostas de vários módulos vêm misturadas.
+     * Liga os cabeçalhos, vê quem responde ao 0100 e passa a falar só com a central do motor
+     * (7E8 → 7E0 em 11 bits; 18DAF110 → DA10F1 em 29 bits), ou pelo menos a ouvir só ela.
+     * Se nada disso der, fica no endereço funcional e pede um PID por vez, porque aí as
+     * respostas de vários módulos vêm misturadas.
      */
     private String selectEngineEcu(String proto) throws IOException {
         boolean ext = proto.equals("7") || proto.equals("9");
@@ -179,17 +189,39 @@ final class Poller implements Runnable {
         }
         elm.cmd("ATH0", 1500);
 
+        String functional = ext ? "ATSHDB33F1" : "ATSH7DF";
         if (best != null) {
             String target = ext ? "DA" + best.substring(6, 8) + "F1"
                     : Integer.toHexString(Integer.parseInt(best, 16) - 8).toUpperCase(Locale.US);
+            // 1) Pedido direto para a central, com o filtro de recepção explícito: alguns clones
+            //    não ajustam o filtro sozinhos em 29 bits e respondem NO DATA.
+            if (ext) elm.cmd("ATCP" + best.substring(0, 2), 1500);
             elm.cmd("ATSH" + target, 1500);
-            if (probe(null, 3000)) {
+            elm.cmd("ATCRA" + best, 1500);
+            if (probeSingle()) {
                 Session.log("   central do motor: responde em " + best + ", pedidos para " + target);
                 return "central do motor " + target;
             }
-            Session.log("   " + target + " não respondeu; voltando ao endereço funcional");
+            // 2) Pedido para todos, mas o adaptador só ouve a central; os outros módulos são ignorados.
+            elm.cmd(functional, 1500);
+            if (probeSingle()) {
+                Session.log("   pedido funcional, ouvindo só " + best);
+                return "funcional, ouvindo só a central " + best;
+            }
+            elm.cmd("ATCRA", 1500);
+            // 3) Pedido para todos com cabeçalhos ligados: o próprio app separa os quadros da central,
+            //    mesmo que o adaptador intercale os de vários módulos.
+            elm.cmd("ATH1", 1500);
+            frameFilter = best;
+            if (probeSingle()) {
+                Session.log("   pedido funcional, separando pelos cabeçalhos os quadros de " + best);
+                return "funcional, separando os quadros da central " + best;
+            }
+            frameFilter = null;
+            elm.cmd("ATH0", 1500);
+            Session.log("   não deu para isolar a central " + best + "; voltando ao endereço funcional");
         }
-        elm.cmd(ext ? "ATSHDB33F1" : "ATSH7DF", 1500);
+        elm.cmd(functional, 1500);
         if (responders <= 1) {
             Session.log("   só um módulo responde; endereço funcional basta");
             return "endereço funcional (um módulo responde)";
@@ -199,10 +231,29 @@ final class Poller implements Runnable {
         return "todos os módulos (um PID por pedido)";
     }
 
+    /** Mensagens de uma resposta: separadas por cabeçalho, se ligado, ou no formato padrão. */
+    private List<int[]> messages(String raw) {
+        return frameFilter != null ? Elm.parseFrames(raw, frameFilter) : Elm.parse(raw);
+    }
+
+    /** Verdadeiro se exatamente um módulo respondeu ao 0100. */
+    private boolean probeSingle() throws IOException {
+        try {
+            int n = 0;
+            for (int[] m : messages(elm.cmd("0100", 3000))) {
+                if (m.length >= 2 && m[0] == 0x41 && m[1] == 0x00) n++;
+            }
+            return n == 1;
+        } catch (Elm.Timeout e) {
+            elm.recover();
+            return false;
+        }
+    }
+
     private boolean probe(String protocolCmd, long timeoutMs) throws IOException {
         if (protocolCmd != null) elm.cmd(protocolCmd, 1500);
         try {
-            for (int[] m : Elm.parse(elm.cmd("0100", timeoutMs))) {
+            for (int[] m : messages(elm.cmd("0100", timeoutMs))) {
                 if (m.length >= 2 && m[0] == 0x41 && m[1] == 0x00) return true;
             }
         } catch (Elm.Timeout e) {
@@ -221,7 +272,7 @@ final class Poller implements Runnable {
                 elm.recover();
                 break;
             }
-            for (int[] m : Elm.parse(r)) {
+            for (int[] m : messages(r)) {
                 if (m.length < 6 || m[0] != 0x41 || m[1] != base) continue;
                 for (int i = 0; i < 32; i++) {
                     if ((m[2 + i / 8] & (0x80 >> (i % 8))) != 0) sup[base + i + 1] = true;
@@ -275,7 +326,8 @@ final class Poller implements Runnable {
     }
 
     private void loop() throws IOException {
-        long t0 = SystemClock.elapsedRealtime();
+        t0 = SystemClock.elapsedRealtime();
+        Arrays.fill(stamp, -1e9f);
         long rateT = t0;
         int rateN = 0;
         int cycle = 0;
@@ -290,9 +342,11 @@ final class Poller implements Runnable {
             if (!sl.isEmpty() && cycle % 3 == 0) request(sl.get(slowIdx++ % sl.size()));
             cycle++;
             derive();
-            float t = (SystemClock.elapsedRealtime() - t0) / 1000f;
+            float t = now();
             Session.store.add(t, state);
-            Session.pulls.feed(t, state);
+            // As puxadas só veem leituras recentes; a tela e o CSV mostram o último valor lido.
+            for (int k = 0; k < Ch.COUNT; k++) fresh[k] = t - stamp[k] <= STALE_S ? state[k] : Float.NaN;
+            Session.pulls.feed(t, fresh);
 
             rateN++;
             long now = SystemClock.elapsedRealtime();
@@ -350,29 +404,43 @@ final class Poller implements Runnable {
         StringBuilder c = new StringBuilder("01");
         for (int pid : pids) c.append(Fmt.hex2(pid));
         if (pids.length == 1 && countSuffix) c.append('1');
-        int decoded = 0;
-        for (int[] m : Elm.parse(elm.cmd(c.toString(), timeoutMs))) {
+        int n = 0;
+        String r = elm.cmd(c.toString(), timeoutMs);
+        float t = now();
+        for (int[] m : messages(r)) {
             if (m.length < 2 || m[0] != 0x41) continue;
             int i = 1;
             while (i < m.length) {
                 int pid = m[i];
                 int len = Pids.LEN[pid];
                 if (len == 0 || i + 1 + len > m.length || !contains(pids, pid)) break;
-                Pids.decode(pid, m, i + 1, state);
-                decoded++;
+                Arrays.fill(decoded, Float.NaN);
+                Pids.decode(pid, m, i + 1, decoded);
+                for (int k = 0; k < Ch.COUNT; k++) {
+                    if (Float.isNaN(decoded[k])) continue;
+                    state[k] = decoded[k];
+                    stamp[k] = t;
+                }
+                n++;
                 i += 1 + len;
             }
         }
-        return decoded;
+        return n;
+    }
+
+    private float now() {
+        return (SystemClock.elapsedRealtime() - t0) / 1000f;
     }
 
     private void derive() {
-        float map = Fmt.ok(state[Ch.MAP_87]) ? state[Ch.MAP_87]
-                : Fmt.ok(state[Ch.MAP_70]) ? state[Ch.MAP_70] : state[Ch.MAP_0B];
+        // Mesma ordem de preferência da fonte de pressão do turbo em buildGroups().
+        int src = Fmt.ok(state[Ch.MAP_70]) ? Ch.MAP_70 : Fmt.ok(state[Ch.MAP_87]) ? Ch.MAP_87 : Ch.MAP_0B;
         float baro = Fmt.ok(state[Ch.BARO]) ? state[Ch.BARO] : 101.3f;
-        state[Ch.MAP] = map;
-        state[Ch.BOOST] = (map - baro) / 100f;
+        state[Ch.MAP] = state[src];
+        state[Ch.BOOST] = (state[src] - baro) / 100f;
         state[Ch.BOOST_CMD] = (state[Ch.BOOST_CMD_ABS] - baro) / 100f;
+        stamp[Ch.MAP] = stamp[Ch.BOOST] = stamp[src];
+        stamp[Ch.BOOST_CMD] = stamp[Ch.BOOST_CMD_ABS];
     }
 
     private static boolean contains(int[] a, int v) {

@@ -24,20 +24,27 @@ respondem saem da leitura.
 
 Os pedidos vão só para a central do motor. O app liga os cabeçalhos, vê quem responde ao
 0100 e passa a endereçar a central (7E8 → 7E0 em CAN 11 bits; 18DAF110 → DA10F1 em 29 bits,
-como no HR-V 2024). Sem isso, câmbio e outros módulos respondem junto e clones do ELM327
-embaralham as respostas de vários quadros.
+como no HR-V 2024), com o filtro de recepção (`ATCRA`) explícito. Se o adaptador não aceitar,
+manda o pedido para todos mas só ouve a central. Se nem isso der, liga os cabeçalhos (`ATH1`)
+e separa ele mesmo os quadros da central, remontando as mensagens de vários quadros. Sem
+nada disso, câmbio e outros módulos respondem junto e clones do ELM327 embaralham as
+respostas; nesse último caso o app pede um PID por vez.
 
 ## Puxadas
 
 Uma puxada começa quando a pressão do turbo fica acima de 0,25 bar por 0,8 s e termina
-quando fica abaixo por 0,7 s. Para cada uma, o app guarda rotação, pressão máxima,
-λ mínimo e máximo sob carga, faixa de avanço, pressão do rail e temperatura do ar, e
-avisa se:
+quando fica abaixo por 0,7 s. O resumo usa só leituras recentes (até 2 s); λ, rail e avanço
+são avaliados no miolo da puxada, depois do primeiro segundo e antes de a borboleta fechar.
+Para cada uma, o app guarda rotação, pressão máxima e alvo, λ medido e pedido, faixa de
+avanço, pressão do rail, wastegate e temperaturas do ar, e avisa se:
 
-- o λ passar de 0,86 com mais de 0,3 bar de turbo, depois do primeiro segundo;
-- a pressão do rail cair mais de 15% depois do pico;
-- o avanço cair mais de 3° de uma leitura para a outra com a rotação subindo;
-- o MAP ficar travado em 255 kPa (limite do PID 0x0B).
+- o λ medido ficar mais de 0,05 acima do λ pedido pela central (0x44), com mais de 0,3 bar,
+  em duas leituras seguidas. O 1.5 turbo do HR-V roda em λ 1,00 com boa parte do turbo e só
+  enriquece perto do limite, então um limite fixo de λ daria alarme falso;
+- a pressão do rail cair mais de 15% depois do pico, ainda com o pé no fundo;
+- o avanço cair mais de 3° entre leituras com até 0,35 s de distância, com a rotação subindo;
+- o MAP do PID 0x0B ficar no limite da escala;
+- a puxada tiver menos de 8 leituras (alertas pouco confiáveis).
 
 ## Como usar
 
