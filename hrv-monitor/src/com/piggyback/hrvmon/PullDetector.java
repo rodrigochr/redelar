@@ -11,7 +11,9 @@ import java.util.Locale;
  * pressão máxima, λ medido contra o pedido pela central, avanço e pressão do rail.
  *
  * Recebe só leituras recentes (valores velhos chegam como NaN). λ, rail e avanço são
- * avaliados no "miolo" da puxada: depois do primeiro segundo e antes de a borboleta fechar.
+ * avaliados no "miolo" da puxada: depois do primeiro segundo, antes de a borboleta fechar e
+ * fora das trocas de marcha. Na troca (inclusive a automática no limitador, mesmo em S), a
+ * central corta avanço de propósito para aliviar o torque; isso não é detonação.
  */
 final class PullDetector {
     /** Medido acima do pedido por mais que isso, sob turbo, é mistura mais pobre que a planejada. */
@@ -23,6 +25,8 @@ final class PullDetector {
     private static final float TAIL_TRIM = 0.5f;    // s ignorados no fim, mesmo sem dado da borboleta
     private static final float LIFT_RATIO = 0.6f;   // borboleta abaixo disso do máximo = tirou o pé
     private static final float MAX_GAP = 0.35f;     // s entre leituras para comparar avanço
+    private static final float SHIFT_DROP = 300f;   // rpm que caem de uma leitura a outra numa troca
+    private static final float SHIFT_MARGIN = 0.5f; // s ignorados antes e depois de cada troca
 
     static final class Pull {
         int number;
@@ -42,6 +46,7 @@ final class PullDetector {
         float ethanol = Float.NaN, speedMax = Float.NEGATIVE_INFINITY;
         float wgMin = Float.POSITIVE_INFINITY, wgMax = Float.NEGATIVE_INFINITY;
         int samples;
+        int shifts;
         boolean mapSaturated;
         final List<String> flags = new ArrayList<>();
 
@@ -73,6 +78,9 @@ final class PullDetector {
             b.append(" °C");
             if (Fmt.ok(ethanol)) b.append(" · etanol ").append(Fmt.f(ethanol, 0)).append('%');
             if (Fmt.ok(speedMax)) b.append(" · ").append(Fmt.f(speedMax, 0)).append(" km/h");
+            if (shifts > 0) {
+                b.append('\n').append(shifts).append(" troca(s) de marcha: ignorada(s) na análise de λ, avanço e rail");
+            }
             for (String f : flags) b.append('\n').append(f);
             return b.toString();
         }
@@ -143,6 +151,11 @@ final class PullDetector {
         return r;
     }
 
+    private static boolean inside(List<float[]> windows, float t) {
+        for (float[] w : windows) if (t >= w[0] && t <= w[1]) return true;
+        return false;
+    }
+
     private static float v(float[] r, int ch) {
         return r[ch + 1];
     }
@@ -166,6 +179,21 @@ final class PullDetector {
                 break;
             }
             thrMax = Math.max(thrMax, thr);
+        }
+
+        // Trocas de marcha: a rotação cai de repente com o pé ainda no fundo.
+        List<float[]> shiftWindows = new ArrayList<>();
+        float lastRpmT = Float.NaN, lastRpm = Float.NaN;
+        for (float[] r : samples) {
+            float rpm = v(r, Ch.RPM);
+            if (!Fmt.ok(rpm)) continue;
+            // Depois de tirar o pé a rotação também cai, mas isso não é troca.
+            if (Fmt.ok(lastRpm) && lastRpm - rpm > SHIFT_DROP && r[0] - lastRpmT <= 1f && r[0] <= coreEnd) {
+                shiftWindows.add(new float[]{lastRpmT - SHIFT_MARGIN, r[0] + SHIFT_MARGIN});
+                p.shifts++;
+            }
+            lastRpmT = r[0];
+            lastRpm = rpm;
         }
 
         float prevT = Float.NaN, prevTiming = Float.NaN, prevRpm = Float.NaN;
@@ -202,6 +230,10 @@ final class PullDetector {
                 p.timingMax = Math.max(p.timingMax, timing);
             }
             if (t < coreStart || t > coreEnd) continue;
+            if (inside(shiftWindows, t)) {
+                run = 0;
+                continue;
+            }
 
             boolean loaded = Fmt.ok(boost) && boost > 0.3f;
             if (lamOk && loaded) p.lambdaMaxLoaded = Math.max(p.lambdaMaxLoaded, lam);

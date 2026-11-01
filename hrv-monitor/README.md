@@ -36,7 +36,10 @@ respostas; nesse último caso o app pede um PID por vez.
 
 Uma puxada começa quando a pressão do turbo fica acima de 0,25 bar por 0,8 s e termina
 quando fica abaixo por 0,7 s. O resumo usa só leituras recentes (até 2 s); λ, rail e avanço
-são avaliados no miolo da puxada, depois do primeiro segundo e antes de a borboleta fechar.
+são avaliados no miolo da puxada, depois do primeiro segundo e antes de a borboleta fechar,
+e fora das trocas de marcha (a rotação cai mais de 300 rpm com o pé no fundo; ignora 0,5 s
+antes e depois). Na troca, inclusive a automática no limitador em S, a central corta avanço
+de propósito para aliviar o torque.
 Para cada uma, o app guarda rotação, pressão máxima e alvo, λ medido e pedido, faixa de
 avanço, pressão do rail, wastegate e temperaturas do ar, e avisa se:
 

@@ -7,8 +7,8 @@ cd "$(dirname "$0")"
 SDK="${ANDROID_HOME:-$HOME/android-sdk}"
 BT="$SDK/build-tools/35.0.1"
 JAR="$SDK/platforms/android-35/android.jar"
-VERSION_NAME="0.1.4"
-VERSION_CODE="5"
+VERSION_NAME="0.1.5"
+VERSION_CODE="6"
 OUT=build
 
 rm -rf "$OUT"

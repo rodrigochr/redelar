@@ -25,7 +25,9 @@ import java.util.Locale;
  *   honda-filtro    igual, mas o pedido direto nunca funciona; só "pedir para todos e ouvir a central"
  *   honda-velho     igual, mas o adaptador não aceita ATCRA: o app separa os quadros pelos cabeçalhos
  *   honda-sem-cabecalho  nem ATCRA nem cabeçalhos: um PID por pedido
- * Em todos, ao fim da puxada a borboleta fecha e o rail cai enquanto o turbo ainda está cheio.
+ * Em todos, ao fim da puxada a borboleta fecha e o rail cai enquanto o turbo ainda está cheio,
+ * e no meio dela há uma troca de marcha automática: a rotação cai, a central corta avanço e
+ * a mistura oscila por uma fração de segundo.
  */
 public final class SimTest {
     static final int[] ECM_BASIC = {0x04, 0x05, 0x06, 0x07, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11,
@@ -101,6 +103,7 @@ public final class SimTest {
         check(Math.abs(pull.boostMax - 1.29f) < 0.05f, "boost máx " + pull.boostMax);
         check(Math.abs(pull.lambdaMin - 0.80f) < 0.02f, "λ mín " + pull.lambdaMin);
         check(pull.rpmMax > 5500, "rpm máx " + pull.rpmMax);
+        check(pull.shifts == 1, "trocas de marcha detectadas: " + pull.shifts);
         check(Math.abs(pull.railPeak - 200f) < 1f, "rail pico " + pull.railPeak);
         check(Math.abs(mid[Ch.TIMING + 1] - (problems ? 6f : 12f)) < 0.01f, "avanço " + mid[Ch.TIMING + 1]);
         // Separando pelos cabeçalhos, os três módulos respondem e o clone trava com mais de 3 PIDs.
@@ -418,11 +421,13 @@ public final class SimTest {
             // Tirou o pé: a borboleta fecha e o rail cai na hora, mas o turbo leva 0,6 s para esvaziar.
             boolean lift = tp >= 4f && tp < 4.6f;
             float k = pull ? Math.min(1f, tp / 1.2f) : 0f;  // rampa da pressão
-            float rpm = pull ? 2000 + tp * 950 : 1800;
+            // Troca de marcha em tp = 1,6 s: a rotação cai 1.000 rpm e volta a subir.
+            float rpm = !pull ? 1800 : tp < 1.6f ? 2000 + tp * 950 : 2520 + (tp - 1.6f) * 1300;
+            boolean shifting = pull && tp >= 1.5f && tp < 1.8f;
             float map = pull ? BARO + k * 129 : lift ? BARO + 129 * (1 - (tp - 4f) / 0.6f) : 60;
-            float lambda = pull && tp > 0.6f ? 0.80f : 1.0f;
+            float lambda = pull && tp > 0.6f ? (shifting && tp >= 1.55f && tp < 1.75f ? 1.15f : 0.80f) : 1.0f;
             float rail = pull ? 150 + k * 50 : lift ? 50 : 120;  // bar
-            float timing = 12;
+            float timing = shifting ? -5 : 12;
             if (problems && pull && tp > 2.5f) {
                 lambda = 0.90f;   // empobreceu
                 rail = 160;       // bomba de alta não segurou
