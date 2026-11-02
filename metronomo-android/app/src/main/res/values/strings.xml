@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BluesTempo</string>
+    <string name="notification_title">BluesTempo tocando</string>
+    <string name="notification_stop">Parar</string>
+    <string name="notification_channel">Reprodução</string>
+    <string name="notification_channel_description">Mostra o metrônomo enquanto ele toca em segundo plano.</string>
+</resources>
