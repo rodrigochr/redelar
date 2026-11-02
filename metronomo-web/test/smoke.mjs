@@ -167,6 +167,31 @@ await page.tap('[data-action="groove"][data-id="rock_basic"]', { timeout: 5000 }
 check(await page.evaluate(() => BluesTempo.settings.songId === null && BluesTempo.settings.progression === 'ROCK_I_IV_V'), 'escolher uma levada tira a música e volta à progressão da levada');
 check(!(await page.locator('.song-banner').count()), 'aviso some depois de tirar a música');
 
+// A cifra acompanha o compasso atual enquanto a música toca (e para de acompanhar se desligado).
+const currentVisible = () => page.evaluate(() => {
+  const cell = document.querySelector('#song-chart .prog-bar.now');
+  if (!cell) return null;
+  const r = cell.getBoundingClientRect();
+  const v = document.getElementById('tab').getBoundingClientRect();
+  return r.top >= v.top && r.bottom <= v.bottom;
+});
+await page.tap('[data-tab="songs"]');
+await page.tap('[data-action="song"][data-id="comfortably_numb"]');
+await page.evaluate(() => BluesTempo.update({ bpm: 260 }, { rerender: false }));
+await page.evaluate(() => { const t = document.getElementById('tab'); t.scrollTop = t.scrollHeight; });
+await page.evaluate(() => document.getElementById('play').click());
+await page.waitForTimeout(6000);
+check(await currentVisible() === true, 'tela rola sozinha até o compasso atual');
+await page.screenshot({ path: join(OUT, '11-acompanhando.png') });
+await page.evaluate(() => document.getElementById('play').click());
+await page.evaluate(() => BluesTempo.update({ followChart: false }));
+await page.evaluate(() => { const t = document.getElementById('tab'); t.scrollTop = t.scrollHeight; });
+await page.evaluate(() => document.getElementById('play').click());
+await page.waitForTimeout(4000);
+check(await currentVisible() === false, 'com "Acompanhar" desligado, a tela fica onde a pessoa deixou');
+await page.evaluate(() => document.getElementById('play').click());
+await page.evaluate(() => BluesTempo.update({ followChart: true }));
+
 // Tela estreita (352 px) com o nome de música mais longo tocando: nada pode alargar a página.
 await page.setViewportSize({ width: 352, height: 760 });
 await page.tap('[data-tab="songs"]');

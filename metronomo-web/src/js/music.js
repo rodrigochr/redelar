@@ -283,6 +283,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   keepScreenOn: true,
   flashOnDownbeat: false,
   useGrooveTempo: true,
+  followChart: true, // a cifra rola sozinha acompanhando o compasso atual
 });
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -310,6 +311,7 @@ export function normalizeSettings(raw) {
   s.songId = song ? song.id : null;
   s.songPart = song && Number.isInteger(s.songPart) && s.songPart >= 0 && s.songPart < song.parts.length ? s.songPart : -1;
   s.songRepeat = s.songRepeat !== false;
+  s.followChart = s.followChart !== false;
   if (s.mode !== 'GROOVE') s.mode = 'CLICK';
   s.swing = clamp(Number(s.swing) || 0.5, 0.5, 0.75);
   s.clickSwing = clamp(Number(s.clickSwing) || 0.5, 0.5, 0.75);

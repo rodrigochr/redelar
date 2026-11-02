@@ -307,6 +307,8 @@ function songPanel(song) {
     return chip(p === 100 ? `Original ${bpm}` : `${p}% · ${bpm}`, settings.bpm === bpm, 'song-tempo', `data-v="${bpm}"`);
   }).join('');
   const looping = song.parts[settings.songPart];
+  const follow = toggle('follow', 'Acompanhar o acorde atual', 'followChart',
+    'Enquanto a música toca, a tela rola sozinha até o compasso que está soando. Rolar com o dedo pausa por alguns segundos.');
   const playMode = looping
     ? `<div class="loop-bar"><span>Repetindo <b>${looping.index + 1}. ${esc(looping.name)}</b></span>
         <button type="button" class="outline sm" data-action="song-part" data-v="-1">Música inteira</button></div>`
@@ -328,7 +330,7 @@ function songPanel(song) {
     <p class="hint">Andamento, tom e compassos vêm de transcrições e partituras publicadas; confira de ouvido as partes marcadas como incertas.</p>
     <div class="row end"><button type="button" class="text" data-action="song-leave">Tirar a música (voltar às levadas)</button></div>`,
   `Confiança ${song.confidenceLabel.toLowerCase()} · ${song.reference}`);
-  return head + section('Cifra', playMode + songChart(song, g), `${song.length} compassos · ${g.meter} · toque numa parte para repeti-la em loop`) + about;
+  return head + section('Cifra', follow + playMode + songChart(song, g), `${song.length} compassos · ${g.meter} · toque numa parte para repeti-la em loop`) + about;
 }
 
 function songChart(song, g) {
@@ -578,10 +580,7 @@ function updatePosition(force) {
           if (cell) cell.classList.add('now');
           const part = chart.querySelector(`.part[data-part="${playing.index}"]`);
           if (part) part.classList.add('playing');
-          // Acompanha a cifra: se o compasso anterior estava na tela, mantém o atual visível.
-          if (cell && previous && previous !== cell && isVisible(previous) && !isVisible(cell)) {
-            cell.scrollIntoView({ block: 'center', behavior: 'smooth' });
-          }
+          if (cell && cell !== previous) followChart(cell);
         }
       }
     }
@@ -638,11 +637,32 @@ function nextChordChange(prog, bar, beat, beats, current, grooveBeats) {
   return current;
 }
 
-function isVisible(el) {
-  const r = el.getBoundingClientRect();
-  const view = $('#tab').getBoundingClientRect();
-  return r.bottom > view.top && r.top < view.bottom;
+// ------------------------------------------------------------------ cifra acompanhando a música
+
+const FOLLOW_PAUSE_MS = 4000;
+let userScrolledAt = -Infinity;
+
+/**
+ * Mantém o compasso atual visível, no terço de cima da tela. Só rola quando ele sai da faixa
+ * confortável (assim a tela não fica balançando a cada compasso). Se a pessoa rolou com o dedo
+ * há pouco, espera: o acompanhamento volta sozinho alguns segundos depois.
+ */
+function followChart(cell) {
+  if (!settings.followChart || !engine.playing) return;
+  if (performance.now() - userScrolledAt < FOLLOW_PAUSE_MS) return;
+  const tab = $('#tab');
+  const view = tab.getBoundingClientRect();
+  const r = cell.getBoundingClientRect();
+  const top = r.top - view.top;
+  if (top >= view.height * 0.1 && r.bottom - view.top <= view.height * 0.72) return;
+  tab.scrollTo({ top: Math.max(0, tab.scrollTop + top - view.height * 0.25), behavior: 'smooth' });
 }
+
+// Rolagem feita pela pessoa (dedo, roda do mouse, teclado) pausa o acompanhamento.
+['touchmove', 'wheel'].forEach((type) => $('#tab').addEventListener(type, () => { userScrolledAt = performance.now(); }, { passive: true }));
+$('#tab').addEventListener('keydown', (e) => {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) userScrolledAt = performance.now();
+});
 
 function clock() {
   const el = $('#clock');
