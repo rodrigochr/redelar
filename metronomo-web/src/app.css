@@ -162,6 +162,9 @@ input[type="range"] { width: 100%; accent-color: var(--amber); height: 28px; mar
   flex-direction: column;
   gap: 12px;
 }
+/* Os blocos da aba nunca encolhem: a aba rola. (Sem isso, a barra Blues/Rock/Jazz, que tem
+   overflow: hidden, era comprimida a ~0 px e a lista de levadas ficava por cima dela.) */
+.tab > * { flex-shrink: 0; }
 .card { background: var(--surface); border-radius: 16px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
 .card h2 { margin: 0; font-size: 17px; font-weight: 600; text-wrap: balance; }
 .hint { margin: 0; color: var(--muted); font-size: 13px; }

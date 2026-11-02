@@ -69,6 +69,20 @@ check(state.now > 0, 'grade da levada destaca o passo atual');
 await page.screenshot({ path: join(OUT, '2-levadas-tocando.png') });
 await page.tap('#play');
 
+// Gêneros: a barra Blues/Rock/Jazz precisa estar visível e responder ao toque.
+for (const [genre, grooveId] of [['ROCK', 'rock_and_roll'], ['JAZZ', 'swing_medium'], ['BLUES', 'slow_blues']]) {
+  const seg = page.locator(`[data-action="genre"][data-id="${genre}"]`);
+  const box = await seg.boundingBox();
+  check(box && box.height >= 30 && box.x >= 0 && box.x + box.width <= 390, `botão ${genre} visível (${box && Math.round(box.height)} px de altura)`);
+  await seg.tap({ timeout: 5000 });
+  const first = await page.evaluate(() => BluesTempo.settings.genre);
+  check(first === genre, `troca para ${genre}`);
+  await page.tap(`[data-action="groove"][data-id="${grooveId}"]`, { timeout: 5000 });
+  check(await page.evaluate((id) => BluesTempo.settings.grooveId === id, grooveId), `seleciona ${grooveId}`);
+}
+await page.evaluate(() => { document.getElementById('tab').scrollTop = 0; });
+await page.screenshot({ path: join(OUT, '2b-generos.png') });
+
 for (const [tab, file] of [['practice', '3-treino.png'], ['presets', '4-presets.png']]) {
   await page.tap(`[data-tab="${tab}"]`);
   await page.screenshot({ path: join(OUT, file) });
