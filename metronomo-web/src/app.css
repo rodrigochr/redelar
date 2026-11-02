@@ -42,6 +42,8 @@ button { touch-action: manipulation; cursor: pointer; }
   flex-direction: column;
   max-width: 640px;
   margin: 0 auto;
+  /* Nada pode alargar a página além da tela (o celular "afastaria" o zoom e cortaria o painel). */
+  overflow-x: clip;
 }
 
 /* ------------------------------------------------------------------ transporte
@@ -53,11 +55,14 @@ button { touch-action: manipulation; cursor: pointer; }
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid;
+  /* A coluna nunca passa da largura da tela: textos longos (nome da música) são cortados com "…". */
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
+  min-width: 0;
 }
 .transport.flash { animation: flash 0.28s ease-out; }
 @keyframes flash { from { background: rgba(245, 166, 35, 0.35); } to { background: var(--surface); } }
-.status-row { display: flex; align-items: center; gap: 8px; min-height: 22px; }
+.status-row { display: flex; align-items: center; gap: 8px; min-height: 22px; min-width: 0; }
 .mode-tag {
   min-width: 0;
   overflow: hidden;
@@ -70,10 +75,10 @@ button { touch-action: manipulation; cursor: pointer; }
   font-size: 12.5px;
   font-weight: 500;
 }
-.status { margin-left: auto; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.status { margin-left: auto; flex-shrink: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .status.count, .status.loading { color: var(--blue); }
 .status.muted { color: var(--red); }
-.clock { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.clock { flex-shrink: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 .clock.on { color: var(--amber); }
 
 .beats { display: flex; justify-content: center; align-items: center; gap: 7px; height: 20px; }

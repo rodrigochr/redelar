@@ -553,18 +553,15 @@ function updatePosition(force) {
   status.className = pos && pos.muted ? 'status muted' : pos && pos.countIn ? 'status count' : loading ? 'status loading' : 'status';
 
   if (groove) {
-    // Com música, a posição vem na numeração da cifra completa.
+    // Com música, a posição vem na numeração da cifra completa (ou da parte em loop).
     const song = songById(settings.songId);
-    const prog = song ? song.progression(-1, true) : activeProgression(settings);
-    const bar = pos && pos.progressionBar >= 0 ? pos.progressionBar : 0;
+    const prog = activeProgression(settings);
+    const from = song ? prog.from : 0;
+    const bar = pos && pos.progressionBar >= 0 ? pos.progressionBar - from : 0;
     const beat = pos ? pos.beat : 0;
     const beats = pos ? pos.beatsPerBar : prog.beatsAt(bar) || g.beats;
     const current = chordAt(prog, bar, beat, beats);
-    let next = chordAt(prog, bar + 1, 0, beats);
-    for (let b = beat + 1; b < beats; b++) {
-      const c = chordAt(prog, bar, b, beats);
-      if (!sameChord(c, current)) { next = c; break; }
-    }
+    const next = nextChordChange(prog, bar, beat, beats, current, g.beats);
     $('#chord').textContent = prog.chordName(current, settings.key);
     $('#chord-next').textContent = `→ ${prog.chordName(next, settings.key)}`;
     if (song) {
@@ -623,6 +620,22 @@ function updatePosition(force) {
     void t.offsetWidth; // reinicia a animação
     t.classList.add('flash');
   }
+}
+
+/** Próximo acorde diferente do atual (no compasso ou nos seguintes); o próprio acorde se não mudar. */
+function nextChordChange(prog, bar, beat, beats, current, grooveBeats) {
+  for (let b = beat + 1; b < beats; b++) {
+    const c = chordAt(prog, bar, b, beats);
+    if (!sameChord(c, current)) return c;
+  }
+  for (let k = 1; k <= prog.bars.length; k++) {
+    const n = prog.beatsAt(bar + k) || grooveBeats;
+    for (let b = 0; b < n; b++) {
+      const c = chordAt(prog, bar + k, b, n);
+      if (!sameChord(c, current)) return c;
+    }
+  }
+  return current;
 }
 
 function isVisible(el) {

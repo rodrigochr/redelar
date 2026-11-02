@@ -43,7 +43,10 @@ import androidx.compose.ui.unit.sp
 import com.redelar.bluestempo.R
 import com.redelar.bluestempo.audio.EngineState
 import com.redelar.bluestempo.model.AppSettings
+import com.redelar.bluestempo.model.Chord
 import com.redelar.bluestempo.model.PlayMode
+import com.redelar.bluestempo.model.Progression
+import com.redelar.bluestempo.model.SongProgression
 import com.redelar.bluestempo.model.tempoMarking
 import com.redelar.bluestempo.ui.components.BeatIndicator
 import com.redelar.bluestempo.ui.components.RepeatButton
@@ -225,20 +228,13 @@ private fun ChordDisplay(
     modifier: Modifier = Modifier,
 ) {
     if (settings.mode != PlayMode.GROOVE) return
-    // Com música, a posição vem na numeração da cifra completa.
-    val prog = settings.song?.progression(-1, true) ?: settings.activeProgression
-    val bar = progressionBar?.takeIf { it >= 0 } ?: 0
+    // Com música, a posição vem na numeração da cifra completa (ou da parte em loop).
+    val prog = settings.activeProgression
+    val from = (prog as? SongProgression)?.from ?: 0
+    val bar = (progressionBar?.takeIf { it >= 0 } ?: from) - from
     val beats = beatsPerBar ?: prog.beatsAt(bar) ?: settings.groove.beatsPerBar
     val currentChord = prog.chordAt(bar, beat, beats)
-    // Próximo acorde diferente (no mesmo compasso ou no seguinte).
-    var nextChord = prog.chordAt(bar + 1, 0, beats)
-    for (b in beat + 1 until beats) {
-        val c = prog.chordAt(bar, b, beats)
-        if (c != currentChord) {
-            nextChord = c
-            break
-        }
-    }
+    val nextChord = nextChordChange(prog, bar, beat, beats, currentChord, settings.groove.beatsPerBar)
     val current = prog.chordName(currentChord, settings.key)
     val next = prog.chordName(nextChord, settings.key)
     Row(
@@ -253,6 +249,22 @@ private fun ChordDisplay(
         Text(current, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, maxLines = 1)
         Text("→ $next", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
     }
+}
+
+/** Próximo acorde diferente do atual (no compasso ou nos seguintes); o próprio acorde se não mudar. */
+private fun nextChordChange(prog: Progression, bar: Int, beat: Int, beats: Int, current: Chord, grooveBeats: Int): Chord {
+    for (b in beat + 1 until beats) {
+        val c = prog.chordAt(bar, b, beats)
+        if (c != current) return c
+    }
+    for (k in 1..prog.length) {
+        val n = prog.beatsAt(Math.floorMod(bar + k, prog.length)) ?: grooveBeats
+        for (b in 0 until n) {
+            val c = prog.chordAt(bar + k, b, n)
+            if (c != current) return c
+        }
+    }
+    return current
 }
 
 @Composable

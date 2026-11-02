@@ -167,6 +167,25 @@ await page.tap('[data-action="groove"][data-id="rock_basic"]', { timeout: 5000 }
 check(await page.evaluate(() => BluesTempo.settings.songId === null && BluesTempo.settings.progression === 'ROCK_I_IV_V'), 'escolher uma levada tira a música e volta à progressão da levada');
 check(!(await page.locator('.song-banner').count()), 'aviso some depois de tirar a música');
 
+// Tela estreita (352 px) com o nome de música mais longo tocando: nada pode alargar a página.
+await page.setViewportSize({ width: 352, height: 760 });
+await page.tap('[data-tab="songs"]');
+await page.evaluate(() => { document.getElementById('tab').scrollTop = 0; });
+await page.locator('[data-action="song"][data-id="canceriano_sem_lar"]').scrollIntoViewIfNeeded();
+await page.tap('[data-action="song"][data-id="canceriano_sem_lar"]');
+await page.evaluate(() => document.getElementById('play').click());
+await page.waitForTimeout(2000);
+const narrow = await page.evaluate(() => ({
+  win: innerWidth, doc: document.documentElement.scrollWidth, tr: document.getElementById('transport').scrollWidth,
+  play: document.getElementById('play').getBoundingClientRect().right, next: document.getElementById('chord-next').textContent,
+}));
+check(narrow.win === 352 && narrow.doc <= 352 && narrow.tr <= 352 && narrow.play <= 352,
+  `tela de 352 px sem rolagem lateral (página ${narrow.doc} px, painel ${narrow.tr} px)`);
+check(narrow.next !== '→ C7', `mostra o próximo acorde diferente (${narrow.next})`);
+await page.screenshot({ path: join(OUT, '10-tela-estreita.png') });
+await page.evaluate(() => document.getElementById('play').click());
+await page.setViewportSize({ width: 390, height: 844 });
+
 for (const [tab, file] of [['practice', '3-treino.png'], ['presets', '4-presets.png']]) {
   await page.tap(`[data-tab="${tab}"]`);
   await page.screenshot({ path: join(OUT, file) });
