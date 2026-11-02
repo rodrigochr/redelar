@@ -16,6 +16,13 @@ function loadScript(src) {
   });
 }
 
+function base64ToBytes(text) {
+  const binary = atob(text.trim());
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
 async function gunzip(buffer) {
   if (typeof DecompressionStream !== 'undefined') {
     const stream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'));
@@ -52,6 +59,7 @@ export async function loadSampleBundle(url, onProgress) {
   } else {
     compressed = new Uint8Array(await response.arrayBuffer());
   }
+  if (/\.txt(\?|$)/.test(url)) compressed = base64ToBytes(new TextDecoder().decode(compressed));
   return parseBundle(await gunzip(compressed.buffer));
 }
 

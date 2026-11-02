@@ -9,11 +9,11 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
+const ROOT = process.env.BT_ROOT || join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 const OUT = process.argv[2] || join(dirname(fileURLToPath(import.meta.url)), 'out');
 mkdirSync(OUT, { recursive: true });
 
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.bin': 'application/octet-stream' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.bin': 'application/octet-stream', '.txt': 'text/plain' };
 const server = createServer((req, res) => {
   const path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   const file = join(ROOT, path.endsWith('/') ? path + 'index.html' : path);
