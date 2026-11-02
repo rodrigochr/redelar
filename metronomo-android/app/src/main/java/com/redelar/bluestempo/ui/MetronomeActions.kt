@@ -46,6 +46,7 @@ interface MetronomeActions {
     fun selectSong(song: Song) {}
     fun stepSong(delta: Int) {}
     fun leaveSong() {}
+    fun setSongGroove(groove: Groove) {}
     fun setSongPart(part: Int) {}
     fun setSongRepeat(repeat: Boolean) {}
     fun setFills(enabled: Boolean) {}

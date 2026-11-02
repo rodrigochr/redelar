@@ -44,7 +44,9 @@ import com.redelar.bluestempo.model.PlayMode
 import com.redelar.bluestempo.model.Song
 import com.redelar.bluestempo.model.SongBook
 import com.redelar.bluestempo.ui.MetronomeActions
+import com.redelar.bluestempo.model.GrooveLibrary
 import com.redelar.bluestempo.ui.components.BarGrid
+import com.redelar.bluestempo.ui.components.DropdownSelector
 import com.redelar.bluestempo.ui.components.RepeatButton
 import com.redelar.bluestempo.ui.components.Section
 import com.redelar.bluestempo.ui.components.Tag
@@ -71,9 +73,14 @@ fun SongsTab(settings: AppSettings, engine: EngineState, vm: MetronomeActions) {
             SongChart(song, settings, currentBar = position?.progressionBar ?: -1, vm = vm)
             SongNotes(song, vm)
         }
-        Section("Setlist", subtitle = "${SongBook.all.size} músicas • toque para carregar") {
+        Section(
+            "Setlist",
+            subtitle = "${SongBook.all.size} músicas • " +
+                if (song != null) "toque na música selecionada para tirá-la" else "toque para carregar",
+        ) {
             SongBook.all.forEach { s ->
-                SongRow(s, selected = s.id == song?.id, onClick = { vm.selectSong(s) })
+                // Tocar de novo na música selecionada tira a seleção.
+                SongRow(s, selected = s.id == song?.id, onClick = { if (s.id == song?.id) vm.leaveSong() else vm.selectSong(s) })
             }
         }
     }
@@ -82,7 +89,11 @@ fun SongsTab(settings: AppSettings, engine: EngineState, vm: MetronomeActions) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun NowPlaying(song: Song, settings: AppSettings, vm: MetronomeActions) {
-    Section(song.title, subtitle = "${song.artist} • ${song.reference}") {
+    Section(
+        song.title,
+        subtitle = "${song.artist} • ${song.reference}",
+        action = { OutlinedButton(onClick = vm::leaveSong) { Text("✕ Tirar música") } },
+    ) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Tag("Tom original ${song.keyName}", color = MaterialTheme.colorScheme.primary)
             Tag("${song.bpm} BPM")
@@ -125,6 +136,13 @@ private fun NowPlaying(song: Song, settings: AppSettings, vm: MetronomeActions) 
                 )
             }
         }
+        DropdownSelector(
+            label = "Levada desta música",
+            options = GrooveLibrary.all,
+            selected = settings.groove,
+            optionLabel = { if (it.id == song.grooveId) "${it.name} (sugerida)" else it.name },
+            onSelect = vm::setSongGroove,
+        )
 
     }
 }
@@ -142,7 +160,7 @@ private fun SongNotes(song: Song, vm: MetronomeActions) {
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        TextButton(onClick = vm::leaveSong) { Text("Sair da música (voltar às progressões)") }
+        TextButton(onClick = vm::leaveSong) { Text("Tirar a música (voltar às levadas)") }
     }
 }
 

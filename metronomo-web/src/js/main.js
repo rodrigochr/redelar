@@ -187,8 +187,10 @@ document.addEventListener('visibilitychange', () => {
 const chip = (label, active, action, extra = '') =>
   `<button type="button" class="chip${active ? ' on' : ''}" data-action="${action}" ${extra} aria-pressed="${active}">${esc(label)}</button>`;
 
-const section = (title, body, subtitle = '') =>
-  `<section class="card"><h2>${esc(title)}</h2>${subtitle ? `<p class="hint">${esc(subtitle)}</p>` : ''}${body}</section>`;
+const section = (title, body, subtitle = '', action = '') =>
+  `<section class="card">${action ? `<div class="card-head"><h2>${esc(title)}</h2>${action}</div>` : `<h2>${esc(title)}</h2>`}${subtitle ? `<p class="hint">${esc(subtitle)}</p>` : ''}${body}</section>`;
+
+const LEAVE_SONG = '<button type="button" class="outline sm leave" data-action="song-leave">✕ Tirar música</button>';
 
 function slider(id, label, path, { min = 0, max = 1, step = 0.01, format = pct } = {}) {
   const value = getPath(path);
@@ -293,7 +295,8 @@ function songsTab() {
   }).join('');
   const top = song ? songPanel(song)
     : '<p class="hint intro">Escolha uma música: o app ajusta andamento, tom, levada e baixo e mostra a cifra compasso a compasso enquanto toca.</p>';
-  return top + section('Setlist', `<div class="songs">${list}</div>`, `${SONG_LIST.length} músicas · toque para carregar`);
+  return top + section('Setlist', `<div class="songs">${list}</div>`,
+    song ? `${SONG_LIST.length} músicas · toque na música selecionada para tirá-la` : `${SONG_LIST.length} músicas · toque para carregar`);
 }
 
 function songPanel(song) {
@@ -318,11 +321,12 @@ function songPanel(song) {
       <output>${esc(keyName(settings.key, song.minor))}${shift ? ` (${shift > 0 ? '+' : ''}${shift})` : ''}</output>
       <button type="button" class="round sm" data-action="song-key" data-v="1" aria-label="Meio tom acima">+</button></div>
     ${settings.key !== song.key ? `<div class="row end"><button type="button" class="text" data-action="song-key-reset">Voltar ao tom original (${esc(song.keyName)})</button></div>` : ''}
-    <p class="label">Andamento de estudo</p><div class="chips scroll">${tempos}</div>`,
-  `${song.artist} · ${song.reference}`);
+    <p class="label">Andamento de estudo</p><div class="chips scroll">${tempos}</div>
+    ${select('song-groove', 'Levada desta música', 'grooveId', M.grooves.map((x) => [x.id, x.id === song.groove ? `${x.name} (sugerida)` : x.name]))}`,
+  `${song.artist} · ${song.reference}`, LEAVE_SONG);
   const about = section('Sobre esta cifra', `${song.notes ? `<p class="hint">${esc(song.notes)}</p>` : ''}
     <p class="hint">Andamento, tom e compassos vêm de transcrições e partituras publicadas; confira de ouvido as partes marcadas como incertas.</p>
-    <div class="row end"><button type="button" class="text" data-action="song-leave">Sair da música (voltar às progressões)</button></div>`,
+    <div class="row end"><button type="button" class="text" data-action="song-leave">Tirar a música (voltar às levadas)</button></div>`,
   `Confiança ${song.confidenceLabel.toLowerCase()} · ${song.reference}`);
   return head + section('Cifra', playMode + songChart(song, g), `${song.length} compassos · ${g.meter} · toque numa parte para repeti-la em loop`) + about;
 }
@@ -363,6 +367,27 @@ function selectSong(song) {
   });
 }
 
+/** Troca a levada da música selecionada (andamento, tom e cifra continuam). */
+function setSongGroove(id) {
+  const song = songById(settings.songId);
+  const g = grooveById(id);
+  const original = song && g.id === song.groove;
+  update({
+    grooveId: g.id,
+    genre: g.genre,
+    swing: original && song.swing != null ? song.swing : g.swing,
+    bassStyle: original && song.bass ? song.bass : g.bass,
+    bassTone: g.tone,
+    mixer: grooveMix(g, settings.mixer),
+  });
+}
+
+/** Tira a música: volta às progressões, com a progressão sugerida da levada atual. */
+function leaveSong() {
+  update({ songId: null, songPart: -1, progression: grooveById(settings.grooveId).progression });
+  toast('Música tirada: a levada volta a seguir a progressão.');
+}
+
 function isDefaultMix(g) {
   const def = grooveMix(g, settings.mixer);
   return Object.keys(def).every((k) => Math.abs(def[k] - settings.mixer[k]) < 0.001);
@@ -389,8 +414,11 @@ function groovesTab() {
       <span class="tags"><span class="tag">${esc(x.meter)}</span><span class="tag">${esc(bassStyleById(x.bass).label)}</span></span></button>`;
   }).join('');
   const bassOptions = M.bassStyles.map((b) => [b.id, b.id === g.bass ? `${b.label} (sugerido)` : b.label]);
+  const song = songById(settings.songId);
+  const banner = song ? `<div class="song-banner"><span>♪ <b>${esc(song.title)}</b> está selecionada. Escolher uma levada abaixo tira a música.</span>
+    <button type="button" class="outline sm" data-action="song-leave">✕ Tirar</button></div>` : '';
   return [
-    `<div class="segmented" role="group" aria-label="Gênero">${genres}</div><div class="grooves">${list}</div>`,
+    `${banner}<div class="segmented" role="group" aria-label="Gênero">${genres}</div><div class="grooves">${list}</div>`,
     section(g.name, stepGrid(g), `${g.meter} · ${g.description}`),
     section('Sensação', `${g.swingUnit != null ? slider('swing', 'Swing', 'swing', { min: 0.5, max: 0.75, format: swingText })
       : '<p class="hint">Levada em tercinas: o shuffle já está escrito na grade.</p>'}
@@ -662,24 +690,31 @@ const ACTIONS = {
   genre: (d) => update({ genre: d.id }),
   groove: (d) => {
     const g = grooveById(d.id);
-    const song = songById(settings.songId);
+    const hadSong = !!songById(settings.songId);
     const changes = {
-      grooveId: g.id, genre: g.genre, mode: 'GROOVE', swing: g.swing, bassStyle: g.bass, bassTone: g.tone,
+      grooveId: g.id, genre: g.genre, mode: 'GROOVE', swing: g.swing, bassStyle: g.bass, bassTone: g.tone, progression: g.progression,
       mixer: grooveMix(g, settings.mixer), // cada levada volta à sua mixagem padrão
+      songId: null, songPart: -1, // escolher uma levada aqui tira a música selecionada
     };
-    // Com uma música escolhida, a levada muda mas a cifra e o andamento dela continuam.
-    if (!song) changes.progression = g.progression;
-    if (settings.useGrooveTempo && !song) changes.bpm = g.bpm;
+    if (settings.useGrooveTempo) changes.bpm = g.bpm;
     update(changes);
+    if (hadSong) toast('Música tirada: tocando a levada com a progressão dela.');
   },
-  song: (d) => { const song = songById(d.id); if (song) { selectSong(song); $('#tab').scrollTop = 0; } },
+  song: (d) => {
+    const song = songById(d.id);
+    if (!song) return;
+    // Tocar de novo na música selecionada tira a seleção.
+    if (song.id === settings.songId) leaveSong();
+    else selectSong(song);
+    $('#tab').scrollTop = 0;
+  },
   'song-step': (d) => {
     const i = SONG_LIST.findIndex((x) => x.id === settings.songId);
     const delta = Number(d.v);
     const next = i < 0 ? (delta > 0 ? 0 : SONG_LIST.length - 1) : mod(i + delta, SONG_LIST.length);
     selectSong(SONG_LIST[next]);
   },
-  'song-leave': () => update({ songId: null, songPart: -1 }),
+  'song-leave': () => leaveSong(),
   'song-part': (d) => update({ songPart: Number(d.v) }),
   'song-part-toggle': (d) => update({ songPart: settings.songPart === Number(d.v) ? -1 : Number(d.v) }),
   'song-repeat': (d) => update({ songRepeat: d.v === '1' }),
@@ -766,6 +801,7 @@ app.addEventListener('input', (e) => {
 app.addEventListener('change', (e) => {
   const el = e.target;
   if (el.dataset.toggle) update({ [el.dataset.toggle]: el.checked }, { rerender: true });
+  else if (el.dataset.select === 'grooveId') setSongGroove(el.value);
   else if (el.dataset.select === 'progression') {
     if (el.value) update({ progression: el.value, songId: null, songPart: -1 });
   } else if (el.dataset.select) update({ [el.dataset.select]: el.value });

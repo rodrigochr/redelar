@@ -95,6 +95,11 @@ class AppSmokeTest {
         assertEquals((song.key + 1) % 12, app.currentSettings().key)
         compose.onNodeWithText("Próxima ▶").performScrollTo().tap()
         assertTrue(app.currentSettings().songId != song.id)
+        // Tirar a seleção da música (botão no topo do cartão da música).
+        compose.onNodeWithText("✕ Tirar música").performScrollTo().tap()
+        assertEquals(null, app.currentSettings().songId)
+        compose.onNodeWithText(song.title).performScrollTo().tap()
+        assertEquals(song.id, app.currentSettings().songId)
         compose.onNodeWithContentDescription("Tocar").tap()
         assertTrue(app.controller.isPlaying)
         compose.onNodeWithContentDescription("Parar").tap()

@@ -175,6 +175,12 @@ input[type="range"] { width: 100%; accent-color: var(--amber); height: 28px; mar
 .tab > * { flex-shrink: 0; }
 .card { background: var(--surface); border-radius: 16px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
 .card h2 { margin: 0; font-size: 17px; font-weight: 600; text-wrap: balance; }
+.card-head { display: flex; align-items: flex-start; gap: 10px; }
+.card-head h2 { flex: 1; min-width: 0; }
+.outline.leave { flex-shrink: 0; margin-top: -3px; color: var(--amber); border-color: rgba(245, 166, 35, 0.6); }
+.song-banner { display: flex; align-items: center; gap: 10px; background: var(--amber-soft); border-radius: 14px; padding: 10px 10px 10px 14px; font-size: 14px; }
+.song-banner span { flex: 1; }
+.song-banner b { color: var(--amber); font-weight: 600; }
 .hint { margin: 0; color: var(--muted); font-size: 13px; }
 .label { margin: 2px 0 -4px; font-size: 14px; }
 .empty { color: var(--muted); padding: 4px 8px; margin: 0; }

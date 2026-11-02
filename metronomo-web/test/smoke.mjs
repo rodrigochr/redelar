@@ -143,6 +143,30 @@ check(await page.locator('#prog').evaluate((el) => el.value === ''), 'aba Levada
 await page.selectOption('#prog', 'BLUES_12');
 check(await page.evaluate(() => BluesTempo.settings.songId === null), 'escolher uma progressão sai da música');
 
+// Tirar a seleção da música: botão no topo, tocar de novo na música e escolher uma levada.
+const songId = () => page.evaluate(() => BluesTempo.settings.songId);
+await page.tap('[data-tab="songs"]');
+await page.tap('[data-action="song"][data-id="black"]');
+check(await songId() === 'black', 'seleciona outra música');
+await page.screenshot({ path: join(OUT, '8-musica-selecionada.png') });
+await page.tap('.card-head [data-action="song-leave"]');
+check(await songId() === null, 'botão "Tirar música" no topo tira a seleção');
+await page.tap('[data-action="song"][data-id="black"]');
+await page.tap('[data-action="song"][data-id="black"]');
+check(await songId() === null, 'tocar de novo na música selecionada tira a seleção');
+await page.tap('[data-action="song"][data-id="black"]');
+await page.selectOption('#song-groove', 'rock_basic');
+check(await page.evaluate(() => BluesTempo.settings.songId === 'black' && BluesTempo.settings.grooveId === 'rock_basic'), 'troca a levada mantendo a música');
+await page.tap('[data-tab="grooves"]');
+check(await page.locator('.song-banner').isVisible(), 'aba Levadas avisa que há música selecionada');
+await page.screenshot({ path: join(OUT, '9-levadas-com-musica.png') });
+await page.tap('[data-action="groove"][data-id="rock_basic"]', { timeout: 5000 }).catch(async () => {
+  await page.tap('[data-action="genre"][data-id="ROCK"]');
+  await page.tap('[data-action="groove"][data-id="rock_basic"]');
+});
+check(await page.evaluate(() => BluesTempo.settings.songId === null && BluesTempo.settings.progression === 'ROCK_I_IV_V'), 'escolher uma levada tira a música e volta à progressão da levada');
+check(!(await page.locator('.song-banner').count()), 'aviso some depois de tirar a música');
+
 for (const [tab, file] of [['practice', '3-treino.png'], ['presets', '4-presets.png']]) {
   await page.tap(`[data-tab="${tab}"]`);
   await page.screenshot({ path: join(OUT, file) });

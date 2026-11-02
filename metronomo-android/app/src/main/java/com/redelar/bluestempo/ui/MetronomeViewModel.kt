@@ -111,12 +111,28 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
             swing = groove.defaultSwing.coerceIn(0.5f, 0.75f),
             bassStyle = groove.bassStyle,
             bassTone = groove.bassTone,
-            // Com uma música escolhida, a levada muda mas a cifra e o andamento dela continuam.
-            progression = if (it.song != null) it.progression else groove.progression,
+            progression = groove.progression,
             // Cada levada tem sua mixagem padrão; o clique guia continua como o usuário deixou.
             mixer = groove.mix.copy(guideClick = it.mixer.guideClick),
+            // Escolher uma levada na aba Levadas tira a música selecionada.
+            songId = null,
+            songPart = -1,
         )
-        if (it.useGrooveTempo && it.song == null) base.copy(bpm = groove.defaultBpm) else base
+        if (it.useGrooveTempo) base.copy(bpm = groove.defaultBpm) else base
+    }
+
+    /** Troca a levada da música selecionada: andamento, tom e cifra continuam. */
+    override fun setSongGroove(groove: Groove) = update {
+        val song = it.song
+        val original = song != null && song.grooveId == groove.id
+        it.copy(
+            grooveId = groove.id,
+            genre = groove.genre,
+            swing = ((if (original) song?.swing else null) ?: groove.defaultSwing).coerceIn(0.5f, 0.75f),
+            bassStyle = (if (original) song?.bassStyle else null) ?: groove.bassStyle,
+            bassTone = groove.bassTone,
+            mixer = groove.mix.copy(guideClick = it.mixer.guideClick),
+        )
     }
 
     // ------------------------------------------------------------------ músicas
@@ -146,7 +162,8 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
         selectSong(list[next])
     }
 
-    override fun leaveSong() = update { it.copy(songId = null, songPart = -1) }
+    /** Tira a música: volta às progressões, com a sugerida pela levada atual. */
+    override fun leaveSong() = update { it.copy(songId = null, songPart = -1, progression = it.groove.progression) }
     override fun setSongPart(part: Int) = update { it.copy(songPart = part) }
     override fun setSongRepeat(repeat: Boolean) = update { it.copy(songRepeat = repeat) }
 
