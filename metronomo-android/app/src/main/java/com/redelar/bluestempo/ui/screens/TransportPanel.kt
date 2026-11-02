@@ -12,13 +12,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -38,7 +37,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,12 +76,13 @@ fun TransportPanel(
         }
     }
 
+    // Painel compacto: status, tempos, [TAP − BPM + ▶] e barra de andamento com o acorde.
     Column(
         modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .background(MaterialTheme.colorScheme.primary.copy(alpha = flash.value))
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 11.dp, bottom = 11.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         // Linha de status
@@ -117,45 +116,74 @@ fun TransportPanel(
             accents = if (grooveMode) null else settings.effectiveAccents.takeIf { it.size == beats },
             countIn = position?.countIn == true,
             muted = position?.muted == true,
+            height = 20.dp,
         )
 
-        // Andamento
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            RepeatButton("−", "Diminuir andamento", { onNudge(-1) })
+        // TAP, −, andamento, + e tocar/parar na mesma linha
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            TapButton(onTap)
+            RepeatButton("−", "Diminuir andamento", { onNudge(-1) }, size = 44.dp)
             Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     "$displayBpm",
-                    style = MaterialTheme.typography.displayLarge,
+                    style = MaterialTheme.typography.displayLarge.copy(fontSize = 64.sp, lineHeight = 63.sp),
                     color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
                     modifier = Modifier.semantics { contentDescription = "$displayBpm batidas por minuto" },
                 )
                 val unit = if (grooveMode) settings.groove.beatNote else "♩"
                 val trainer = if (settings.trainerEnabled) "  →  ${settings.trainerTargetBpm}" else ""
                 Text(
                     "BPM ($unit) • ${tempoMarking(displayBpm)}$trainer",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
-            RepeatButton("+", "Aumentar andamento", { onNudge(1) })
-        }
-        Slider(
-            value = settings.bpm.toFloat(),
-            onValueChange = { onSetBpm(it.roundToInt()) },
-            valueRange = AppSettings.MIN_BPM.toFloat()..AppSettings.MAX_BPM.toFloat(),
-            modifier = Modifier.height(32.dp),
-        )
-
-        // Controles
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            FilledTonalButton(onClick = onTap, modifier = Modifier.widthIn(min = 88.dp)) {
-                Text("TAP", fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
-            }
-            Spacer(Modifier.weight(1f))
+            RepeatButton("+", "Aumentar andamento", { onNudge(1) }, size = 44.dp)
             PlayButton(playing, onTogglePlay)
-            Spacer(Modifier.weight(1f))
-            ChordDisplay(settings, position?.progressionBar, position?.beat ?: 0, Modifier.widthIn(min = 88.dp))
         }
+
+        // Barra de andamento + acorde atual (modo levada)
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = 36.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Slider(
+                value = settings.bpm.toFloat(),
+                onValueChange = { onSetBpm(it.roundToInt()) },
+                valueRange = AppSettings.MIN_BPM.toFloat()..AppSettings.MAX_BPM.toFloat(),
+                modifier = Modifier.weight(1f).height(32.dp),
+            )
+            ChordDisplay(settings, position?.progressionBar, position?.beat ?: 0)
+        }
+    }
+}
+
+@Composable
+private fun TapButton(onTap: () -> Unit) {
+    Box(
+        Modifier
+            .size(width = 58.dp, height = 44.dp)
+            .clip(RoundedCornerShape(50))
+            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .clickable(onClick = onTap)
+            .semantics { role = Role.Button },
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            "TAP",
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 1.5.sp,
+            fontSize = 13.sp,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+        )
     }
 }
 
@@ -163,7 +191,7 @@ fun TransportPanel(
 private fun PlayButton(playing: Boolean, onClick: () -> Unit) {
     Box(
         Modifier
-            .size(72.dp)
+            .size(60.dp)
             .clip(CircleShape)
             .background(if (playing) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary)
             .clickable(onClick = onClick)
@@ -177,45 +205,31 @@ private fun PlayButton(playing: Boolean, onClick: () -> Unit) {
             painterResource(if (playing) R.drawable.ic_stop else R.drawable.ic_play),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.size(36.dp),
+            modifier = Modifier.size(30.dp),
         )
     }
 }
 
-/** Acorde atual (e o próximo) no modo levada. */
+/** Acorde atual e o próximo, compacto, ao lado da barra de andamento (só no modo levada). */
 @Composable
 private fun ChordDisplay(settings: AppSettings, progressionBar: Int?, beat: Int, modifier: Modifier = Modifier) {
-    if (settings.mode != PlayMode.GROOVE) {
-        Box(modifier)
-        return
-    }
+    if (settings.mode != PlayMode.GROOVE) return
     val prog = settings.progression
     val beats = settings.groove.beatsPerBar
     val bar = progressionBar?.takeIf { it >= 0 } ?: 0
     val current = prog.chordAt(bar, beat, beats).name(settings.key)
     val next = prog.chordAt(bar + 1, 0, beats).name(settings.key)
-    Column(
+    Row(
         modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(horizontal = 10.dp, vertical = 2.dp)
+            .semantics { contentDescription = "Acorde $current, depois $next" },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Text(
-            current,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            "depois: $next",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-        )
+        Text(current, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+        Text("→ $next", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
     }
 }
 

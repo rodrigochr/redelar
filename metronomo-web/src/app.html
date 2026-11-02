@@ -15,26 +15,25 @@
     </div>
     <div class="beats" id="beats" aria-hidden="true"></div>
     <div class="tempo-row">
+      <button type="button" class="tap" data-action="tap">TAP</button>
       <button type="button" class="round" data-repeat="bpm" data-delta="-1" aria-label="Diminuir andamento">−</button>
       <div class="tempo">
         <output class="bpm" id="bpm" aria-live="off">100</output>
         <span class="bpm-label" id="bpm-label">BPM (♩) · Moderato</span>
       </div>
       <button type="button" class="round" data-repeat="bpm" data-delta="1" aria-label="Aumentar andamento">+</button>
-    </div>
-    <label class="visually-hidden" for="bpm-slider">Andamento</label>
-    <input id="bpm-slider" class="bpm-slider" type="range" min="20" max="300" step="1" value="100">
-    <div class="controls">
-      <button type="button" class="tap" data-action="tap">TAP</button>
       <button type="button" class="play" id="play" data-action="play" aria-label="Tocar">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M8 5v14l11-7z"/></svg>
       </button>
+    </div>
+    <div class="slider-row">
+      <label class="visually-hidden" for="bpm-slider">Andamento</label>
+      <input id="bpm-slider" class="bpm-slider" type="range" min="20" max="300" step="1" value="100">
       <div class="chord-box" id="chord-box" hidden>
         <strong id="chord">A7</strong>
-        <small id="chord-next">depois: A7</small>
+        <small id="chord-next">→ A7</small>
       </div>
     </div>
-    <p class="loading" id="loading" hidden>Carregando instrumentos reais…</p>
   </header>
 
   <main class="tab" id="tab"></main>

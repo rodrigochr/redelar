@@ -347,8 +347,6 @@ function renderTransport() {
   $('#play').setAttribute('aria-label', engine.playing ? 'Parar' : 'Tocar');
   $('#play-icon').setAttribute('d', engine.playing ? 'M7 7h10v10H7z' : 'M8 5v14l11-7z');
   $('#chord-box').hidden = !groove;
-  $('#loading').hidden = samplesState !== 'loading' || !groove;
-  $('#loading').textContent = `Carregando instrumentos reais… ${Math.round(samplesProgress * 100)}%`;
   lastPositionKey = '';
   updatePosition(true);
 }
@@ -379,15 +377,17 @@ function updatePosition(force) {
   });
 
   const status = $('#status');
-  status.textContent = pos ? (pos.countIn ? 'Contagem' : pos.muted ? 'Silêncio' : `Comp. ${pos.bar + 1}`) : '';
-  status.className = pos && pos.muted ? 'status muted' : pos && pos.countIn ? 'status count' : 'status';
+  const loading = !pos && groove && samplesState === 'loading';
+  status.textContent = pos ? (pos.countIn ? 'Contagem' : pos.muted ? 'Silêncio' : `Comp. ${pos.bar + 1}`)
+    : loading ? `Carregando sons… ${Math.round(samplesProgress * 100)}%` : '';
+  status.className = pos && pos.muted ? 'status muted' : pos && pos.countIn ? 'status count' : loading ? 'status loading' : 'status';
 
   if (groove) {
     const prog = progressionById(settings.progression);
     const bar = pos && pos.progressionBar >= 0 ? pos.progressionBar : 0;
     const beat = pos ? pos.beat : 0;
     $('#chord').textContent = chordName(chordAt(prog, bar, beat, g.beats), settings.key);
-    $('#chord-next').textContent = `depois: ${chordName(chordAt(prog, bar + 1, 0, g.beats), settings.key)}`;
+    $('#chord-next').textContent = `→ ${chordName(chordAt(prog, bar + 1, 0, g.beats), settings.key)}`;
     const grid = document.getElementById('step-grid');
     if (grid) {
       const step = pos && pos.mode === 'GROOVE' && !pos.countIn ? pos.step : -1;
@@ -605,8 +605,7 @@ setInterval(clock, 250);
 const bundleUrl = window.BT_SAMPLES_URL || 'samples.bin';
 loadSampleBundle(bundleUrl, (p) => {
   samplesProgress = p;
-  const el = $('#loading');
-  if (el) el.textContent = `Carregando instrumentos reais… ${Math.round(p * 100)}%`;
+  if (!engine.playing) updatePosition(true);
 }).then((bundle) => {
   engine.setBundle(bundle);
   samplesState = 'ready';

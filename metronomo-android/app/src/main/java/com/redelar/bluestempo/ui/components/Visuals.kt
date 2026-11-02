@@ -35,6 +35,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.redelar.bluestempo.model.Accent
@@ -50,6 +51,7 @@ fun BeatIndicator(
     countIn: Boolean,
     muted: Boolean,
     modifier: Modifier = Modifier,
+    height: Dp = 28.dp,
 ) {
     val active = when {
         muted -> MaterialTheme.colorScheme.secondary
@@ -57,11 +59,11 @@ fun BeatIndicator(
         else -> MaterialTheme.colorScheme.primary
     }
     Row(
-        modifier.fillMaxWidth().height(28.dp),
+        modifier.fillMaxWidth().height(height),
         horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val maxSize = if (beats > 9) 16.dp else 22.dp
+        val maxSize = minOf(if (beats > 9) 16.dp else 22.dp, height - 2.dp)
         for (i in 0 until beats) {
             val accent = accents?.getOrNull(i)
             val scale = when (accent) {
