@@ -24,6 +24,7 @@ const taps = [];
 const engine = new Engine({
   onStop: (reason) => {
     releaseWakeLock();
+    stopIOSAudio();
     renderTransport();
     if (reason === 'timer') toast('Tempo de estudo concluído.');
   },
@@ -68,12 +69,32 @@ async function togglePlay() {
   try {
     await engine.start(settings);
   } catch (e) {
-    toast('O navegador bloqueou o áudio. Toque em Tocar novamente.');
+    console.error(e);
+    toast('O navegador bloqueou o áudio. Toque em ▶ novamente.');
     return;
   }
   requestWakeLock();
   renderTransport();
+  // Confere se o relógio de áudio realmente começou a andar.
+  const t0 = engine.ctx.currentTime;
+  setTimeout(() => {
+    if (engine.playing && (!engine.audioRunning || engine.ctx.currentTime <= t0)) {
+      toast(IS_IOS
+        ? 'O iPhone não liberou o som. Aumente o volume, toque em ■ e depois em ▶. Se continuar mudo, abra a página no Safari.'
+        : 'O navegador não liberou o som. Toque em ■ e depois em ▶ novamente.');
+    }
+  }, 900);
 }
+
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+engine.onStateChange = (state) => {
+  if (!engine.playing) return;
+  if (state === 'interrupted' || state === 'suspended') {
+    engine.stop('interrupted');
+    toast('O som foi interrompido (ligação, alarme ou outro app). Toque em ▶ para continuar.');
+  }
+};
 
 function nudge(delta) {
   update({ bpm: clamp(settings.bpm + delta, MIN_BPM, MAX_BPM) }, { rerender: false });
@@ -92,19 +113,37 @@ function tap() {
   }
 }
 
-/** iPhone: toca áudio mesmo com a chave de silencioso ligada. */
+/**
+ * iPhone: um <audio> mudo tocando em loop coloca a página na categoria "reprodução" do iOS,
+ * então o som sai mesmo com a chave de silencioso ligada. O arquivo vem junto com a página
+ * (silence.wav); se não carregar, usa uma versão embutida.
+ */
 let silentAudio = null;
 function prepareIOSAudio() {
   try {
     if (navigator.audioSession) navigator.audioSession.type = 'playback';
   } catch (e) { /* sem suporte */ }
-  if (!silentAudio && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
-    try {
-      silentAudio = new Audio(silentWav());
+  try {
+    if (!silentAudio) {
+      silentAudio = document.createElement('audio');
+      silentAudio.setAttribute('playsinline', '');
+      silentAudio.setAttribute('x-webkit-airplay', 'deny');
+      silentAudio.preload = 'auto';
       silentAudio.loop = true;
-      silentAudio.play().catch(() => {});
-    } catch (e) { /* sem suporte */ }
-  }
+      silentAudio.src = 'silence.wav';
+      silentAudio.addEventListener('error', () => {
+        if (!silentAudio.src.startsWith('data:')) {
+          silentAudio.src = silentWav();
+          silentAudio.play().catch(() => {});
+        }
+      }, { once: true });
+    }
+    silentAudio.play().catch(() => {});
+  } catch (e) { /* sem suporte */ }
+}
+
+function stopIOSAudio() {
+  try { if (silentAudio) silentAudio.pause(); } catch (e) { /* sem suporte */ }
 }
 
 function silentWav() {

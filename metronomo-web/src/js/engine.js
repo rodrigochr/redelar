@@ -103,6 +103,7 @@ export class Engine {
       this.ctx = new AC({ latencyHint: 'playback' });
     }
     const ctx = this.ctx;
+    if (!offline) ctx.onstatechange = () => this.onStateChange && this.onStateChange(ctx.state);
     this.mix = ctx.createGain();
     this.master = ctx.createGain();
     this.master.gain.value = 0;
@@ -164,20 +165,43 @@ export class Engine {
   // ---------------------------------------------------------------- transporte
 
   async start(settings) {
-    if (this.playing) return;
-    if (!this.ctx) this.createContext();
-    if (this.ctx.state !== 'running') await this.ctx.resume();
-    this.reset(settings, this.ctx.currentTime + C.leadIn + 0.05);
-    this.playing = true;
-    this.startedAt = this.ctx.currentTime;
-    if (!this.worker) this.worker = tickerWorker();
-    if (this.worker) {
-      this.worker.onmessage = () => this.tick();
-      this.worker.postMessage('start');
-    } else {
+    if (this.playing || this.starting) return;
+    this.starting = true;
+    try {
+      if (!this.ctx) this.createContext();
+      const ctx = this.ctx;
+      // iOS: um buffer mudo tocado dentro do próprio toque "destrava" o áudio da página.
+      try {
+        const unlock = ctx.createBufferSource();
+        unlock.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+        unlock.connect(ctx.destination);
+        unlock.start(0);
+      } catch (e) { /* sem suporte */ }
+      // resume() é chamado dentro do toque; não espera indefinidamente pela confirmação.
+      const resumed = ctx.state === 'running' ? Promise.resolve() : Promise.resolve(ctx.resume()).catch(() => {});
+      await Promise.race([resumed, new Promise((r) => setTimeout(r, 400))]);
+      this.reset(settings, ctx.currentTime + C.leadIn + 0.05);
+      this.playing = true;
+      this.startedAt = ctx.currentTime;
+      // Dois despertadores: o worker (continua em segundo plano) e um intervalo comum,
+      // caso o navegador bloqueie workers. Agendar duas vezes é inofensivo.
+      if (this.worker === undefined) this.worker = tickerWorker();
+      if (this.worker) {
+        this.worker.onmessage = () => this.tick();
+        this.worker.onerror = () => { this.worker = null; };
+        this.worker.postMessage('start');
+      }
+      clearInterval(this.interval);
       this.interval = setInterval(() => this.tick(), TICK_MS);
+      this.tick();
+    } finally {
+      this.starting = false;
     }
-    this.tick();
+  }
+
+  /** O relógio de áudio está andando? (false quando o navegador ainda não liberou o som) */
+  get audioRunning() {
+    return !!this.ctx && this.ctx.state === 'running';
   }
 
   stop(reason) {
@@ -185,6 +209,7 @@ export class Engine {
     this.playing = false;
     if (this.worker) this.worker.postMessage('stop');
     clearInterval(this.interval);
+    this.interval = null;
     const now = this.ctx.currentTime;
     this.master.gain.cancelScheduledValues(now);
     this.master.gain.setTargetAtTime(0, now, 0.015);

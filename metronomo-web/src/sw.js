@@ -1,6 +1,6 @@
 // Service worker do BluesTempo: guarda o app e os sons para funcionar offline.
 const CACHE = 'bluestempo-__VERSION__';
-const SHELL = ['./', 'index.html', 'app.css', 'app.js?v=__VERSION__', 'samples.bin', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/apple-touch-icon.png'];
+const SHELL = ['./', 'index.html', 'app.css', 'app.js?v=__VERSION__', 'samples.bin', 'silence.wav', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));

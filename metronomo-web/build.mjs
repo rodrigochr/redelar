@@ -90,7 +90,15 @@ async function main() {
   const samples = sampleBundle();
   const version = createHash('sha1').update(appJs).update(appCss).update(fragment).update(samples).digest('hex').slice(0, 10);
 
+  // 1 s de silêncio (16 bits, 8 kHz): mantém o iPhone na categoria "reprodução" de áudio.
+  const silence = Buffer.alloc(44 + 16000);
+  silence.write('RIFF', 0); silence.writeUInt32LE(36 + 16000, 4); silence.write('WAVEfmt ', 8);
+  silence.writeUInt32LE(16, 16); silence.writeUInt16LE(1, 20); silence.writeUInt16LE(1, 22);
+  silence.writeUInt32LE(8000, 24); silence.writeUInt32LE(16000, 28); silence.writeUInt16LE(2, 32); silence.writeUInt16LE(16, 34);
+  silence.write('data', 36); silence.writeUInt32LE(16000, 40);
+
   for (const dir of [dist, artifact]) {
+    writeFileSync(join(dir, 'silence.wav'), silence);
     writeFileSync(join(dir, 'app.js'), appJs);
     writeFileSync(join(dir, 'app.css'), appCss);
     writeFileSync(join(dir, 'samples.bin'), samples);
