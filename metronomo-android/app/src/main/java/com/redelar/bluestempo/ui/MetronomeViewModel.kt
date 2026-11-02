@@ -17,6 +17,8 @@ import com.redelar.bluestempo.model.Meter
 import com.redelar.bluestempo.model.PlayMode
 import com.redelar.bluestempo.model.Preset
 import com.redelar.bluestempo.model.ProgressionType
+import com.redelar.bluestempo.model.Song
+import com.redelar.bluestempo.model.SongBook
 import com.redelar.bluestempo.model.Subdivision
 import com.redelar.bluestempo.model.defaultAccents
 import kotlinx.coroutines.flow.StateFlow
@@ -109,12 +111,44 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
             swing = groove.defaultSwing.coerceIn(0.5f, 0.75f),
             bassStyle = groove.bassStyle,
             bassTone = groove.bassTone,
-            progression = groove.progression,
+            // Com uma música escolhida, a levada muda mas a cifra e o andamento dela continuam.
+            progression = if (it.song != null) it.progression else groove.progression,
             // Cada levada tem sua mixagem padrão; o clique guia continua como o usuário deixou.
             mixer = groove.mix.copy(guideClick = it.mixer.guideClick),
         )
-        if (it.useGrooveTempo) base.copy(bpm = groove.defaultBpm) else base
+        if (it.useGrooveTempo && it.song == null) base.copy(bpm = groove.defaultBpm) else base
     }
+
+    // ------------------------------------------------------------------ músicas
+
+    /** Carrega a música: andamento, tom, levada, baixo e mixagem padrão da levada. */
+    override fun selectSong(song: Song) = update {
+        val groove = song.groove
+        it.copy(
+            mode = PlayMode.GROOVE,
+            songId = song.id,
+            songPart = -1,
+            bpm = song.bpm,
+            key = song.key,
+            grooveId = groove.id,
+            genre = groove.genre,
+            swing = (song.swing ?: groove.defaultSwing).coerceIn(0.5f, 0.75f),
+            bassStyle = song.bassStyle ?: groove.bassStyle,
+            bassTone = groove.bassTone,
+            mixer = groove.mix.copy(guideClick = it.mixer.guideClick),
+        )
+    }
+
+    override fun stepSong(delta: Int) {
+        val list = SongBook.all
+        val current = list.indexOfFirst { it.id == repo.current.songId }
+        val next = if (current < 0) (if (delta > 0) 0 else list.lastIndex) else Math.floorMod(current + delta, list.size)
+        selectSong(list[next])
+    }
+
+    override fun leaveSong() = update { it.copy(songId = null, songPart = -1) }
+    override fun setSongPart(part: Int) = update { it.copy(songPart = part) }
+    override fun setSongRepeat(repeat: Boolean) = update { it.copy(songRepeat = repeat) }
 
     override fun resetMixer() = update {
         it.copy(mixer = it.groove.mix.copy(guideClick = it.mixer.guideClick))
@@ -126,7 +160,7 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
     override fun setBassTone(tone: BassTone) = update { it.copy(bassTone = tone) }
     override fun setBassOctave(octave: Int) = update { it.copy(bassOctave = octave.coerceIn(-1, 1)) }
     override fun setKey(key: Int) = update { it.copy(key = Math.floorMod(key, 12)) }
-    override fun setProgression(p: ProgressionType) = update { it.copy(progression = p) }
+    override fun setProgression(p: ProgressionType) = update { it.copy(progression = p, songId = null, songPart = -1) }
     override fun setFills(enabled: Boolean) = update { it.copy(fills = enabled) }
     override fun setHumanize(enabled: Boolean) = update { it.copy(humanize = enabled) }
     override fun setChannelVolume(channel: Channel, value: Float) = update { it.copy(mixer = it.mixer.with(channel, value)) }

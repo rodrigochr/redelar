@@ -653,5 +653,272 @@
    "fills": true,
    "countInBars": 0
   }
+ },
+ {
+  "name": "rock_ballad",
+  "seconds": 32.727,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "rock_ballad",
+   "genre": "ROCK",
+   "bpm": 66,
+   "swing": 0.5,
+   "bassStyle": "BALLAD",
+   "bassTone": "ELECTRIC",
+   "progression": "POP_I_V_VI_IV",
+   "key": 0,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "country_two_beat",
+  "seconds": 24.0,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "country_two_beat",
+   "genre": "ROCK",
+   "bpm": 90,
+   "swing": 0.5,
+   "bassStyle": "COUNTRY",
+   "bassTone": "ELECTRIC",
+   "progression": "ROCK_I_IV_V",
+   "key": 5,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "synth_pop",
+  "seconds": 19.115,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "synth_pop",
+   "genre": "ROCK",
+   "bpm": 113,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "progression": "POP_I_V_VI_IV",
+   "key": 10,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "samba_rock",
+  "seconds": 18.621,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "samba_rock",
+   "genre": "ROCK",
+   "bpm": 116,
+   "swing": 0.54,
+   "bassStyle": "SAMBA",
+   "bassTone": "ELECTRIC",
+   "progression": "ROCK_I_IV_V",
+   "key": 3,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "rumba_blues",
+  "seconds": 18.305,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "rumba_blues",
+   "genre": "BLUES",
+   "bpm": 118,
+   "swing": 0.5,
+   "bassStyle": "TRESILLO",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_MINOR",
+   "key": 8,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "musica-irregular-nc",
+  "seconds": 26,
+  "settings": {
+   "mode": "GROOVE",
+   "songId": "man_who_sold",
+   "grooveId": "rock_basic",
+   "genre": "ROCK",
+   "bpm": 230,
+   "key": 1,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.7,
+    "snare": 0.9,
+    "cymbals": 0.55,
+    "percussion": 0.85,
+    "bass": 0.5,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "musica-transposta-parte",
+  "seconds": 22,
+  "settings": {
+   "mode": "GROOVE",
+   "songId": "wish_you_were_here",
+   "grooveId": "rock_ballad",
+   "genre": "ROCK",
+   "bpm": 150,
+   "key": 9,
+   "swing": 0.5,
+   "bassStyle": "TWO_FEEL",
+   "bassTone": "ELECTRIC",
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.65,
+    "snare": 0.9,
+    "cymbals": 0.6,
+    "percussion": 0.85,
+    "bass": 0.65,
+    "guideClick": 0
+   },
+   "songPart": 2
+  }
+ },
+ {
+  "name": "musica-5-4-walking",
+  "seconds": 34,
+  "settings": {
+   "mode": "GROOVE",
+   "songId": "dont_let_me_down",
+   "grooveId": "rock_ballad",
+   "genre": "ROCK",
+   "bpm": 170,
+   "key": 4,
+   "swing": 0.5,
+   "bassStyle": "WALKING",
+   "bassTone": "UPRIGHT",
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.65,
+    "snare": 0.9,
+    "cymbals": 0.6,
+    "percussion": 0.85,
+    "bass": 0.65,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "musica-loving-cup",
+  "seconds": 30,
+  "settings": {
+   "mode": "GROOVE",
+   "songId": "loving_cup",
+   "grooveId": "rock_ballad",
+   "genre": "ROCK",
+   "bpm": 200,
+   "key": 7,
+   "swing": 0.5,
+   "bassStyle": "BALLAD",
+   "bassTone": "ELECTRIC",
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.65,
+    "snare": 0.9,
+    "cymbals": 0.6,
+    "percussion": 0.85,
+    "bass": 0.65,
+    "guideClick": 0
+   }
+  }
+ },
+ {
+  "name": "musica-fim",
+  "seconds": 53,
+  "settings": {
+   "mode": "GROOVE",
+   "songId": "musica_urbana_2",
+   "grooveId": "chicago_shuffle",
+   "genre": "BLUES",
+   "bpm": 300,
+   "key": 7,
+   "swing": 0.67,
+   "bassStyle": "BOOGIE",
+   "bassTone": "ELECTRIC",
+   "humanize": true,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.6,
+    "snare": 0.9,
+    "cymbals": 0.75,
+    "percussion": 0.85,
+    "bass": 0.6,
+    "guideClick": 0
+   },
+   "songRepeat": false
+  }
  }
 ]

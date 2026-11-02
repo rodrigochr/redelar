@@ -2,8 +2,8 @@
 // Os eventos são gerados tempo a tempo (mudança de andamento vale no tempo seguinte) e
 // agendados no relógio do AudioContext, que tem precisão de amostra.
 import {
-  C, INSTRUMENTS, M, activeBeatsPerBar, bassStyleById, channelKey, chordAt, chordRoot, defaultAccents,
-  degreeSemitones, effectiveAccents, grooveById, mod, progressionById, sameChord, subdivisionById, swingWarp,
+  C, INSTRUMENTS, M, activeBeatsPerBar, activeProgression, bassStyleById, channelKey, chordAt, chordBass, defaultAccents,
+  degreeSemitones, effectiveAccents, grooveById, mod, sameChord, songById, subdivisionById, swingWarp,
 } from './music.js';
 import { synthesizeClicks } from './sounds.js';
 
@@ -250,6 +250,11 @@ export class Engine {
     this.hasFill = false;
     this.hasCrash = false;
     this.progBar = 0;
+    this.barProg = activeProgression(settings);
+    this.progStartBar = 0;
+    this.isEnding = false;
+    this.finished = false;
+    this.stopAt = -1;
     this.currentBpm = settings.bpm;
     this.lastUserBpm = settings.bpm;
     this.prevBassNote = -1;
@@ -284,6 +289,7 @@ export class Engine {
     while (this.nextBeatTime < now + LOOKAHEAD) this.scheduleBeat();
     const minutes = this.settings.timerMinutes;
     if (minutes > 0 && now - this.startedAt >= minutes * 60) this.stop('timer');
+    else if (this.stopAt >= 0 && now >= this.stopAt) this.stop('song');
     if (this.activeVoices.length > 256) this.activeVoices = this.activeVoices.filter((v) => v.end > now);
   }
 
@@ -307,7 +313,9 @@ export class Engine {
     if (this.beatInBar === 0) this.startBar(latest, start);
     this.updateBpm(latest);
     const beatLen = 60 / this.currentBpm;
-    if (this.isCountIn) this.scheduleCountIn(start, latest);
+    if (this.finished) { /* a música terminou */ }
+    else if (this.isEnding) this.scheduleEnding(start, beatLen, latest);
+    else if (this.isCountIn) this.scheduleCountIn(start, latest);
     else if (this.barSettings.mode === 'CLICK') this.scheduleClick(start, beatLen, latest);
     else this.scheduleGroove(start, beatLen, latest);
     this.nextBeatTime = start + beatLen;
@@ -319,6 +327,13 @@ export class Engine {
   }
 
   startBar(s, time) {
+    if (this.isEnding || this.finished) {
+      // A música terminou: o compasso final já soou.
+      this.isEnding = false;
+      if (!this.finished) this.stopAt = time;
+      this.finished = true;
+      return;
+    }
     const modeChanged = this.barSettings.mode !== s.mode || this.barSettings.grooveId !== s.grooveId;
     this.barSettings = s;
     this.barGroove = grooveById(s.grooveId);
@@ -334,6 +349,20 @@ export class Engine {
     }
     this.isCountIn = false;
     this.musicalBar = this.barsPlayed;
+    // Trocar de música ou de parte recomeça a progressão no compasso seguinte.
+    const prog = activeProgression(s);
+    if (prog !== this.barProg) {
+      this.progStartBar = this.musicalBar - prog.entryBar(this.barProg, this.progBar);
+      this.barProg = prog;
+    }
+    const songBar = this.musicalBar - this.progStartBar;
+    if (!prog.loops && songBar >= prog.bars.length && s.mode === 'GROOVE') {
+      this.isEnding = true;
+      this.isMuted = false;
+      this.hasFill = false;
+      this.hasCrash = false;
+      return;
+    }
     if (s.trainerEnabled && this.musicalBar > 0 && this.musicalBar % s.trainerEveryBars === 0) {
       const target = s.trainerTargetBpm;
       const step = s.trainerStepBpm;
@@ -341,11 +370,14 @@ export class Engine {
     }
     const cycle = s.gapPlayBars + s.gapMuteBars;
     this.isMuted = s.gapEnabled && this.musicalBar % cycle >= s.gapPlayBars;
-    const prog = progressionById(s.progression);
-    this.progBar = this.musicalBar % prog.bars.length;
+    this.progBar = mod(songBar, prog.bars.length);
+    if (s.mode === 'GROOVE') {
+      const beats = prog.beatsAt(this.progBar);
+      if (beats != null) this.barBeats = beats;
+    }
     const groove = s.mode === 'GROOVE' && s.fills;
-    this.hasFill = groove && prog.bars.length > 1 && this.progBar === prog.bars.length - 1;
-    this.hasCrash = groove && this.progBar === 0 && this.musicalBar > 0;
+    this.hasFill = groove && prog.fillAt(this.progBar);
+    this.hasCrash = groove && prog.crashAt(this.progBar) && this.musicalBar > 0;
   }
 
   updateBpm(latest) {
@@ -367,14 +399,28 @@ export class Engine {
         beatsPerBar: this.barBeats,
         step,
         patternBar,
-        progressionBar: !this.isCountIn && this.barSettings.mode === 'GROOVE' ? this.progBar : -1,
+        progressionBar: !this.isCountIn && !this.isEnding && this.barSettings.mode === 'GROOVE' ? this.barProg.displayBar(this.progBar) : -1,
         countIn: this.isCountIn,
         countInBarsLeft: this.isCountIn ? this.countInLeft : 0,
         muted: this.isMuted,
         bpm: Math.round(this.currentBpm),
+        ending: this.isEnding,
       },
     });
     if (this.markers.length > MAX_MARKERS) this.markers.splice(0, this.markers.length - MAX_MARKERS);
+  }
+
+  /** Compasso final: prato, bumbo e a tônica no baixo, deixando soar. */
+  scheduleEnding(start, beatLen, s) {
+    this.marker(start, -1);
+    if (this.beatInBar !== 0) return;
+    this.drum(start, 'CRASH', 0.9, s);
+    this.drum(start, 'KICK', 0.9, s);
+    if (s.bassEnabled) {
+      const song = songById(s.songId);
+      const tonic = { degree: 0, quality: song && song.minor ? 'MIN' : 'MAJ' };
+      this.bass(start, this.nearOctave(this.rootMidi(tonic, s), s), beatLen * Math.min(this.barBeats, 3) * 0.95, 0.95, s);
+    }
   }
 
   scheduleCountIn(start, s) {
@@ -408,13 +454,14 @@ export class Engine {
     const patternBar = this.musicalBar % g.bars;
     const swing = g.swingUnit != null ? s.swing : 0.5;
     const pair = g.swingUnit != null ? g.swingUnit : 1;
-    const fillBeats = g.beats >= 4 ? 2 : 1;
-    const fillActive = this.hasFill && this.beatInBar >= g.beats - fillBeats;
+    const fillBeats = this.barBeats >= 4 ? 2 : 1;
+    const fillActive = this.hasFill && this.beatInBar >= this.barBeats - fillBeats;
     const stepsPerBar = g.beats * spb;
+    const patternBeat = Engine.patternBeat(this.beatInBar, g.beats);
 
     for (let st = 0; st < spb; st++) {
       const at = start + swingWarp(st / spb, swing, pair) * beatLen;
-      const stepInBar = this.beatInBar * spb + st;
+      const stepInBar = patternBeat * spb + st;
       this.marker(at, stepInBar, patternBar);
       if (this.isMuted) continue;
       const idx = patternBar * stepsPerBar + stepInBar;
@@ -430,7 +477,7 @@ export class Engine {
         this.drum(at, track.instrument, v, s);
       }
       if (fillActive) {
-        const fillStep = (this.beatInBar - (g.beats - fillBeats)) * spb + st;
+        const fillStep = (this.beatInBar - (this.barBeats - fillBeats)) * spb + st;
         this.fill(at, g.fillKit, fillStep, fillBeats * spb, fillBeats, s);
       }
       if (crashHere) {
@@ -507,8 +554,29 @@ export class Engine {
 
   // ---------------------------------------------------------------- baixo
 
+  /** Nota grave do acorde (o baixo invertido, se houver) na região do baixo. */
   rootMidi(chord, s) {
-    return C.bassLowRoot + mod(chordRoot(chord, s.key) - 4, 12) + 12 * s.bassOctave;
+    return C.bassLowRoot + mod(chordBass(chord, s.key) - 4, 12) + 12 * s.bassOctave;
+  }
+
+  /** Nota a [semitones] da fundamental; em acordes invertidos (D/F#) a tônica do padrão vira o baixo. */
+  static chordTone(base, chord, semitones) {
+    if (chord.bass == null || mod(semitones, 12) === 0) return base + semitones;
+    const note = base - mod(chord.bass - chord.degree, 12) + semitones;
+    return semitones > 0 && note < base ? note + 12 : note;
+  }
+
+  /** Tempo da grade da levada para compassos irregulares (5/4 numa levada 4/4 = 1 2 3 4 3). */
+  static patternBeat(beat, grooveBeats) {
+    if (beat < grooveBeats) return beat;
+    const half = Math.max(1, Math.floor(grooveBeats / 2));
+    return grooveBeats - half + ((beat - grooveBeats) % half);
+  }
+
+  /** Próximo acorde depois do tempo [beat] (ignora compassos sem acorde). */
+  nextChord(prog, chord, beat, beats) {
+    const next = beat < beats ? chordAt(prog, this.progBar, beat, beats) : chordAt(prog, this.progBar + 1, 0, beats);
+    return next.quality === 'NC' ? chord : next;
   }
 
   lowLimit(s) { return C.minBassNote + 12 * s.bassOctave; }
@@ -522,8 +590,9 @@ export class Engine {
   }
 
   scheduleBass(start, beatLen, s, g) {
-    const prog = progressionById(this.barSettings.progression);
-    const beats = g.beats;
+    const prog = this.barProg;
+    const beats = this.barBeats;
+    if (chordAt(prog, this.progBar, this.beatInBar, beats).quality === 'NC') return;
     const style = bassStyleById(s.bassStyle);
     if (style.algorithm === 'WALKING') {
       const note = this.walkingNote(prog, beats, s);
@@ -546,7 +615,7 @@ export class Engine {
         const spec = variation.notes[mod(this.beatInBar * bspb + k, variation.length)];
         if (!spec) continue;
         const at = start + swingWarp(k / bspb, bassSwing, bassPair) * beatLen;
-        const midi = root + degreeSemitones(spec.degree, chord.quality);
+        const midi = Engine.chordTone(root, chord, degreeSemitones(spec.degree, chord.quality));
         this.bass(at, midi, stepLen * spec.len * style.gate, k === 0 ? 0.95 : 0.8, s);
       }
     }
@@ -566,12 +635,12 @@ export class Engine {
       return this.segmentRootNote;
     }
     if (pos === segLen - 1) {
-      const next = this.beatInBar + 1 < beats ? chordAt(prog, this.progBar, this.beatInBar + 1, beats) : chordAt(prog, this.progBar + 1, 0, beats);
+      const next = this.nextChord(prog, chord, this.beatInBar + 1, beats);
       return this.approach(this.nearOctave(this.rootMidi(next, s), s), variant, s);
     }
     const template = M.walkTemplates[variant % M.walkTemplates.length];
     const degree = template[(pos - 1) % template.length];
-    let note = this.segmentRootNote + degreeSemitones(degree, chord.quality);
+    let note = Engine.chordTone(this.segmentRootNote, chord, degreeSemitones(degree, chord.quality));
     if (note > this.highLimit(s)) note -= 12;
     return note;
   }
@@ -593,13 +662,12 @@ export class Engine {
       this.segmentRootNote = this.nearOctave(this.rootMidi(chord, s), s);
       return this.segmentRootNote;
     }
-    const nextBeat = this.beatInBar + half;
-    const next = nextBeat < beats ? chordAt(prog, this.progBar, nextBeat, beats) : chordAt(prog, this.progBar + 1, 0, beats);
+    const next = this.nextChord(prog, chord, this.beatInBar + half, beats);
     if (!sameChord(next, chord)) {
       const target = this.nearOctave(this.rootMidi(next, s), s);
       return this.prevBassNote > target ? target + 1 : target - 1;
     }
-    const fifth = this.segmentRootNote + M.qualities[chord.quality].fifth;
+    const fifth = Engine.chordTone(this.segmentRootNote, chord, M.qualities[chord.quality].fifth);
     return fifth > this.highLimit(s) ? fifth - 12 : fifth;
   }
 

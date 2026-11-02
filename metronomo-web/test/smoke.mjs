@@ -101,6 +101,48 @@ for (const [genre, grooveId] of [['ROCK', 'rock_and_roll'], ['JAZZ', 'swing_medi
 await page.evaluate(() => { document.getElementById('tab').scrollTop = 0; });
 await page.screenshot({ path: join(OUT, '2b-generos.png') });
 
+// Músicas: carregar uma música ajusta andamento, tom e levada; a cifra acompanha a execução.
+await page.tap('[data-tab="songs"]');
+const songCount = await page.locator('[data-action="song"]').count();
+check(songCount > 0, `setlist com ${songCount} músicas`);
+await page.screenshot({ path: join(OUT, '6-musicas.png') });
+await page.tap('[data-action="song"][data-id="wish_you_were_here"]');
+const loaded = await page.evaluate(() => {
+  const s = BluesTempo.settings;
+  const song = window.BluesTempoInternals.songById('wish_you_were_here');
+  return { ok: s.songId === song.id && s.bpm === song.bpm && s.key === song.key && s.grooveId === song.groove && s.mode === 'GROOVE', bpm: s.bpm };
+});
+check(loaded.ok, `carrega a música (andamento ${loaded.bpm}, tom e levada)`);
+check((await page.locator('#song-chart .prog-bar').count()) > 40, 'mostra a cifra completa');
+await page.evaluate(() => BluesTempo.update({ bpm: 200 }));
+await page.tap('#play');
+await page.waitForTimeout(2500);
+state = await page.evaluate(() => ({
+  pos: BluesTempo.engine.positionNow(),
+  now: document.querySelectorAll('#song-chart .prog-bar.now').length,
+  tag: document.getElementById('mode-tag').textContent,
+  chord: document.getElementById('chord').textContent,
+}));
+check(state.pos && state.pos.progressionBar >= 1 && state.now === 1, `cifra destaca o compasso atual (${state.pos && state.pos.progressionBar + 1})`);
+check(state.tag.includes('Wish You Were Here'), `painel mostra a música e a parte (${state.tag})`);
+check(['Em7', 'G', 'A7sus4'].includes(state.chord), `acorde atual na grafia da música (${state.chord})`);
+await page.screenshot({ path: join(OUT, '7-musica-tocando.png') });
+await page.tap('#song-chart .part[data-part="2"]');
+await page.waitForTimeout(3500);
+state = await page.evaluate(() => ({ pos: BluesTempo.engine.positionNow(), part: window.BluesTempoInternals.songById('wish_you_were_here').parts[2] }));
+check(state.pos && state.pos.progressionBar >= state.part.start && state.pos.progressionBar < state.part.end, 'loop de uma parte (verso) pula para ela no compasso seguinte');
+await page.tap('#play');
+await page.tap('[data-action="song-key"][data-v="1"]');
+const transposed = await page.evaluate(() => [...document.querySelectorAll('#song-chart .prog-bar b')].slice(0, 6).map((b) => b.textContent));
+check(transposed[0] === 'Fm7' && transposed[1] === 'Ab', `transpõe a cifra (+1: ${transposed.join(' ')})`);
+await page.tap('[data-action="song-key-reset"]');
+await page.tap('[data-action="song-step"][data-v="1"]');
+check(await page.evaluate(() => BluesTempo.settings.songId !== 'wish_you_were_here'), 'próxima música');
+await page.tap('[data-tab="grooves"]');
+check(await page.locator('#prog').evaluate((el) => el.value === ''), 'aba Levadas indica que a progressão vem da música');
+await page.selectOption('#prog', 'BLUES_12');
+check(await page.evaluate(() => BluesTempo.settings.songId === null), 'escolher uma progressão sai da música');
+
 for (const [tab, file] of [['practice', '3-treino.png'], ['presets', '4-presets.png']]) {
   await page.tap(`[data-tab="${tab}"]`);
   await page.screenshot({ path: join(OUT, file) });

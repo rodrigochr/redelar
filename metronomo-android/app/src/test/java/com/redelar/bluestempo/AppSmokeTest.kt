@@ -11,6 +11,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import com.redelar.bluestempo.model.GrooveLibrary
 import com.redelar.bluestempo.model.PlayMode
+import com.redelar.bluestempo.model.SongBook
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -77,6 +78,26 @@ class AppSmokeTest {
         compose.runOnIdle { app.repository.savePreset("Minha jam") }
         compose.waitForIdle()
         compose.onNodeWithText("Minha jam").assertIsDisplayed()
+
+        // Músicas: carregar uma música ajusta andamento, tom e levada e mostra a cifra.
+        compose.onNodeWithText("Músicas").tap()
+        assertEquals(PlayMode.GROOVE, app.currentSettings().mode)
+        val song = SongBook.byId("wish_you_were_here")!!
+        compose.onNodeWithText(song.title).performScrollTo().tap()
+        app.currentSettings().let {
+            assertEquals(song.id, it.songId)
+            assertEquals(song.bpm, it.bpm)
+            assertEquals(song.key, it.key)
+            assertEquals(song.grooveId, it.grooveId)
+        }
+        compose.onNodeWithText("Cifra").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithContentDescription("Meio tom acima").performScrollTo().tap()
+        assertEquals((song.key + 1) % 12, app.currentSettings().key)
+        compose.onNodeWithText("Próxima ▶").performScrollTo().tap()
+        assertTrue(app.currentSettings().songId != song.id)
+        compose.onNodeWithContentDescription("Tocar").tap()
+        assertTrue(app.controller.isPlaying)
+        compose.onNodeWithContentDescription("Parar").tap()
 
         compose.onNodeWithText("Metrônomo").tap()
         assertEquals(PlayMode.CLICK, app.currentSettings().mode)

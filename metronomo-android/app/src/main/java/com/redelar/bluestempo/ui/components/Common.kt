@@ -215,6 +215,7 @@ fun <T> DropdownSelector(
     optionLabel: (T) -> String,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
+    buttonLabel: String? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Column(modifier.fillMaxWidth()) {
@@ -222,7 +223,7 @@ fun <T> DropdownSelector(
         Box {
             OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    optionLabel(selected) + "  ▾",
+                    (buttonLabel ?: optionLabel(selected)) + "  ▾",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )

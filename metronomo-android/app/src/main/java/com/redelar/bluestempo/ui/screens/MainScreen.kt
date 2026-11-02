@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.redelar.bluestempo.R
 import com.redelar.bluestempo.model.PlayMode
@@ -45,6 +46,7 @@ import kotlinx.coroutines.launch
 enum class Tab(val label: String, val icon: Int) {
     METRONOME("Metrônomo", R.drawable.ic_metronome),
     GROOVES("Levadas", R.drawable.ic_drum),
+    SONGS("Músicas", R.drawable.ic_music),
     PRACTICE("Treino", R.drawable.ic_practice),
     PRESETS("Presets", R.drawable.ic_bookmark),
 }
@@ -79,14 +81,20 @@ fun MainContent(
     val scope = rememberCoroutineScope()
 
     var tab by rememberSaveable {
-        mutableStateOf(initialTab ?: if (settings.mode == PlayMode.GROOVE) Tab.GROOVES else Tab.METRONOME)
+        mutableStateOf(
+            initialTab ?: when {
+                settings.mode == PlayMode.GROOVE && settings.song != null -> Tab.SONGS
+                settings.mode == PlayMode.GROOVE -> Tab.GROOVES
+                else -> Tab.METRONOME
+            },
+        )
     }
 
     fun selectTab(t: Tab) {
         tab = t
         when (t) {
             Tab.METRONOME -> actions.setMode(PlayMode.CLICK)
-            Tab.GROOVES -> actions.setMode(PlayMode.GROOVE)
+            Tab.GROOVES, Tab.SONGS -> actions.setMode(PlayMode.GROOVE)
             else -> Unit
         }
     }
@@ -100,7 +108,7 @@ fun MainContent(
                         selected = tab == t,
                         onClick = { selectTab(t) },
                         icon = { Icon(painterResource(t.icon), contentDescription = null) },
-                        label = { Text(t.label) },
+                        label = { Text(t.label, maxLines = 1, softWrap = false, fontSize = 11.sp) },
                     )
                 }
             }
@@ -125,6 +133,7 @@ fun MainContent(
                 when (tab) {
                     Tab.METRONOME -> MetronomeTab(settings, engine, actions)
                     Tab.GROOVES -> GroovesTab(settings, engine, actions)
+                    Tab.SONGS -> SongsTab(settings, engine, actions)
                     Tab.PRACTICE -> PracticeTab(settings, actions)
                     Tab.PRESETS -> PresetsTab(settings, presets, actions) { mode ->
                         scope.launch { snackbar.showSnackbar("Preset carregado") }

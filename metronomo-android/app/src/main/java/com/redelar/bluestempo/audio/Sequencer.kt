@@ -12,7 +12,8 @@ import com.redelar.bluestempo.model.FillKit
 import com.redelar.bluestempo.model.Groove
 import com.redelar.bluestempo.model.Instrument
 import com.redelar.bluestempo.model.PlayMode
-import com.redelar.bluestempo.model.ProgressionType
+import com.redelar.bluestempo.model.Progression
+import com.redelar.bluestempo.model.Quality
 import com.redelar.bluestempo.model.defaultAccents
 import java.util.PriorityQueue
 import kotlin.math.abs
@@ -40,6 +41,8 @@ data class PlaybackPosition(
     val countInBarsLeft: Int,
     val muted: Boolean,
     val bpm: Int,
+    /** Compasso final da música (só o acorde de encerramento). */
+    val ending: Boolean = false,
 )
 
 /** Evento disparado (exposto apenas para testes). */
@@ -133,6 +136,11 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
     private var hasFill = false
     private var hasCrash = false
     private var progBar = 0
+    private var barProg: Progression = barSettings.activeProgression
+    private var progStartBar = 0
+    private var isEnding = false
+    private var finished = false
+    private var stopAtFrame = -1L
     private var currentBpm = 100.0
     private var lastUserBpm = -1
     private var prevBassNote = -1
@@ -179,6 +187,11 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         lastUserBpm = settings.bpm
         prevBassNote = -1
         segmentRootNote = -1
+        barProg = settings.activeProgression
+        progStartBar = 0
+        isEnding = false
+        finished = false
+        stopAtFrame = -1L
         markerHead = 0
         markerCount = 0
         stopRequested = false
@@ -237,6 +250,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
 
         val timer = pending.timerMinutes
         if (timer > 0 && frame >= timer * 60L * sampleRate) stopRequested = true
+        if (stopAtFrame >= 0 && frame >= stopAtFrame) stopRequested = true
     }
 
     private fun fire(e: Event, now: Long) {
@@ -265,10 +279,12 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
     private fun scheduleBeat() {
         val start = nextBeatFrame
         val latest = pending
-        if (beatInBar == 0) startBar(latest)
+        if (beatInBar == 0) startBar(latest, start)
         updateBpm(latest)
         val beatLen = sampleRate * 60.0 / currentBpm
         when {
+            finished -> Unit
+            isEnding -> scheduleEnding(start, beatLen, latest)
             isCountIn -> scheduleCountIn(start, latest)
             barSettings.mode == PlayMode.CLICK -> scheduleClick(start, beatLen, latest)
             else -> scheduleGroove(start, beatLen, latest)
@@ -281,7 +297,14 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         }
     }
 
-    private fun startBar(s: AppSettings) {
+    private fun startBar(s: AppSettings, start: Double) {
+        if (isEnding || finished) {
+            // A música terminou: o compasso final já soou.
+            isEnding = false
+            if (!finished) stopAtFrame = start.roundToLong()
+            finished = true
+            return
+        }
         barSettings = s
         barGroove = s.groove
         barBeats = s.activeBeatsPerBar
@@ -296,6 +319,21 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         isCountIn = false
         musicalBar = barsPlayed
 
+        // Trocar de música ou de parte recomeça a progressão no compasso seguinte.
+        val prog = s.activeProgression
+        if (prog !== barProg) {
+            progStartBar = musicalBar - prog.entryBar(barProg, progBar)
+            barProg = prog
+        }
+        val songBar = musicalBar - progStartBar
+        if (!prog.loops && songBar >= prog.length && s.mode == PlayMode.GROOVE) {
+            isEnding = true
+            isMuted = false
+            hasFill = false
+            hasCrash = false
+            return
+        }
+
         if (s.trainerEnabled && musicalBar > 0 && musicalBar % s.trainerEveryBars == 0) {
             val target = s.trainerTargetBpm.toDouble()
             val step = s.trainerStepBpm.toDouble()
@@ -305,11 +343,11 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         val cycle = s.gapPlayBars + s.gapMuteBars
         isMuted = s.gapEnabled && musicalBar % cycle >= s.gapPlayBars
 
-        val prog = s.progression
-        progBar = musicalBar % prog.length
+        progBar = Math.floorMod(songBar, prog.length)
+        if (s.mode == PlayMode.GROOVE) prog.beatsAt(progBar)?.let { barBeats = it }
         val groove = s.mode == PlayMode.GROOVE && s.fills
-        hasFill = groove && prog.length > 1 && progBar == prog.length - 1
-        hasCrash = groove && progBar == 0 && musicalBar > 0
+        hasFill = groove && prog.fillAt(progBar)
+        hasCrash = groove && prog.crashAt(progBar) && musicalBar > 0
     }
 
     private fun updateBpm(latest: AppSettings) {
@@ -331,14 +369,27 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
             beatsPerBar = barBeats,
             step = step,
             patternBar = patternBar,
-            progressionBar = if (!isCountIn && barSettings.mode == PlayMode.GROOVE) progBar else -1,
+            progressionBar = if (!isCountIn && !isEnding && barSettings.mode == PlayMode.GROOVE) barProg.displayBar(progBar) else -1,
             countIn = isCountIn,
             countInBarsLeft = if (isCountIn) countInLeft else 0,
             muted = isMuted,
             bpm = currentBpm.roundToInt(),
+            ending = isEnding,
         )
         markerHead = (markerHead + 1) % MARKERS
         markerCount = min(markerCount + 1, MARKERS)
+    }
+
+    /** Compasso final: prato, bumbo e a tônica no baixo, deixando soar. */
+    private fun scheduleEnding(start: Double, beatLen: Double, s: AppSettings) {
+        marker(start, -1)
+        if (beatInBar != 0) return
+        addDrum(start, Instrument.CRASH, 0.9f, s)
+        addDrum(start, Instrument.KICK, 0.9f, s)
+        if (s.bassEnabled) {
+            val tonic = Chord(0, if (s.song?.minor == true) Quality.MIN else Quality.MAJ)
+            addBass(start, nearOctave(rootMidi(tonic, s), s), beatLen * min(barBeats, 3) * 0.95, 0.95f, s.bassTone)
+        }
     }
 
     private fun scheduleCountIn(start: Double, s: AppSettings) {
@@ -377,12 +428,13 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         val patternBar = musicalBar % g.bars
         val swing = if (g.swingUnit != null) s.swing.toDouble() else 0.5
         val pair = g.swingUnit?.pairLength ?: 1.0
-        val fillBeats = if (g.beatsPerBar >= 4) 2 else 1
-        val fillActive = hasFill && beatInBar >= g.beatsPerBar - fillBeats
+        val fillBeats = if (barBeats >= 4) 2 else 1
+        val fillActive = hasFill && beatInBar >= barBeats - fillBeats
+        val patternBeat = patternBeat(beatInBar, g.beatsPerBar)
 
         for (st in 0 until spb) {
             val at = start + swingWarp(st.toDouble() / spb, swing, pair) * beatLen
-            val stepInBar = beatInBar * spb + st
+            val stepInBar = patternBeat * spb + st
             marker(at, stepInBar, patternBar)
             if (isMuted) continue
             val idx = patternBar * g.stepsPerBar + stepInBar
@@ -398,7 +450,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
                 addDrum(at, inst, v, s)
             }
             if (fillActive) {
-                val fillStep = (beatInBar - (g.beatsPerBar - fillBeats)) * spb + st
+                val fillStep = (beatInBar - (barBeats - fillBeats)) * spb + st
                 addFill(at, g.fillKit, fillStep, fillBeats * spb, fillBeats, s)
             }
             if (crashHere) {
@@ -471,8 +523,20 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
 
     // ------------------------------------------------------------------ baixo
 
+    /** Nota grave do acorde (o baixo invertido, se houver) na região do baixo. */
     private fun rootMidi(chord: Chord, s: AppSettings): Int =
-        BASS_LOW_ROOT + Math.floorMod(chord.rootPitchClass(s.key) - 4, 12) + 12 * s.bassOctave
+        BASS_LOW_ROOT + Math.floorMod(chord.bassPitchClass(s.key) - 4, 12) + 12 * s.bassOctave
+
+    /**
+     * Nota a [semitones] da fundamental do acorde, partindo da nota grave [base]. Em acordes com
+     * baixo invertido (D/F#), a tônica do padrão vira o baixo e as outras notas seguem o acorde.
+     */
+    private fun chordTone(base: Int, chord: Chord, semitones: Int): Int {
+        val bass = chord.bass ?: return base + semitones
+        if (Math.floorMod(semitones, 12) == 0) return base + semitones
+        val note = base - Math.floorMod(bass - chord.degree, 12) + semitones
+        return if (semitones > 0 && note < base) note + 12 else note
+    }
 
     private fun lowLimit(s: AppSettings) = MIN_BASS_NOTE + 12 * s.bassOctave
     private fun highLimit(s: AppSettings) = MAX_BASS_NOTE + 12 * s.bassOctave
@@ -485,8 +549,9 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
     }
 
     private fun scheduleBass(start: Double, beatLen: Double, s: AppSettings, g: Groove) {
-        val prog = barSettings.progression
-        val beats = g.beatsPerBar
+        val prog = barProg
+        val beats = barBeats
+        if (prog.chordAt(progBar, beatInBar, beats).isNoChord) return
         val tone = s.bassTone
         when (s.bassStyle.algorithm) {
             BassAlgorithm.WALKING -> {
@@ -516,14 +581,21 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
                 for (k in 0 until bspb) {
                     val spec = variation.noteAt(beatInBar * bspb + k) ?: continue
                     val at = start + swingWarp(k.toDouble() / bspb, bassSwing, bassPair) * beatLen
-                    val midi = root + spec.degree.semitones(chord.quality)
+                    val midi = chordTone(root, chord, spec.degree.semitones(chord.quality))
                     addBass(at, midi, stepLen * spec.lengthSteps * pattern.gate, if (k == 0) 0.95f else 0.8f, tone)
                 }
             }
         }
     }
 
-    private fun walkingNote(prog: ProgressionType, beats: Int, s: AppSettings): Int {
+    /** Próximo acorde depois do tempo [beat] (ignora compassos sem acorde). */
+    private fun nextChord(prog: Progression, chord: Chord, beat: Int, beats: Int): Chord {
+        val next = if (beat < beats) prog.chordAt(progBar, beat, beats)
+        else prog.chordAt(progBar + 1, 0, prog.beatsAt(Math.floorMod(progBar + 1, prog.length)) ?: barGroove.beatsPerBar)
+        return if (next.isNoChord) chord else next
+    }
+
+    private fun walkingNote(prog: Progression, beats: Int, s: AppSettings): Int {
         val chord = prog.chordAt(progBar, beatInBar, beats)
         var segStart = beatInBar
         while (segStart > 0 && prog.chordAt(progBar, segStart - 1, beats) == chord) segStart--
@@ -538,13 +610,12 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
             return segmentRootNote
         }
         if (pos == segLen - 1) {
-            val nextChord = if (beatInBar + 1 < beats) prog.chordAt(progBar, beatInBar + 1, beats)
-            else prog.chordAt(progBar + 1, 0, beats)
+            val nextChord = nextChord(prog, chord, beatInBar + 1, beats)
             return approach(nearOctave(rootMidi(nextChord, s), s), variant, s)
         }
         val template = WALK_TEMPLATES[variant % WALK_TEMPLATES.size]
         val degree = template[(pos - 1) % template.size]
-        var note = segmentRootNote + degree.semitones(chord.quality)
+        var note = chordTone(segmentRootNote, chord, degree.semitones(chord.quality))
         if (note > highLimit(s)) note -= 12
         return note
     }
@@ -566,20 +637,19 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         }
     }
 
-    private fun twoFeelNote(prog: ProgressionType, beats: Int, half: Int, s: AppSettings): Int {
+    private fun twoFeelNote(prog: Progression, beats: Int, half: Int, s: AppSettings): Int {
         val chord = prog.chordAt(progBar, beatInBar, beats)
         val isStart = beatInBar == 0 || prog.chordAt(progBar, beatInBar - 1, beats) != chord
         if (isStart) {
             segmentRootNote = nearOctave(rootMidi(chord, s), s)
             return segmentRootNote
         }
-        val nextBeat = beatInBar + half
-        val nextChord = if (nextBeat < beats) prog.chordAt(progBar, nextBeat, beats) else prog.chordAt(progBar + 1, 0, beats)
+        val nextChord = nextChord(prog, chord, beatInBar + half, beats)
         if (nextChord != chord) {
             val target = nearOctave(rootMidi(nextChord, s), s)
             return if (prevBassNote > target) target + 1 else target - 1
         }
-        val fifth = segmentRootNote + chord.quality.fifth
+        val fifth = chordTone(segmentRootNote, chord, chord.quality.fifth)
         return if (fifth > highLimit(s)) fifth - 12 else fifth
     }
 
@@ -608,6 +678,16 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         const val BASS_LOW_ROOT = 28
         const val MIN_BASS_NOTE = 26
         const val MAX_BASS_NOTE = 55
+
+        /**
+         * Tempo da grade da levada usado no tempo [beat] de um compasso: compassos mais longos que
+         * a levada repetem a segunda metade dela (5/4 numa levada 4/4 = 1 2 3 4 3).
+         */
+        fun patternBeat(beat: Int, grooveBeats: Int): Int {
+            if (beat < grooveBeats) return beat
+            val half = max(1, grooveBeats / 2)
+            return grooveBeats - half + (beat - grooveBeats) % half
+        }
 
         internal val WALK_TEMPLATES: List<List<Degree>> = listOf(
             listOf("3", "5"), listOf("2", "3"), listOf("5", "6"), listOf("8", "7"),

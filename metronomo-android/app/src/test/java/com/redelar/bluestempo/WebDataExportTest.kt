@@ -12,7 +12,9 @@ import com.redelar.bluestempo.model.Genre
 import com.redelar.bluestempo.model.GrooveLibrary
 import com.redelar.bluestempo.model.Instrument
 import com.redelar.bluestempo.model.Meter
+import com.redelar.bluestempo.model.Chord
 import com.redelar.bluestempo.model.ProgressionType
+import com.redelar.bluestempo.model.SongBook
 import com.redelar.bluestempo.model.Quality
 import com.redelar.bluestempo.model.Subdivision
 import kotlinx.serialization.json.Json
@@ -56,6 +58,17 @@ class WebDataExportTest {
         put("acc", d.accidental)
         put("oct", d.octave)
         put("chord", d.chordAware)
+    }
+
+    private fun chord(c: Chord) = buildJsonObject {
+        put("degree", c.degree)
+        put("quality", c.quality.name)
+        put("suffix", c.suffix)
+        c.bass?.let { put("bass", it) }
+        if (c.spellShift != 0 || c.spellMinor != null) {
+            put("spellShift", c.spellShift)
+            put("spellMinor", c.spellMinor?.let { JsonPrimitive(it) } ?: JsonNull)
+        }
     }
 
     private fun floats(values: FloatArray): JsonArray =
@@ -130,6 +143,42 @@ class WebDataExportTest {
                             }
                         }))
                     }
+                })
+            }
+        }
+        putJsonArray("songs") {
+            SongBook.all.forEach { song ->
+                add(buildJsonObject {
+                    put("id", song.id)
+                    put("number", song.number)
+                    put("title", song.title)
+                    put("artist", song.artist)
+                    put("reference", song.reference)
+                    put("key", song.key)
+                    put("minor", song.minor)
+                    put("bpm", song.bpm)
+                    put("groove", song.grooveId)
+                    put("bass", song.bassStyle?.let { JsonPrimitive(it.name) } ?: JsonNull)
+                    put("swing", song.swing?.let { JsonPrimitive(it) } ?: JsonNull)
+                    put("confidence", song.confidence.name)
+                    put("confidenceLabel", song.confidence.label)
+                    put("notes", song.notes)
+                    // Formato compacto: tabela de acordes da música e compassos como índices nela.
+                    val chords = song.sections.flatMap { s -> s.bars.flatMap { it.chords } }.distinct()
+                    put("chords", JsonArray(chords.map { chord(it) }))
+                    put("sections", JsonArray(song.sections.map { section ->
+                        buildJsonObject {
+                            put("name", section.name)
+                            put("bars", JsonArray(section.bars.map { bar ->
+                                JsonArray(bar.chords.map { JsonPrimitive(chords.indexOf(it)) })
+                            }))
+                            val irregular = section.bars.withIndex().filter { it.value.beats != null }
+                            if (irregular.isNotEmpty()) {
+                                put("beats", buildJsonObject { irregular.forEach { put(it.index.toString(), it.value.beats!!) } })
+                            }
+                        }
+                    }))
+                    put("form", JsonArray(song.form.map { JsonPrimitive(song.sections.indexOf(it)) }))
                 })
             }
         }

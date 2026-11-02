@@ -22,7 +22,10 @@ class DemoRenderer {
         val samples = SampleLibrary.load(RealInstrumentsTest.source, sr)
         val bank = SoundBank(sr, samples)
         raw = System.getenv("BLUESTEMPO_DEMO_RAW") == "1"
-        GrooveLibrary.all.forEach { g ->
+        // BLUESTEMPO_DEMO_ONLY=id1,id2 limita às levadas indicadas (para calibrar levadas novas).
+        val only = System.getenv("BLUESTEMPO_DEMO_ONLY")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }
+        val grooves = GrooveLibrary.all.filter { only == null || it.id in only }
+        grooves.forEach { g ->
             val s = AppSettings(
                 mode = PlayMode.GROOVE, grooveId = g.id, bpm = g.defaultBpm, swing = g.defaultSwing,
                 bassStyle = g.bassStyle, bassTone = g.bassTone, progression = g.progression, key = 9,
@@ -53,7 +56,7 @@ class DemoRenderer {
                 "perc" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 1f, 0f, 0f),
                 "bass" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 0f, 1f, 0f),
             )
-            GrooveLibrary.all.forEach { g ->
+            grooves.forEach { g ->
                 solos.forEach { (stem, mixer) ->
                     val s = AppSettings(
                         mode = PlayMode.GROOVE, grooveId = g.id, bpm = g.defaultBpm, swing = g.defaultSwing,

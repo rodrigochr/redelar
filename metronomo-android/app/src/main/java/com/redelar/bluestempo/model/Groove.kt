@@ -249,6 +249,18 @@ object GrooveLibrary {
             kick("x--- ---- x--- ----")
         },
         groove(
+            "rumba_blues", "Rumba Blues (latin)", Genre.BLUES,
+            "Blues com batida latina: bumbo no 1, no \"e\" do 2 e no 3, aro no 2 e 4, surdo no \"e\" do 4 " +
+                "e baixo em tresillo. O som de \"Help the Poor\" (B.B. King).",
+            level = 3.47f, synthLevel = 2.54f, mix = mix(0.35f, 0.9f, 0.45f, 0.55f, 0.45f),
+            bpm = 118, bass = BassStyle.TRESILLO, progression = ProgressionType.BLUES_MINOR, swingUnit = null,
+        ) {
+            hat("Xo xo Xo xo")
+            rim("-- x- -- x-")
+            kick("x- -x x- --")
+            tomLow("-- -- -- -x")
+        },
+        groove(
             "blues_rock", "Blues Rock (colcheias retas)", Genre.BLUES,
             "Colcheias retas e pesadas com o baixo martelando a tônica. Blues com pegada de rock " +
                 "britânico dos anos 60 e 70.",
@@ -373,6 +385,52 @@ object GrooveLibrary {
             hat("Xo Xo Xo Xo")
             snare("-x -x -x -x")
             kick("x- x- x- x-")
+        },
+        groove(
+            "rock_ballad", "Balada Rock", Genre.ROCK,
+            "Andamento lento: chimbal em colcheias, caixa cheia no 2 e 4 e bumbo com a semicolcheia " +
+                "de apoio antes do 3. Para baladas como \"Wish You Were Here\" e \"Comfortably Numb\".",
+            level = 1.8f, synthLevel = 1.32f, mix = mix(0.65f, 0.9f, 0.6f, 0.85f, 0.65f),
+            bpm = 66, bass = BassStyle.BALLAD, progression = ProgressionType.POP_I_V_VI_IV, steps = 4,
+        ) {
+            hat("X-x- x-x- X-x- x-x-")
+            snare("---- X--- ---- X---")
+            kick("x--- ---o x--- --o-")
+        },
+        groove(
+            "country_two_beat", "Country / Rock Rural (dois tempos)", Genre.ROCK,
+            "O \"bum-tchi\" do country e do rock rural: bumbo nos tempos, caixa nos contratempos e baixo " +
+                "alternando tônica e quinta. Conte devagar (cada tempo é um \"bum-tchi\").",
+            level = 2.66f, synthLevel = 1.57f, mix = mix(0.4f, 0.65f, 0.9f, 0.6f, 0.45f),
+            bpm = 90, bass = BassStyle.COUNTRY, progression = ProgressionType.ROCK_I_IV_V,
+        ) {
+            hat("-o -o -o -o")
+            snare("-x -x -X -x")
+            kick("x- x- x- x-")
+        },
+        groove(
+            "synth_pop", "Synth-pop (4 no chão)", Genre.ROCK,
+            "Bumbo em todos os tempos, caixa no 2 e 4 e chimbal em semicolcheias com o aberto no " +
+                "contratempo. New wave e synth-pop dos anos 80.",
+            level = 1.84f, synthLevel = 1.0f, mix = mix(0.75f, 0.9f, 0.4f, 0.85f, 0.55f),
+            bpm = 113, bass = BassStyle.ROCK_EIGHTHS, progression = ProgressionType.POP_I_V_VI_IV, steps = 4,
+        ) {
+            hat("xo-o xo-o xo-o xo-o")
+            hatOpen("--x- --x- --x- --x-")
+            snare("---- X--- ---- X---")
+            kick("x--- x--- x--- x---")
+        },
+        groove(
+            "samba_rock", "Samba-Rock (congas)", Genre.ROCK,
+            "Congas e maracas em semicolcheias sobre o bumbo de samba, no clima de " +
+                "\"Sympathy for the Devil\".",
+            level = 1.38f, synthLevel = 0.9f, mix = mix(0.7f, 0.75f, 0.65f, 0.8f, 0.9f),
+            bpm = 116, bass = BassStyle.SAMBA, progression = ProgressionType.ROCK_I_IV_V, steps = 4, swing = 0.54f,
+        ) {
+            shaker("Xoxo xoxo Xoxo xoxo")
+            tomHigh("--x- x-xo --x- x-x-")
+            tomLow("x--- ---- x--- ---x")
+            kick("x--o ---- x--o ----")
         },
 
         // ------------------------------------------------------------------ JAZZ

@@ -1,8 +1,9 @@
 // Interface da versão web do BluesTempo (mesmas abas do app Android).
 import { Engine } from './engine.js';
 import {
-  ACCENT_CYCLE, KEYS, M, MAX_BPM, MIN_BPM, activeBeatsPerBar, bassStyleById, channelKey, chordAt, chordName,
-  defaultAccents, effectiveAccents, grooveById, grooveMix, normalizeSettings, progressionById, subdivisionById, tempoMarking,
+  ACCENT_CYCLE, KEYS, M, MAX_BPM, MIN_BPM, SONG_LIST, activeBeatsPerBar, activeProgression, bassStyleById, channelKey, chordAt,
+  chordName, defaultAccents, effectiveAccents, grooveById, grooveMix, keyName, mod, normalizeSettings, progressionById, sameChord, songById,
+  subdivisionById, tempoMarking,
 } from './music.js';
 import { loadSampleBundle } from './sounds.js';
 import { applyPreset, loadPresets, loadSettings, savePresets, saveSettings } from './store.js';
@@ -14,7 +15,7 @@ const pct = (v) => `${Math.round(v * 100)}%`;
 
 let settings = loadSettings();
 let presets = loadPresets();
-let tab = settings.mode === 'GROOVE' ? 'grooves' : 'metronome';
+let tab = settings.mode === 'GROOVE' ? (settings.songId ? 'songs' : 'grooves') : 'metronome';
 let samplesState = 'loading'; // loading | ready | error
 let samplesProgress = 0;
 let presetForm = null; // { mode: 'save' } | { mode: 'delete', id }
@@ -27,6 +28,7 @@ const engine = new Engine({
     stopIOSAudio();
     renderTransport();
     if (reason === 'timer') toast('Tempo de estudo concluído.');
+    if (reason === 'song') toast('Fim da música.');
   },
 });
 
@@ -263,6 +265,104 @@ function progressionGrid() {
     `<div class="prog-bar" data-bar="${i}"><small>${i + 1}</small><b class="${bar.length > 1 ? 'two' : ''}">${bar.map((c) => esc(chordName(c, settings.key))).join(' ')}</b></div>`).join('')}</div>`;
 }
 
+function progressionArea() {
+  const song = songById(settings.songId);
+  if (song) {
+    const options = [['', `♪ ${song.title} (música)`], ...M.progressions.map((p) => [p.id, p.label])];
+    return `<div class="field"><label for="prog">Progressão</label><select id="prog" data-select="progression">${options
+      .map(([v, l]) => `<option value="${esc(v)}"${v === '' ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
+      <p class="hint">Tocando a cifra de “${esc(song.title)}” (aba Músicas). Escolher uma progressão aqui sai da música.</p>`;
+  }
+  return `${select('prog', 'Progressão', 'progression', M.progressions.map((p) => [p.id, p.label]))}
+    <p class="hint">${esc(progressionById(settings.progression).description)}</p>
+    ${progressionGrid()}`;
+}
+
+// ------------------------------------------------------------------ músicas
+
+const TEMPO_STEPS = [50, 60, 70, 80, 90, 100];
+
+function songsTab() {
+  const song = songById(settings.songId);
+  const list = SONG_LIST.map((x) => {
+    const on = !!song && x.id === song.id;
+    return `<button type="button" class="song${on ? ' on' : ''}" data-action="song" data-id="${esc(x.id)}" aria-pressed="${on}">
+      <span class="song-n">${x.number}</span>
+      <span class="song-main"><strong>${esc(x.title)}</strong><small>${esc(x.artist)} · ${esc(grooveById(x.groove).name)}</small></span>
+      <span class="song-meta"><b>${esc(x.keyName)}</b><small>${x.bpm}</small></span></button>`;
+  }).join('');
+  const top = song ? songPanel(song)
+    : '<p class="hint intro">Escolha uma música: o app ajusta andamento, tom, levada e baixo e mostra a cifra compasso a compasso enquanto toca.</p>';
+  return top + section('Setlist', `<div class="songs">${list}</div>`, `${SONG_LIST.length} músicas · toque para carregar`);
+}
+
+function songPanel(song) {
+  const g = grooveById(settings.grooveId);
+  const shift = mod(settings.key - song.key + 6, 12) - 6;
+  const tempos = [...TEMPO_STEPS].reverse().map((p) => {
+    const bpm = Math.round((song.bpm * p) / 100);
+    return chip(p === 100 ? `Original ${bpm}` : `${p}% · ${bpm}`, settings.bpm === bpm, 'song-tempo', `data-v="${bpm}"`);
+  }).join('');
+  const looping = song.parts[settings.songPart];
+  const playMode = looping
+    ? `<div class="loop-bar"><span>Repetindo <b>${looping.index + 1}. ${esc(looping.name)}</b></span>
+        <button type="button" class="outline sm" data-action="song-part" data-v="-1">Música inteira</button></div>`
+    : `<div class="row"><span class="grow">No fim da música</span>${chip('Repetir', settings.songRepeat, 'song-repeat', 'data-v="1"')}${chip('Parar', !settings.songRepeat, 'song-repeat', 'data-v="0"')}</div>`;
+  const head = section(song.title, `
+    <div class="tags"><span class="tag gold">Tom original ${esc(song.keyName)}</span><span class="tag">${song.bpm} BPM</span>
+      <span class="tag">${esc(grooveById(song.groove).name)}</span><span class="tag conf-${song.confidence.toLowerCase()}">Confiança ${esc(song.confidenceLabel.toLowerCase())}</span></div>
+    <div class="two-buttons"><button type="button" class="outline" data-action="song-step" data-v="-1">◀ Anterior</button>
+      <button type="button" class="outline" data-action="song-step" data-v="1">Próxima ▶</button></div>
+    <div class="stepper key"><span>Tom</span>
+      <button type="button" class="round sm" data-action="song-key" data-v="-1" aria-label="Meio tom abaixo">−</button>
+      <output>${esc(keyName(settings.key, song.minor))}${shift ? ` (${shift > 0 ? '+' : ''}${shift})` : ''}</output>
+      <button type="button" class="round sm" data-action="song-key" data-v="1" aria-label="Meio tom acima">+</button></div>
+    ${settings.key !== song.key ? `<div class="row end"><button type="button" class="text" data-action="song-key-reset">Voltar ao tom original (${esc(song.keyName)})</button></div>` : ''}
+    <p class="label">Andamento de estudo</p><div class="chips scroll">${tempos}</div>`,
+  `${song.artist} · ${song.reference}`);
+  const about = section('Sobre esta cifra', `${song.notes ? `<p class="hint">${esc(song.notes)}</p>` : ''}
+    <p class="hint">Andamento, tom e compassos vêm de transcrições e partituras publicadas; confira de ouvido as partes marcadas como incertas.</p>
+    <div class="row end"><button type="button" class="text" data-action="song-leave">Sair da música (voltar às progressões)</button></div>`,
+  `Confiança ${song.confidenceLabel.toLowerCase()} · ${song.reference}`);
+  return head + section('Cifra', playMode + songChart(song, g), `${song.length} compassos · ${g.meter} · toque numa parte para repeti-la em loop`) + about;
+}
+
+function songChart(song, g) {
+  const compound = g.steps === 3 && g.meter.endsWith('/8');
+  const prog = song.progression(-1, true);
+  return `<div class="song-chart" id="song-chart">${song.parts.map((p) => {
+    const looping = settings.songPart === p.index;
+    const bars = p.bars.map((bar, i) => {
+      const n = p.start + i;
+      const names = bar.chords.map((c) => prog.chordName(c, settings.key));
+      const text = names.join(' ');
+      const size = names.length > 2 || text.length > 11 ? 'three' : names.length > 1 || text.length > 6 ? 'two' : '';
+      const beats = bar.beats != null ? `<small class="beats">${compound ? `${bar.beats * 3}/8` : `${bar.beats}/4`}</small>` : '';
+      return `<div class="prog-bar" data-bar="${n}"><small>${n + 1}</small>${beats}<b class="${size}">${esc(text)}</b></div>`;
+    }).join('');
+    return `<div class="part${looping ? ' looping' : ''}" data-part="${p.index}" data-action="song-part-toggle" data-v="${p.index}" role="button" tabindex="0">
+      <div class="part-head"><strong>${p.index + 1}. ${esc(p.name)}</strong>${looping ? '<span class="tag loop">loop</span>' : ''}</div>
+      <div class="prog">${bars}</div></div>`;
+  }).join('')}</div>`;
+}
+
+function selectSong(song) {
+  const g = grooveById(song.groove);
+  update({
+    mode: 'GROOVE',
+    songId: song.id,
+    songPart: -1,
+    bpm: song.bpm,
+    key: song.key,
+    grooveId: g.id,
+    genre: g.genre,
+    swing: song.swing != null ? song.swing : g.swing,
+    bassStyle: song.bass || g.bass,
+    bassTone: g.tone,
+    mixer: grooveMix(g, settings.mixer),
+  });
+}
+
 function isDefaultMix(g) {
   const def = grooveMix(g, settings.mixer);
   return Object.keys(def).every((k) => Math.abs(def[k] - settings.mixer[k]) < 0.001);
@@ -298,9 +398,7 @@ function groovesTab() {
       ${toggle('fills', 'Viradas e prato de ataque', 'fills', 'Virada no último compasso da progressão e prato na volta.')}`),
     section('Baixo e harmonia', `${toggle('bass-on', 'Linha de baixo', 'bassEnabled')}
       <p class="label">Tom</p><div class="chips keys">${KEYS.map((k, i) => chip(k, i === settings.key, 'key', `data-i="${i}"`)).join('')}</div>
-      ${select('prog', 'Progressão', 'progression', M.progressions.map((p) => [p.id, p.label]))}
-      <p class="hint">${esc(progressionById(settings.progression).description)}</p>
-      ${progressionGrid()}
+      ${progressionArea()}
       ${select('bass-style', 'Estilo do baixo', 'bassStyle', bassOptions)}
       <p class="label">Timbre</p><div class="chips">${M.bassTones.map((t) => chip(t.label, t.id === settings.bassTone, 'tone', `data-id="${t.id}"`)).join('')}</div>
       <p class="label">Região</p><div class="chips">${[[-1, 'Mais grave'], [0, 'Normal'], [1, 'Aguda (alto-falante do celular)']]
@@ -336,6 +434,10 @@ function practiceTab() {
 
 function presetSummary(p) {
   const s = normalizeSettings(p.settings);
+  const song = songById(s.songId);
+  if (s.mode === 'GROOVE' && song) {
+    return `♪ ${song.title} · ${s.bpm} BPM · Tom ${keyName(s.key, song.minor)} · ${grooveById(s.grooveId).name}`;
+  }
   if (s.mode === 'GROOVE') {
     return `${grooveById(s.grooveId).name} · ${s.bpm} BPM${s.bassEnabled ? ` · Tom ${KEYS[s.key]}` : ''} · ${progressionById(s.progression).label}`;
   }
@@ -365,7 +467,7 @@ function presetsTab() {
 
 // ------------------------------------------------------------------ renderização
 
-const TABS = { metronome: metronomeTab, grooves: groovesTab, practice: practiceTab, presets: presetsTab };
+const TABS = { metronome: metronomeTab, grooves: groovesTab, songs: songsTab, practice: practiceTab, presets: presetsTab };
 
 function render() {
   const main = $('#tab');
@@ -380,7 +482,8 @@ function render() {
 function renderTransport() {
   const g = grooveById(settings.grooveId);
   const groove = settings.mode === 'GROOVE';
-  $('#mode-tag').textContent = groove ? `${g.name} · ${g.meter}` : `Metrônomo · ${settings.beatsPerBar}/${settings.beatUnit}`;
+  const song = groove ? songById(settings.songId) : null;
+  $('#mode-tag').textContent = song ? `♪ ${song.title} · ${g.name}` : groove ? `${g.name} · ${g.meter}` : `Metrônomo · ${settings.beatsPerBar}/${settings.beatUnit}`;
   $('#bpm-slider').value = settings.bpm;
   $('#play').classList.toggle('playing', engine.playing);
   $('#play').setAttribute('aria-label', engine.playing ? 'Parar' : 'Tocar');
@@ -393,7 +496,7 @@ function renderTransport() {
 let lastPositionKey = '';
 function updatePosition(force) {
   const pos = engine.positionNow();
-  const key = pos ? `${pos.bar}|${pos.beat}|${pos.step}|${pos.bpm}|${pos.muted}|${pos.countIn}` : `stop|${settings.bpm}|${settings.mode}|${settings.beatsPerBar}`;
+  const key = pos ? `${pos.bar}|${pos.beat}|${pos.step}|${pos.bpm}|${pos.muted}|${pos.countIn}|${pos.ending}` : `stop|${settings.bpm}|${settings.mode}|${settings.beatsPerBar}`;
   if (!force && key === lastPositionKey) return;
   lastPositionKey = key;
   const groove = settings.mode === 'GROOVE';
@@ -417,16 +520,46 @@ function updatePosition(force) {
 
   const status = $('#status');
   const loading = !pos && groove && samplesState === 'loading';
-  status.textContent = pos ? (pos.countIn ? 'Contagem' : pos.muted ? 'Silêncio' : `Comp. ${pos.bar + 1}`)
+  status.textContent = pos ? (pos.countIn ? 'Contagem' : pos.ending ? 'Fim' : pos.muted ? 'Silêncio' : `Comp. ${pos.bar + 1}`)
     : loading ? `Carregando sons… ${Math.round(samplesProgress * 100)}%` : '';
   status.className = pos && pos.muted ? 'status muted' : pos && pos.countIn ? 'status count' : loading ? 'status loading' : 'status';
 
   if (groove) {
-    const prog = progressionById(settings.progression);
+    // Com música, a posição vem na numeração da cifra completa.
+    const song = songById(settings.songId);
+    const prog = song ? song.progression(-1, true) : activeProgression(settings);
     const bar = pos && pos.progressionBar >= 0 ? pos.progressionBar : 0;
     const beat = pos ? pos.beat : 0;
-    $('#chord').textContent = chordName(chordAt(prog, bar, beat, g.beats), settings.key);
-    $('#chord-next').textContent = `→ ${chordName(chordAt(prog, bar + 1, 0, g.beats), settings.key)}`;
+    const beats = pos ? pos.beatsPerBar : prog.beatsAt(bar) || g.beats;
+    const current = chordAt(prog, bar, beat, beats);
+    let next = chordAt(prog, bar + 1, 0, beats);
+    for (let b = beat + 1; b < beats; b++) {
+      const c = chordAt(prog, bar, b, beats);
+      if (!sameChord(c, current)) { next = c; break; }
+    }
+    $('#chord').textContent = prog.chordName(current, settings.key);
+    $('#chord-next').textContent = `→ ${prog.chordName(next, settings.key)}`;
+    if (song) {
+      const playing = pos && pos.progressionBar >= 0 ? song.partAt(pos.progressionBar) : null;
+      $('#mode-tag').textContent = `♪ ${song.title} · ${playing ? playing.name : g.name}`;
+      const chart = document.getElementById('song-chart');
+      if (chart) {
+        const current = pos && pos.progressionBar >= 0 ? pos.progressionBar : -1;
+        const previous = chart.querySelector('.prog-bar.now');
+        chart.querySelectorAll('.prog-bar.now').forEach((el) => el.classList.remove('now'));
+        chart.querySelectorAll('.part.playing').forEach((el) => el.classList.remove('playing'));
+        if (current >= 0) {
+          const cell = chart.querySelector(`.prog-bar[data-bar="${current}"]`);
+          if (cell) cell.classList.add('now');
+          const part = chart.querySelector(`.part[data-part="${playing.index}"]`);
+          if (part) part.classList.add('playing');
+          // Acompanha a cifra: se o compasso anterior estava na tela, mantém o atual visível.
+          if (cell && previous && previous !== cell && isVisible(previous) && !isVisible(cell)) {
+            cell.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          }
+        }
+      }
+    }
     const grid = document.getElementById('step-grid');
     if (grid) {
       const step = pos && pos.mode === 'GROOVE' && !pos.countIn ? pos.step : -1;
@@ -464,6 +597,12 @@ function updatePosition(force) {
   }
 }
 
+function isVisible(el) {
+  const r = el.getBoundingClientRect();
+  const view = $('#tab').getBoundingClientRect();
+  return r.bottom > view.top && r.top < view.bottom;
+}
+
 function clock() {
   const el = $('#clock');
   if (!engine.playing) {
@@ -498,7 +637,7 @@ const ACTIONS = {
     tab = d.tab;
     presetForm = null;
     if (tab === 'metronome') update({ mode: 'CLICK' });
-    else if (tab === 'grooves') update({ mode: 'GROOVE' });
+    else if (tab === 'grooves' || tab === 'songs') update({ mode: 'GROOVE' });
     else render();
     $('#tab').scrollTop = 0;
   },
@@ -523,13 +662,30 @@ const ACTIONS = {
   genre: (d) => update({ genre: d.id }),
   groove: (d) => {
     const g = grooveById(d.id);
+    const song = songById(settings.songId);
     const changes = {
-      grooveId: g.id, genre: g.genre, mode: 'GROOVE', swing: g.swing, bassStyle: g.bass, bassTone: g.tone, progression: g.progression,
+      grooveId: g.id, genre: g.genre, mode: 'GROOVE', swing: g.swing, bassStyle: g.bass, bassTone: g.tone,
       mixer: grooveMix(g, settings.mixer), // cada levada volta à sua mixagem padrão
     };
-    if (settings.useGrooveTempo) changes.bpm = g.bpm;
+    // Com uma música escolhida, a levada muda mas a cifra e o andamento dela continuam.
+    if (!song) changes.progression = g.progression;
+    if (settings.useGrooveTempo && !song) changes.bpm = g.bpm;
     update(changes);
   },
+  song: (d) => { const song = songById(d.id); if (song) { selectSong(song); $('#tab').scrollTop = 0; } },
+  'song-step': (d) => {
+    const i = SONG_LIST.findIndex((x) => x.id === settings.songId);
+    const delta = Number(d.v);
+    const next = i < 0 ? (delta > 0 ? 0 : SONG_LIST.length - 1) : mod(i + delta, SONG_LIST.length);
+    selectSong(SONG_LIST[next]);
+  },
+  'song-leave': () => update({ songId: null, songPart: -1 }),
+  'song-part': (d) => update({ songPart: Number(d.v) }),
+  'song-part-toggle': (d) => update({ songPart: settings.songPart === Number(d.v) ? -1 : Number(d.v) }),
+  'song-repeat': (d) => update({ songRepeat: d.v === '1' }),
+  'song-tempo': (d) => update({ bpm: Number(d.v) }),
+  'song-key': (d) => update({ key: mod(settings.key + Number(d.v), 12) }),
+  'song-key-reset': () => { const song = songById(settings.songId); if (song) update({ key: song.key }); },
   key: (d) => update({ key: Number(d.i) }),
   tone: (d) => update({ bassTone: d.id }),
   octave: (d) => update({ bassOctave: Number(d.v) }),
@@ -577,6 +733,14 @@ app.addEventListener('click', (e) => {
   if (fn) fn(el.dataset);
 });
 
+// Partes da cifra (div com role="button") também respondem ao teclado.
+app.addEventListener('keydown', (e) => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role="button"][data-action]')) {
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
 app.addEventListener('submit', (e) => {
   const form = e.target.closest('[data-form="save"]');
   if (!form) return;
@@ -602,7 +766,9 @@ app.addEventListener('input', (e) => {
 app.addEventListener('change', (e) => {
   const el = e.target;
   if (el.dataset.toggle) update({ [el.dataset.toggle]: el.checked }, { rerender: true });
-  else if (el.dataset.select) update({ [el.dataset.select]: el.value });
+  else if (el.dataset.select === 'progression') {
+    if (el.value) update({ progression: el.value, songId: null, songPart: -1 });
+  } else if (el.dataset.select) update({ [el.dataset.select]: el.value });
   else if (el.dataset.slider && tab === 'practice') render();
 });
 
@@ -662,4 +828,4 @@ if (window.BT_PWA && 'serviceWorker' in navigator) {
 
 // Exposto para testes automatizados.
 window.BluesTempo = { engine, get settings() { return settings; }, update };
-window.BluesTempoInternals = { Engine, grooveById, normalizeSettings };
+window.BluesTempoInternals = { Engine, grooveById, normalizeSettings, songById };

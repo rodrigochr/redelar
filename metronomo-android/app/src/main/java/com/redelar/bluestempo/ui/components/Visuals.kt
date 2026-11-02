@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.redelar.bluestempo.model.Accent
 import com.redelar.bluestempo.model.Groove
-import com.redelar.bluestempo.model.ProgressionType
+import com.redelar.bluestempo.model.Progression
 
 /** Bolinhas dos tempos do compasso; a do tempo atual acende. */
 @Composable
@@ -210,13 +210,36 @@ fun StepGrid(groove: Groove, patternBar: Int, currentStep: Int, modifier: Modifi
 
 /** Progressão em linhas de 4 compassos, com o compasso atual destacado. */
 @Composable
-fun ProgressionGrid(progression: ProgressionType, key: Int, currentBar: Int, modifier: Modifier = Modifier) {
+fun ProgressionGrid(progression: Progression, key: Int, currentBar: Int, modifier: Modifier = Modifier) {
+    BarGrid(
+        bars = progression.bars.map { bar -> bar.map { progression.chordName(it, key) } },
+        currentBar = currentBar,
+        modifier = modifier,
+    )
+}
+
+/**
+ * Compassos (cada um com seus acordes já nomeados) em linhas de 4. [firstNumber] é o número
+ * mostrado no primeiro compasso, [currentBar] o índice (relativo a [bars]) a destacar e
+ * [beats] marca compassos irregulares.
+ */
+@Composable
+fun BarGrid(
+    bars: List<List<String>>,
+    currentBar: Int,
+    modifier: Modifier = Modifier,
+    firstNumber: Int = 1,
+    beats: List<Int?> = emptyList(),
+    beatLabel: (Int) -> String = { "$it/4" },
+) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        progression.bars.chunked(4).forEachIndexed { row, bars ->
+        bars.chunked(4).forEachIndexed { row, rowBars ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                bars.forEachIndexed { col, chords ->
+                rowBars.forEachIndexed { col, chords ->
                     val index = row * 4 + col
                     val isCurrent = index == currentBar
+                    val dim = if (isCurrent) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                    else MaterialTheme.colorScheme.onSurfaceVariant
                     Box(
                         Modifier
                             .weight(1f)
@@ -230,24 +253,37 @@ fun ProgressionGrid(progression: ProgressionType, key: Int, currentBar: Int, mod
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            "${index + 1}",
+                            "${firstNumber + index}",
                             fontSize = 9.sp,
-                            color = if (isCurrent) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = dim,
                             modifier = Modifier.align(Alignment.TopStart).padding(top = 3.dp),
                         )
+                        beats.getOrNull(index)?.let {
+                            Text(
+                                beatLabel(it),
+                                fontSize = 9.sp,
+                                color = dim,
+                                modifier = Modifier.align(Alignment.TopEnd).padding(top = 3.dp),
+                            )
+                        }
+                        val text = chords.joinToString(" ")
                         Text(
-                            chords.joinToString(" ") { it.name(key) },
+                            text,
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold,
-                            fontSize = if (chords.size > 1) 12.sp else 16.sp,
-                            maxLines = 1,
+                            fontSize = when {
+                                chords.size > 2 || text.length > 11 -> 10.sp
+                                chords.size > 1 || text.length > 6 -> 12.sp
+                                else -> 16.sp
+                            },
+                            maxLines = 2,
+                            lineHeight = 12.sp,
                             overflow = TextOverflow.Ellipsis,
                             color = if (isCurrent) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 }
-                repeat(4 - bars.size) { Box(Modifier.weight(1f)) }
+                repeat(4 - rowBars.size) { Box(Modifier.weight(1f)) }
             }
         }
     }

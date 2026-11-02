@@ -65,6 +65,12 @@ data class AppSettings(
     val bassOctave: Int = 0,
     val key: Int = 9,
     val progression: ProgressionType = ProgressionType.BLUES_12,
+    /** Música da setlist (null = progressão escolhida acima). */
+    val songId: String? = null,
+    /** Parte da forma tocada em loop (-1 = a música inteira). */
+    val songPart: Int = -1,
+    /** No fim da música: true = recomeça, false = para. */
+    val songRepeat: Boolean = true,
     val fills: Boolean = true,
     val humanize: Boolean = true,
     val mixer: MixerSettings = GrooveLibrary.default.mix,
@@ -90,6 +96,12 @@ data class AppSettings(
     val realInstruments: Boolean = true,
 ) {
     val groove: Groove get() = GrooveLibrary.byId(grooveId)
+
+    val song: Song? get() = SongBook.byId(songId)
+
+    /** Progressão que o modo levada toca: a da música escolhida ou a progressão padrão. */
+    val activeProgression: Progression
+        get() = song?.takeIf { mode == PlayMode.GROOVE }?.progression(songPart, songRepeat) ?: progression
 
     /** Acentos válidos para a fórmula atual (corrige listas de tamanho diferente). */
     val effectiveAccents: List<Accent>
@@ -119,6 +131,8 @@ data class AppSettings(
         bassOctave = bassOctave.coerceIn(-1, 1),
         key = Math.floorMod(key, 12),
         grooveId = GrooveLibrary.byId(grooveId).id,
+        songId = SongBook.byId(songId)?.id,
+        songPart = SongBook.byId(songId)?.let { song -> songPart.takeIf { it in song.parts.indices } } ?: -1,
         countInBars = countInBars.coerceIn(0, 4),
         trainerTargetBpm = trainerTargetBpm.coerceIn(MIN_BPM, MAX_BPM),
         trainerStepBpm = trainerStepBpm.coerceIn(1, 20),
@@ -140,7 +154,10 @@ data class AppSettings(
 @Serializable
 data class Preset(val id: String, val name: String, val settings: AppSettings) {
     val summary: String
-        get() = if (settings.mode == PlayMode.GROOVE) {
+        get() = if (settings.mode == PlayMode.GROOVE && settings.song != null) {
+            val song = settings.song!!
+            "♪ ${song.title} • ${settings.bpm} BPM • Tom ${NoteNames.keyName(settings.key, song.minor)} • ${settings.groove.name}"
+        } else if (settings.mode == PlayMode.GROOVE) {
             val g = settings.groove
             buildString {
                 append(g.name).append(" • ").append(settings.bpm).append(" BPM")

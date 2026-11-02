@@ -9,6 +9,7 @@ import com.redelar.bluestempo.model.Genre
 import com.redelar.bluestempo.model.Groove
 import com.redelar.bluestempo.model.PlayMode
 import com.redelar.bluestempo.model.ProgressionType
+import com.redelar.bluestempo.model.Song
 import com.redelar.bluestempo.model.Subdivision
 
 /**
@@ -42,6 +43,11 @@ interface MetronomeActions {
     fun setBassOctave(octave: Int) {}
     fun setKey(key: Int) {}
     fun setProgression(p: ProgressionType) {}
+    fun selectSong(song: Song) {}
+    fun stepSong(delta: Int) {}
+    fun leaveSong() {}
+    fun setSongPart(part: Int) {}
+    fun setSongRepeat(repeat: Boolean) {}
     fun setFills(enabled: Boolean) {}
     fun setHumanize(enabled: Boolean) {}
     fun setChannelVolume(channel: Channel, value: Float) {}

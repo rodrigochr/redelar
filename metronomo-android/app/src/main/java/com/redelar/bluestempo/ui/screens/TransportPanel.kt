@@ -87,7 +87,11 @@ fun TransportPanel(
     ) {
         // Linha de status
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            val modeText = if (grooveMode) {
+            val song = settings.song
+            val modeText = if (grooveMode && song != null) {
+                val bar = position?.progressionBar?.takeIf { it >= 0 }
+                "♪ ${song.title}" + (bar?.let { " • ${song.partAt(it).name}" } ?: " • ${settings.groove.name}")
+            } else if (grooveMode) {
                 "${settings.groove.name} • ${settings.groove.meter}"
             } else {
                 "Metrônomo • ${settings.beatsPerBar}/${settings.beatUnit}"
@@ -98,6 +102,7 @@ fun TransportPanel(
             Spacer(Modifier.width(8.dp))
             when {
                 position?.countIn == true -> Tag("Contagem", color = MaterialTheme.colorScheme.secondary)
+                position?.ending == true -> Tag("Fim", color = MaterialTheme.colorScheme.secondary)
                 position?.muted == true -> Tag("Silêncio", color = MaterialTheme.colorScheme.tertiary)
                 position != null -> Text(
                     "Comp. ${position.bar + 1}",
@@ -161,7 +166,7 @@ fun TransportPanel(
                 valueRange = AppSettings.MIN_BPM.toFloat()..AppSettings.MAX_BPM.toFloat(),
                 modifier = Modifier.weight(1f).height(32.dp),
             )
-            ChordDisplay(settings, position?.progressionBar, position?.beat ?: 0)
+            ChordDisplay(settings, position?.progressionBar, position?.beat ?: 0, position?.beatsPerBar)
         }
     }
 }
@@ -212,13 +217,30 @@ private fun PlayButton(playing: Boolean, onClick: () -> Unit) {
 
 /** Acorde atual e o próximo, compacto, ao lado da barra de andamento (só no modo levada). */
 @Composable
-private fun ChordDisplay(settings: AppSettings, progressionBar: Int?, beat: Int, modifier: Modifier = Modifier) {
+private fun ChordDisplay(
+    settings: AppSettings,
+    progressionBar: Int?,
+    beat: Int,
+    beatsPerBar: Int?,
+    modifier: Modifier = Modifier,
+) {
     if (settings.mode != PlayMode.GROOVE) return
-    val prog = settings.progression
-    val beats = settings.groove.beatsPerBar
+    // Com música, a posição vem na numeração da cifra completa.
+    val prog = settings.song?.progression(-1, true) ?: settings.activeProgression
     val bar = progressionBar?.takeIf { it >= 0 } ?: 0
-    val current = prog.chordAt(bar, beat, beats).name(settings.key)
-    val next = prog.chordAt(bar + 1, 0, beats).name(settings.key)
+    val beats = beatsPerBar ?: prog.beatsAt(bar) ?: settings.groove.beatsPerBar
+    val currentChord = prog.chordAt(bar, beat, beats)
+    // Próximo acorde diferente (no mesmo compasso ou no seguinte).
+    var nextChord = prog.chordAt(bar + 1, 0, beats)
+    for (b in beat + 1 until beats) {
+        val c = prog.chordAt(bar, b, beats)
+        if (c != currentChord) {
+            nextChord = c
+            break
+        }
+    }
+    val current = prog.chordName(currentChord, settings.key)
+    val next = prog.chordName(nextChord, settings.key)
     Row(
         modifier
             .clip(RoundedCornerShape(10.dp))

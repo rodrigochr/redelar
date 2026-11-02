@@ -134,23 +134,33 @@ fun GroovesTab(settings: AppSettings, engine: EngineState, vm: MetronomeActions)
                 label = { NoteNames.keyLabel(it) },
                 onSelect = vm::setKey,
             )
+            val song = settings.song
             DropdownSelector(
                 label = "Progressão",
                 options = ProgressionType.entries,
                 selected = settings.progression,
                 optionLabel = { it.label },
                 onSelect = vm::setProgression,
+                buttonLabel = song?.let { "♪ ${it.title} (música)" },
             )
-            Text(
-                settings.progression.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            ProgressionGrid(
-                progression = settings.progression,
-                key = settings.key,
-                currentBar = position?.progressionBar ?: -1,
-            )
+            if (song != null) {
+                Text(
+                    "Tocando a cifra de \"${song.title}\" (aba Músicas). Escolher uma progressão aqui sai da música.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                Text(
+                    settings.progression.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                ProgressionGrid(
+                    progression = settings.progression,
+                    key = settings.key,
+                    currentBar = position?.progressionBar ?: -1,
+                )
+            }
             DropdownSelector(
                 label = "Estilo do baixo",
                 options = BassStyle.entries,

@@ -26,7 +26,7 @@ os sons continua disponível como opção.
 - 5 sons de clique: clássico, madeira, baquetas, cowbell e digital.
 
 **Levadas (bateria + baixo)**
-- 30 levadas: 11 de blues, 10 de rock e 9 de jazz (tabela abaixo), com grade visual que
+- 35 levadas: 12 de blues, 14 de rock e 9 de jazz (tabela abaixo), com grade visual que
   mostra cada peça e o passo que está tocando.
 - **Swing ajustável** (reto → shuffle → pontuado) nas levadas em colcheias/semicolcheias.
 - **Linha de baixo** que segue a harmonia: boogie 1-3-5-6-b7, shuffle 1-5-6, boogie em
@@ -39,6 +39,21 @@ os sons continua disponível como opção.
 - **Viradas** no fim da progressão e prato de ataque na volta; **humanização** de dinâmica.
 - **Mixer**: bumbo, caixa, pratos, percussão, baixo e clique guia por cima da levada.
 - Todas as levadas têm volume equalizado (≈ −16 LUFS com instrumentos reais) para trocar sem sustos.
+
+**Músicas (setlist com cifra)**
+- 31 músicas da setlist (Ira!, Legião Urbana, Pink Floyd, Rolling Stones, The Doors, The Cure,
+  Beatles, Raul Seixas…) com **andamento, tom, levada, baixo e a cifra compasso a compasso**
+  de cada parte da gravação de referência (intro, versos, refrões, solos, final).
+- Ao escolher uma música, o app ajusta tudo e a cifra acompanha a execução: o compasso atual
+  acende, o painel mostra a parte e o próximo acorde, e a tela rola junto.
+- **Transposição** meio tom por vez (a cifra é reescrita com a grafia certa do novo tom),
+  **andamento de estudo** (50% a 100% do original) e **loop de uma parte** (toque nela).
+- Compassos irregulares (2/4, 3/4, 5/4), acordes com baixo invertido (D/F#), vários acordes
+  no compasso, modulações e trechos sem acorde (N.C.).
+- No fim: repetir a música ou parar com um acorde final (prato, bumbo e tônica).
+- Andamento, tom e forma vieram de transcrições sincronizadas à gravação e partituras
+  publicadas, conferidos pela duração de cada faixa; cada música traz o grau de confiança e
+  observações sobre as partes incertas.
 
 **Treino**
 - Contagem inicial de 1, 2 ou 4 compassos.
@@ -84,6 +99,7 @@ Kotlin puro). Para regenerar: `python3 tools/build_samples.py` (precisa de git, 
 | Blues | Train Beat (trem) | 4/4 | 140 | Boogie em semínimas | Blues 12 compassos |
 | Blues | Swamp Blues (Louisiana) | 4/4 | 96 | Shuffle 1-5-6 | Blues 12 compassos |
 | Blues | Bo Diddley Beat | 4/4 | 112 | Bo Diddley | Vamp em I7 (um acorde) |
+| Blues | Rumba Blues (latin) | 4/4 | 118 | Tresillo (latin) | Blues menor 12 |
 | Blues | Blues Rock (colcheias retas) | 4/4 | 120 | Tônica em colcheias | Blues 12 compassos |
 | Blues | Blues Menor (16ths) | 4/4 | 88 | Groove menor (16ths) | Blues menor 12 |
 | Rock | Rock Básico | 4/4 | 110 | Tônica em colcheias | Rock I–IV–V–IV |
@@ -96,6 +112,10 @@ Kotlin puro). Para regenerar: `python3 tools/build_samples.py` (precisa de git, 
 | Rock | Shuffle Meio-Tempo (Purdie) | 4/4 | 90 | Shuffle 1-5-6 | Blues 12 compassos |
 | Rock | Balada 6/8 | 6/8 | 58 | Tônica nos tempos | I–V–vi–IV |
 | Rock | Punk (polca) | 4/4 | 190 | Tônica em colcheias | Rock I–IV–V–IV |
+| Rock | Balada Rock | 4/4 | 66 | Balada (tônica e oitava) | I–V–vi–IV |
+| Rock | Country / Rock Rural (dois tempos) | 4/4 | 90 | Country (tônica-quinta) | Rock I–IV–V–IV |
+| Rock | Synth-pop (4 no chão) | 4/4 | 113 | Tônica em colcheias | I–V–vi–IV |
+| Rock | Samba-Rock (congas) | 4/4 | 116 | Samba (surdo) | Rock I–IV–V–IV |
 | Jazz | Swing Médio | 4/4 | 140 | Walking bass (jazz) | Jazz blues |
 | Jazz | Bebop (rápido) | 4/4 | 240 | Walking bass (jazz) | Jazz blues |
 | Jazz | Shuffle Kansas City | 4/4 | 150 | Walking bass (jazz) | Blues 12 compassos |
@@ -134,7 +154,7 @@ BLUESTEMPO_DEMO_DIR=/tmp/demos ./gradlew testDebugUnitTest --tests '*DemoRendere
 
 ```
 app/src/main/java/com/redelar/bluestempo/
-├── model/      Teoria musical e dados: levadas (DSL), progressões, baixo, configurações
+├── model/      Teoria musical e dados: levadas (DSL), progressões, baixo, músicas (SongBook), configurações
 ├── audio/      Motor de áudio
 │   ├── SampleLibrary.kt  carrega os instrumentos reais (camadas de dinâmica, notas de baixo)
 │   ├── SoundBank.kt   escolhe a camada gravada certa; síntese de reserva e cliques
@@ -143,7 +163,7 @@ app/src/main/java/com/redelar/bluestempo/
 │   └── AudioEngine.kt thread de áudio + AudioTrack (float estéreo) e sincronia visual
 ├── service/    Foco de áudio, ligações, fone desconectado e serviço em primeiro plano
 ├── data/       Persistência (SharedPreferences + kotlinx.serialization)
-└── ui/         Jetpack Compose (Material 3): painel de transporte e 4 abas
+└── ui/         Jetpack Compose (Material 3): painel de transporte e 5 abas
 ```
 
 - O **Sequencer** é Kotlin puro (sem Android) e gera os eventos de cada tempo no momento em
@@ -168,6 +188,28 @@ groove(
     kick("x- -- x- --")
 }
 ```
+
+### Acrescentando uma música
+
+As músicas ficam em `model/SongBook.kt`, com a cifra escrita compasso a compasso:
+
+```kotlin
+song(
+    18, "wish_you_were_here", "Wish You Were Here", "Pink Floyd", "Wish You Were Here (1975)",
+    key = "G", bpm = 61, groove = "rock_ballad", bass = BassStyle.BALLAD,
+    confidence = Confidence.HIGH, notes = "…",
+    form = "Intro, Solo, Verso x2, Solo, Verso, Interlúdio, Solo final, Final",
+    sections = listOf(
+        "Verso" to "C | D/F# | Am | G | D/F# | C | Am | G",
+        // …
+    ),
+)
+```
+
+Compassos são separados por `|` e os acordes de um compasso o dividem em partes iguais
+(`G G G C` = 3 tempos de G e 1 de C). `E *4` repete o compasso, `%` repete o anterior,
+`[5] E` é um compasso de 5 tempos e `{Bb}` no começo de uma seção grafa os acordes no tom da
+modulação. Os acordes ficam guardados em graus do tom, então a transposição é automática.
 
 Linhas de baixo usam graus relativos ao acorde (`R 3 5 6 7 6 5 3`; `~` prolonga,
 `.` é pausa, `b`/`#` alteram, `,`/`'` mudam a oitava) em `model/Bass.kt`.
