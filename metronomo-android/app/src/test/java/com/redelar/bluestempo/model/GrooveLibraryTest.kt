@@ -21,6 +21,22 @@ class GrooveLibraryTest {
     }
 
     @Test
+    fun `cada levada tem mixagem padrao propria e valida`() {
+        GrooveLibrary.all.forEach { g ->
+            val m = g.mix
+            listOf(m.kick, m.snare, m.cymbals, m.percussion, m.bass).forEach { assertTrue(g.id, it in 0.15f..1f) }
+            assertEquals(g.id, 0f, m.guideClick)
+        }
+        assertTrue("as mixagens deveriam variar por estilo", GrooveLibrary.all.map { it.mix }.toSet().size > 20)
+        // Jazz: condução na frente e bumbo só "pena"; Bo Diddley: percussão na frente.
+        val swing = GrooveLibrary.byId("swing_medium").mix
+        assertTrue(swing.cymbals > swing.kick && swing.cymbals > swing.snare)
+        val bo = GrooveLibrary.byId("bo_diddley").mix
+        assertTrue(bo.percussion >= maxOf(bo.kick, bo.snare, bo.bass))
+        assertEquals(GrooveLibrary.default.mix, AppSettings().mixer)
+    }
+
+    @Test
     fun `levadas em tercinas nao usam swing`() {
         GrooveLibrary.all.filter { it.stepsPerBeat == 3 }.forEach { assertEquals(it.id, null, it.swingUnit) }
     }

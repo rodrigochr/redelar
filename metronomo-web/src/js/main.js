@@ -2,7 +2,7 @@
 import { Engine } from './engine.js';
 import {
   ACCENT_CYCLE, KEYS, M, MAX_BPM, MIN_BPM, activeBeatsPerBar, bassStyleById, channelKey, chordAt, chordName,
-  defaultAccents, effectiveAccents, grooveById, normalizeSettings, progressionById, subdivisionById, tempoMarking,
+  defaultAccents, effectiveAccents, grooveById, grooveMix, normalizeSettings, progressionById, subdivisionById, tempoMarking,
 } from './music.js';
 import { loadSampleBundle } from './sounds.js';
 import { applyPreset, loadPresets, loadSettings, savePresets, saveSettings } from './store.js';
@@ -41,6 +41,7 @@ function update(changes, { rerender = true } = {}) {
 
 function setMixer(key, value) {
   update({ mixer: { ...settings.mixer, [key]: value } }, { rerender: false });
+  refreshMixerReset();
 }
 
 function getPath(path) {
@@ -223,6 +224,20 @@ function progressionGrid() {
     `<div class="prog-bar" data-bar="${i}"><small>${i + 1}</small><b class="${bar.length > 1 ? 'two' : ''}">${bar.map((c) => esc(chordName(c, settings.key))).join(' ')}</b></div>`).join('')}</div>`;
 }
 
+function isDefaultMix(g) {
+  const def = grooveMix(g, settings.mixer);
+  return Object.keys(def).every((k) => Math.abs(def[k] - settings.mixer[k]) < 0.001);
+}
+
+function refreshMixerReset() {
+  const btn = document.getElementById('mixer-reset');
+  if (!btn) return;
+  const g = grooveById(settings.grooveId);
+  const isDefault = isDefaultMix(g);
+  btn.disabled = isDefault;
+  btn.textContent = isDefault ? `Mixagem padrão de ${g.name}` : 'Restaurar padrão da levada';
+}
+
 function groovesTab() {
   const g = grooveById(settings.grooveId);
   const genres = M.genres.map((x) =>
@@ -252,7 +267,10 @@ function groovesTab() {
       <p class="label">Região</p><div class="chips">${[[-1, 'Mais grave'], [0, 'Normal'], [1, 'Aguda (alto-falante do celular)']]
         .map(([v, l]) => chip(l, v === settings.bassOctave, 'octave', `data-v="${v}"`)).join('')}</div>`),
     section('Mixer', `${M.channels.map((c) => slider(`mix-${c.id}`, c.label, `mixer.${channelKey(c.id)}`)).join('')}
-      ${slider('master-vol', 'Volume geral', 'masterVolume')}`),
+      ${slider('master-vol', 'Volume geral', 'masterVolume')}
+      <div class="row end"><button type="button" class="text" id="mixer-reset" data-action="mixer-reset"${isDefaultMix(g) ? ' disabled' : ''}>
+        ${isDefaultMix(g) ? `Mixagem padrão de ${esc(g.name)}` : 'Restaurar padrão da levada'}</button></div>`,
+    'Cada levada tem sua mixagem padrão. Ao trocar de levada, os volumes voltam ao padrão dela.'),
   ].join('');
 }
 
@@ -458,6 +476,7 @@ const ACTIONS = {
     accents[i] = ACCENT_CYCLE[(ACCENT_CYCLE.indexOf(accents[i]) + 1) % ACCENT_CYCLE.length];
     update({ accents });
   },
+  'mixer-reset': () => update({ mixer: grooveMix(grooveById(settings.grooveId), settings.mixer) }),
   'accents-reset': () => update({ accents: defaultAccents(settings.beatsPerBar, settings.beatUnit) }),
   'accents-none': () => update({ accents: Array(settings.beatsPerBar).fill('NORMAL') }),
   sub: (d) => update({ subdivision: d.id }),
@@ -465,7 +484,10 @@ const ACTIONS = {
   genre: (d) => update({ genre: d.id }),
   groove: (d) => {
     const g = grooveById(d.id);
-    const changes = { grooveId: g.id, genre: g.genre, mode: 'GROOVE', swing: g.swing, bassStyle: g.bass, bassTone: g.tone, progression: g.progression };
+    const changes = {
+      grooveId: g.id, genre: g.genre, mode: 'GROOVE', swing: g.swing, bassStyle: g.bass, bassTone: g.tone, progression: g.progression,
+      mixer: grooveMix(g, settings.mixer), // cada levada volta à sua mixagem padrão
+    };
     if (settings.useGrooveTempo) changes.bpm = g.bpm;
     update(changes);
   },

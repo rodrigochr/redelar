@@ -34,6 +34,7 @@ interface MetronomeActions {
     fun setSubdivisionVolume(value: Float) {}
     fun setGenre(genre: Genre) {}
     fun selectGroove(groove: Groove) {}
+    fun resetMixer() {}
     fun setSwing(value: Float) {}
     fun setBassEnabled(enabled: Boolean) {}
     fun setBassStyle(style: BassStyle) {}

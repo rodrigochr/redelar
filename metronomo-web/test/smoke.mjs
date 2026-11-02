@@ -61,6 +61,24 @@ check(!(await page.evaluate(() => BluesTempo.engine.playing)), 'parar');
 await page.tap('[data-tab="grooves"]');
 await page.tap('[data-action="groove"][data-id="boogie_woogie"]');
 check(await page.evaluate(() => BluesTempo.settings.grooveId === 'boogie_woogie' && BluesTempo.settings.bpm === 150), 'seleciona Boogie-Woogie com andamento sugerido');
+// Mixagem padrão por levada: muda ao trocar de levada e volta ao padrão depois de mexer.
+const mixOf = (id) => page.evaluate((gid) => {
+  const g = window.BluesTempoInternals.grooveById(gid);
+  const m = BluesTempo.settings.mixer;
+  return ['kick', 'snare', 'cymbals', 'percussion', 'bass'].every((k) => Math.abs(m[k] - g.mix[k]) < 0.001);
+}, id);
+check(await mixOf('boogie_woogie'), 'mixer assume a mixagem padrão do Boogie-Woogie');
+await page.evaluate(() => { document.getElementById('mix-BASS').scrollIntoView(); });
+await page.locator('#mix-BASS').fill('0.2');
+check(await page.evaluate(() => Math.abs(BluesTempo.settings.mixer.bass - 0.2) < 0.001), 'ajusta o volume do baixo');
+check(await page.locator('#mixer-reset').isEnabled(), 'botão "Restaurar padrão da levada" habilitado depois de mexer');
+await page.tap('#mixer-reset');
+check(await mixOf('boogie_woogie'), 'restaura a mixagem padrão');
+await page.locator('#mix-BASS').fill('0.2');
+await page.evaluate(() => { document.getElementById('tab').scrollTop = 0; });
+await page.tap('[data-action="groove"][data-id="chicago_shuffle"]');
+check(await mixOf('chicago_shuffle'), 'trocar de levada volta à mixagem padrão dela');
+await page.tap('[data-action="groove"][data-id="boogie_woogie"]');
 await page.tap('#play');
 await page.waitForTimeout(2500);
 state = await page.evaluate(() => ({ pos: BluesTempo.engine.positionNow(), now: document.querySelectorAll('#step-grid .cell.now').length, chord: document.getElementById('chord').textContent }));
@@ -98,14 +116,14 @@ await page.evaluate(() => { document.getElementById('tab').scrollTop = 1700; });
 await page.screenshot({ path: join(OUT, '5-levadas-baixo.png') });
 
 // Áudio real renderizado pelo grafo do Web Audio (OfflineAudioContext)
-for (const id of ['chicago_shuffle', 'swing_medium']) {
+for (const id of ['chicago_shuffle', 'swing_medium', 'rock_basic', 'bo_diddley']) {
   const audio = await page.evaluate(async (grooveId) => {
     const { Engine } = window.BluesTempoInternals;
     const src = BluesTempo.engine;
     const e = new Engine();
     e.setBundle(src.bundle);
     const g = window.BluesTempoInternals.grooveById(grooveId);
-    const settings = window.BluesTempoInternals.normalizeSettings({ mode: 'GROOVE', grooveId, bpm: g.bpm, swing: g.swing, bassStyle: g.bass, bassTone: g.tone, progression: g.progression, key: 9 });
+    const settings = window.BluesTempoInternals.normalizeSettings({ mode: 'GROOVE', grooveId, bpm: g.bpm, swing: g.swing, bassStyle: g.bass, bassTone: g.tone, progression: g.progression, key: 9, mixer: { ...g.mix } });
     const seconds = 8 * g.beats * 60 / g.bpm;
     const ctx = new OfflineAudioContext(2, Math.ceil(44100 * seconds), 44100);
     const rendered = await e.renderOffline(ctx, settings, seconds);

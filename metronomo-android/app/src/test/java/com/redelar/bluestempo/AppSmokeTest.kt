@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
+import com.redelar.bluestempo.model.GrooveLibrary
 import com.redelar.bluestempo.model.PlayMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -54,6 +55,14 @@ class AppSmokeTest {
         compose.onNodeWithText("Boogie-Woogie").performScrollTo().tap()
         assertEquals("boogie_woogie", app.currentSettings().grooveId)
         assertEquals(150, app.currentSettings().bpm)
+        // O mixer assume a mixagem padrão da levada; mexer e trocar de levada volta ao padrão.
+        val boogie = GrooveLibrary.byId("boogie_woogie")
+        assertEquals(boogie.mix, app.currentSettings().mixer)
+        compose.runOnIdle { app.repository.update { it.copy(mixer = it.mixer.copy(bass = 0.2f)) } }
+        compose.onNodeWithText("Shuffle de Chicago").performScrollTo().tap()
+        assertEquals(GrooveLibrary.byId("chicago_shuffle").mix, app.currentSettings().mixer)
+        compose.onNodeWithText("Boogie-Woogie").performScrollTo().tap()
+        assertEquals(boogie.mix, app.currentSettings().mixer)
 
         compose.onNodeWithContentDescription("Tocar").tap()
         assertTrue(app.controller.isPlaying)

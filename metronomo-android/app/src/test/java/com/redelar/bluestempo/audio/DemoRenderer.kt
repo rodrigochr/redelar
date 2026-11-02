@@ -26,7 +26,7 @@ class DemoRenderer {
             val s = AppSettings(
                 mode = PlayMode.GROOVE, grooveId = g.id, bpm = g.defaultBpm, swing = g.defaultSwing,
                 bassStyle = g.bassStyle, bassTone = g.bassTone, progression = g.progression, key = 9,
-                realInstruments = System.getenv("BLUESTEMPO_DEMO_SYNTH") != "1",
+                realInstruments = System.getenv("BLUESTEMPO_DEMO_SYNTH") != "1", mixer = g.mix,
             )
             val bars = if (g.progression.length >= 12) 12 else 8
             writeWav(File(dir, "${g.id}.wav"), render(bank, s, bars * g.beatsPerBar * 60.0 / g.defaultBpm + 1.0), sr)
@@ -45,12 +45,13 @@ class DemoRenderer {
         if (System.getenv("BLUESTEMPO_DEMO_STEMS") == "1") {
             // Faixas separadas por canal para medir o equilíbrio da mixagem.
             val stemsDir = File(dir, "stems").apply { mkdirs() }
+            // Cada canal sozinho, em volume 1, para medir o volume natural de cada instrumento.
             val solos = mapOf(
-                "kick" to com.redelar.bluestempo.model.MixerSettings(0.9f, 0f, 0f, 0f, 0f, 0f),
-                "snare" to com.redelar.bluestempo.model.MixerSettings(0f, 0.85f, 0f, 0f, 0f, 0f),
-                "cymbals" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0.7f, 0f, 0f, 0f),
-                "perc" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 0.8f, 0f, 0f),
-                "bass" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 0f, 0.8f, 0f),
+                "kick" to com.redelar.bluestempo.model.MixerSettings(1f, 0f, 0f, 0f, 0f, 0f),
+                "snare" to com.redelar.bluestempo.model.MixerSettings(0f, 1f, 0f, 0f, 0f, 0f),
+                "cymbals" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 1f, 0f, 0f, 0f),
+                "perc" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 1f, 0f, 0f),
+                "bass" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 0f, 1f, 0f),
             )
             GrooveLibrary.all.forEach { g ->
                 solos.forEach { (stem, mixer) ->

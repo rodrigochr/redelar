@@ -113,7 +113,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   progression: 'BLUES_12',
   fills: true,
   humanize: true,
-  mixer: { kick: 0.9, snare: 0.85, cymbals: 0.7, percussion: 0.8, bass: 0.8, guideClick: 0 },
+  mixer: { ...data.grooves[0].mix, guideClick: 0 }, // mixagem padrão da levada inicial
   masterVolume: 0.9,
   countInBars: 0,
   trainerEnabled: false,
@@ -166,6 +166,9 @@ export function normalizeSettings(raw) {
   for (const k of Object.keys(s.mixer)) s.mixer[k] = clamp(Number(s.mixer[k]) || 0, 0, 1);
   return s;
 }
+
+/** Mixagem padrão de uma levada, mantendo o clique guia que o usuário escolheu. */
+export const grooveMix = (groove, current) => ({ ...groove.mix, guideClick: current ? current.guideClick : 0 });
 
 export const activeBeatsPerBar = (s) => (s.mode === 'GROOVE' ? grooveById(s.grooveId).beats : s.beatsPerBar);
 export const effectiveAccents = (s) =>

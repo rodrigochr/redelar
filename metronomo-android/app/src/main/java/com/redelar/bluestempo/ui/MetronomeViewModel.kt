@@ -110,8 +110,14 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
             bassStyle = groove.bassStyle,
             bassTone = groove.bassTone,
             progression = groove.progression,
+            // Cada levada tem sua mixagem padrão; o clique guia continua como o usuário deixou.
+            mixer = groove.mix.copy(guideClick = it.mixer.guideClick),
         )
         if (it.useGrooveTempo) base.copy(bpm = groove.defaultBpm) else base
+    }
+
+    override fun resetMixer() = update {
+        it.copy(mixer = it.groove.mix.copy(guideClick = it.mixer.guideClick))
     }
 
     override fun setSwing(value: Float) = update { it.copy(swing = value) }

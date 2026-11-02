@@ -67,7 +67,7 @@ data class AppSettings(
     val progression: ProgressionType = ProgressionType.BLUES_12,
     val fills: Boolean = true,
     val humanize: Boolean = true,
-    val mixer: MixerSettings = MixerSettings(),
+    val mixer: MixerSettings = GrooveLibrary.default.mix,
     val masterVolume: Float = 0.9f,
 
     // Treino

@@ -168,6 +168,10 @@ class WebDataExportTest {
                     put("progression", g.progression.name)
                     put("fillKit", g.fillKit.name)
                     put("level", g.level)
+                    put("mix", buildJsonObject {
+                        put("kick", g.mix.kick); put("snare", g.mix.snare); put("cymbals", g.mix.cymbals)
+                        put("percussion", g.mix.percussion); put("bass", g.mix.bass); put("guideClick", g.mix.guideClick)
+                    })
                     put("beatNote", g.beatNote)
                     put("tracks", JsonArray(g.tracks.map { t ->
                         buildJsonObject { put("instrument", t.instrument.name); put("v", floats(t.velocities)) }

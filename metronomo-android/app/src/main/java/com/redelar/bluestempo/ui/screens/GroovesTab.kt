@@ -16,6 +16,7 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -174,11 +175,20 @@ fun GroovesTab(settings: AppSettings, engine: EngineState, vm: MetronomeActions)
             )
         }
 
-        Section("Mixer") {
+        Section(
+            "Mixer",
+            subtitle = "Cada levada tem sua mixagem padrão. Ao trocar de levada, os volumes voltam ao padrão dela.",
+        ) {
             Channel.entries.forEach { channel ->
                 LabeledSlider(channel.label, settings.mixer.volume(channel), { vm.setChannelVolume(channel, it) })
             }
             LabeledSlider("Volume geral", settings.masterVolume, vm::setMasterVolume)
+            val isDefault = settings.mixer == groove.mix.copy(guideClick = settings.mixer.guideClick)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                TextButton(onClick = vm::resetMixer, enabled = !isDefault) {
+                    Text(if (isDefault) "Mixagem padrão de ${groove.name}" else "Restaurar padrão da levada")
+                }
+            }
         }
     }
 }

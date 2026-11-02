@@ -1938,7 +1938,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.76,
+            "level": 2.22,
+            "mix": {
+                "kick": 0.6,
+                "snare": 0.9,
+                "cymbals": 0.75,
+                "percussion": 0.85,
+                "bass": 0.6,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -1998,7 +2006,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.38,
+            "level": 1.74,
+            "mix": {
+                "kick": 0.55,
+                "snare": 0.9,
+                "cymbals": 0.85,
+                "percussion": 0.85,
+                "bass": 0.65,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2058,7 +2074,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.57,
+            "level": 1.87,
+            "mix": {
+                "kick": 0.5,
+                "snare": 0.85,
+                "cymbals": 0.9,
+                "percussion": 0.8,
+                "bass": 0.7,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2131,7 +2155,15 @@
             "tone": "ELECTRIC",
             "progression": "VAMP_DOM",
             "fillKit": "STICKS",
-            "level": 1.32,
+            "level": 1.66,
+            "mix": {
+                "kick": 0.55,
+                "snare": 0.9,
+                "cymbals": 0.65,
+                "percussion": 0.85,
+                "bass": 0.65,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2191,7 +2223,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.82,
+            "level": 2.29,
+            "mix": {
+                "kick": 0.6,
+                "snare": 0.9,
+                "cymbals": 0.7,
+                "percussion": 0.85,
+                "bass": 0.55,
+                "guideClick": 0.0
+            },
             "beatNote": "♩.",
             "tracks": [
                 {
@@ -2263,7 +2303,15 @@
             "tone": "UPRIGHT",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.72,
+            "level": 2.17,
+            "mix": {
+                "kick": 0.15,
+                "snare": 0.4,
+                "cymbals": 0.9,
+                "percussion": 0.4,
+                "bass": 0.3,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2336,7 +2384,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.66,
+            "level": 1.93,
+            "mix": {
+                "kick": 0.55,
+                "snare": 0.9,
+                "cymbals": 0.75,
+                "percussion": 0.85,
+                "bass": 0.7,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2399,7 +2455,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.86,
+            "level": 2.95,
+            "mix": {
+                "kick": 0.45,
+                "snare": 0.9,
+                "cymbals": 0.6,
+                "percussion": 0.45,
+                "bass": 0.5,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2472,7 +2536,15 @@
             "tone": "ELECTRIC",
             "progression": "VAMP_DOM",
             "fillKit": "STICKS",
-            "level": 1.72,
+            "level": 2.04,
+            "mix": {
+                "kick": 0.45,
+                "snare": 0.75,
+                "cymbals": 0.65,
+                "percussion": 0.9,
+                "bass": 0.6,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2556,7 +2628,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.62,
+            "level": 2.04,
+            "mix": {
+                "kick": 0.65,
+                "snare": 0.9,
+                "cymbals": 0.55,
+                "percussion": 0.85,
+                "bass": 0.55,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2616,7 +2696,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_MINOR",
             "fillKit": "STICKS",
-            "level": 1.86,
+            "level": 2.34,
+            "mix": {
+                "kick": 0.6,
+                "snare": 0.9,
+                "cymbals": 0.55,
+                "percussion": 0.85,
+                "bass": 0.6,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2700,7 +2788,15 @@
             "tone": "ELECTRIC",
             "progression": "ROCK_I_IV_V",
             "fillKit": "STICKS",
-            "level": 1.74,
+            "level": 2.19,
+            "mix": {
+                "kick": 0.7,
+                "snare": 0.9,
+                "cymbals": 0.55,
+                "percussion": 0.85,
+                "bass": 0.5,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2760,7 +2856,15 @@
             "tone": "ELECTRIC",
             "progression": "ROCK_I_IV_V",
             "fillKit": "STICKS",
-            "level": 1.53,
+            "level": 2.02,
+            "mix": {
+                "kick": 0.55,
+                "snare": 0.9,
+                "cymbals": 0.55,
+                "percussion": 0.85,
+                "bass": 0.5,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2820,7 +2924,15 @@
             "tone": "ELECTRIC",
             "progression": "POP_I_V_VI_IV",
             "fillKit": "STICKS",
-            "level": 1.6,
+            "level": 2.01,
+            "mix": {
+                "kick": 0.65,
+                "snare": 0.9,
+                "cymbals": 0.5,
+                "percussion": 0.85,
+                "bass": 0.5,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2904,7 +3016,15 @@
             "tone": "ELECTRIC",
             "progression": "ROCK_I_IV_V",
             "fillKit": "STICKS",
-            "level": 1.55,
+            "level": 1.97,
+            "mix": {
+                "kick": 0.6,
+                "snare": 0.9,
+                "cymbals": 0.6,
+                "percussion": 0.85,
+                "bass": 0.5,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -2964,7 +3084,15 @@
             "tone": "ELECTRIC",
             "progression": "POP_I_V_VI_IV",
             "fillKit": "STICKS",
-            "level": 1.64,
+            "level": 2.06,
+            "mix": {
+                "kick": 0.7,
+                "snare": 0.9,
+                "cymbals": 0.65,
+                "percussion": 0.85,
+                "bass": 0.55,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3024,7 +3152,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.55,
+            "level": 1.91,
+            "mix": {
+                "kick": 0.65,
+                "snare": 0.9,
+                "cymbals": 0.6,
+                "percussion": 0.85,
+                "bass": 0.6,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3084,7 +3220,15 @@
             "tone": "UPRIGHT",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.38,
+            "level": 1.99,
+            "mix": {
+                "kick": 0.55,
+                "snare": 0.9,
+                "cymbals": 0.7,
+                "percussion": 0.85,
+                "bass": 0.45,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3144,7 +3288,15 @@
             "tone": "ELECTRIC",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 2.0,
+            "level": 2.52,
+            "mix": {
+                "kick": 0.55,
+                "snare": 0.9,
+                "cymbals": 0.7,
+                "percussion": 0.85,
+                "bass": 0.55,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3216,7 +3368,15 @@
             "tone": "ELECTRIC",
             "progression": "POP_I_V_VI_IV",
             "fillKit": "STICKS",
-            "level": 2.04,
+            "level": 2.57,
+            "mix": {
+                "kick": 0.55,
+                "snare": 0.9,
+                "cymbals": 0.65,
+                "percussion": 0.85,
+                "bass": 0.5,
+                "guideClick": 0.0
+            },
             "beatNote": "♩.",
             "tracks": [
                 {
@@ -3270,7 +3430,15 @@
             "tone": "ELECTRIC",
             "progression": "ROCK_I_IV_V",
             "fillKit": "STICKS",
-            "level": 1.33,
+            "level": 1.81,
+            "mix": {
+                "kick": 0.6,
+                "snare": 0.9,
+                "cymbals": 0.55,
+                "percussion": 0.85,
+                "bass": 0.5,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3330,7 +3498,15 @@
             "tone": "UPRIGHT",
             "progression": "JAZZ_BLUES",
             "fillKit": "STICKS",
-            "level": 2.51,
+            "level": 3.16,
+            "mix": {
+                "kick": 0.2,
+                "snare": 0.45,
+                "cymbals": 0.9,
+                "percussion": 0.45,
+                "bass": 0.3,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3435,7 +3611,15 @@
             "tone": "UPRIGHT",
             "progression": "JAZZ_BLUES",
             "fillKit": "STICKS",
-            "level": 2.0,
+            "level": 2.52,
+            "mix": {
+                "kick": 0.3,
+                "snare": 0.45,
+                "cymbals": 0.9,
+                "percussion": 0.45,
+                "bass": 0.35,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3540,7 +3724,15 @@
             "tone": "UPRIGHT",
             "progression": "BLUES_12",
             "fillKit": "STICKS",
-            "level": 1.5,
+            "level": 2.14,
+            "mix": {
+                "kick": 0.2,
+                "snare": 0.35,
+                "cymbals": 0.9,
+                "percussion": 0.35,
+                "bass": 0.3,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3613,7 +3805,15 @@
             "tone": "UPRIGHT",
             "progression": "JAZZ_BLUES",
             "fillKit": "BRUSHES",
-            "level": 1.88,
+            "level": 1.95,
+            "mix": {
+                "kick": 0.4,
+                "snare": 0.9,
+                "cymbals": 1.0,
+                "percussion": 0.85,
+                "bass": 0.7,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3686,7 +3886,15 @@
             "tone": "UPRIGHT",
             "progression": "II_V_I",
             "fillKit": "BRUSHES",
-            "level": 2.37,
+            "level": 2.29,
+            "mix": {
+                "kick": 0.5,
+                "snare": 0.9,
+                "cymbals": 1.0,
+                "percussion": 0.85,
+                "bass": 0.8,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3759,7 +3967,15 @@
             "tone": "UPRIGHT",
             "progression": "JAZZ_BLUES",
             "fillKit": "STICKS",
-            "level": 2.57,
+            "level": 3.24,
+            "mix": {
+                "kick": 0.2,
+                "snare": 0.75,
+                "cymbals": 0.9,
+                "percussion": 0.7,
+                "bass": 0.35,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3819,7 +4035,15 @@
             "tone": "UPRIGHT",
             "progression": "JAZZ_BLUES",
             "fillKit": "STICKS",
-            "level": 2.29,
+            "level": 2.88,
+            "mix": {
+                "kick": 0.2,
+                "snare": 0.4,
+                "cymbals": 0.9,
+                "percussion": 0.4,
+                "bass": 0.3,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3884,7 +4108,15 @@
             "tone": "UPRIGHT",
             "progression": "II_V_I",
             "fillKit": "STICKS",
-            "level": 1.88,
+            "level": 3.23,
+            "mix": {
+                "kick": 0.25,
+                "snare": 0.9,
+                "cymbals": 0.55,
+                "percussion": 0.85,
+                "bass": 0.4,
+                "guideClick": 0.0
+            },
             "beatNote": "♩",
             "tracks": [
                 {
@@ -3968,7 +4200,15 @@
             "tone": "UPRIGHT",
             "progression": "VAMP_MINOR",
             "fillKit": "STICKS",
-            "level": 1.7,
+            "level": 2.14,
+            "mix": {
+                "kick": 0.5,
+                "snare": 0.75,
+                "cymbals": 0.9,
+                "percussion": 0.9,
+                "bass": 0.65,
+                "guideClick": 0.0
+            },
             "beatNote": "♩.",
             "tracks": [
                 {
