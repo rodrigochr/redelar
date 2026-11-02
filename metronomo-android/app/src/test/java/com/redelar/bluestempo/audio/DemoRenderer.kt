@@ -19,12 +19,14 @@ class DemoRenderer {
         val dir = System.getenv("BLUESTEMPO_DEMO_DIR")?.takeIf { it.isNotBlank() }?.let(::File) ?: return
         dir.mkdirs()
         val sr = 44100
-        val bank = SoundBank(sr)
+        val samples = SampleLibrary.load(RealInstrumentsTest.source, sr)
+        val bank = SoundBank(sr, samples)
         raw = System.getenv("BLUESTEMPO_DEMO_RAW") == "1"
         GrooveLibrary.all.forEach { g ->
             val s = AppSettings(
                 mode = PlayMode.GROOVE, grooveId = g.id, bpm = g.defaultBpm, swing = g.defaultSwing,
                 bassStyle = g.bassStyle, bassTone = g.bassTone, progression = g.progression, key = 9,
+                realInstruments = System.getenv("BLUESTEMPO_DEMO_SYNTH") != "1",
             )
             val bars = if (g.progression.length >= 12) 12 else 8
             writeWav(File(dir, "${g.id}.wav"), render(bank, s, bars * g.beatsPerBar * 60.0 / g.defaultBpm + 1.0), sr)
@@ -38,6 +40,27 @@ class DemoRenderer {
             for (level in 0..2) {
                 val mono = bank.click(cs, level)
                 writeWav(File(samplesDir, "click_${cs.name}_$level.wav"), FloatArray(mono.size * 2) { mono[it / 2] }, sr)
+            }
+        }
+        if (System.getenv("BLUESTEMPO_DEMO_STEMS") == "1") {
+            // Faixas separadas por canal para medir o equilíbrio da mixagem.
+            val stemsDir = File(dir, "stems").apply { mkdirs() }
+            val solos = mapOf(
+                "kick" to com.redelar.bluestempo.model.MixerSettings(0.9f, 0f, 0f, 0f, 0f, 0f),
+                "snare" to com.redelar.bluestempo.model.MixerSettings(0f, 0.85f, 0f, 0f, 0f, 0f),
+                "cymbals" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0.7f, 0f, 0f, 0f),
+                "perc" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 0.8f, 0f, 0f),
+                "bass" to com.redelar.bluestempo.model.MixerSettings(0f, 0f, 0f, 0f, 0.8f, 0f),
+            )
+            GrooveLibrary.all.forEach { g ->
+                solos.forEach { (stem, mixer) ->
+                    val s = AppSettings(
+                        mode = PlayMode.GROOVE, grooveId = g.id, bpm = g.defaultBpm, swing = g.defaultSwing,
+                        bassStyle = g.bassStyle, bassTone = g.bassTone, progression = g.progression, key = 9,
+                        mixer = mixer, fills = false,
+                    )
+                    writeWav(File(stemsDir, "${g.id}__$stem.wav"), render(bank, s, 8 * g.beatsPerBar * 60.0 / g.defaultBpm), sr)
+                }
             }
         }
         val drumsOff = com.redelar.bluestempo.model.MixerSettings(kick = 0f, snare = 0f, cymbals = 0f, percussion = 0f)

@@ -92,8 +92,13 @@ fun PracticeTab(settings: AppSettings, vm: MetronomeActions) {
         Section("Sobre") {
             Text(
                 "BluesTempo ${BuildConfig.VERSION_NAME}\n" +
-                    "Todos os sons (bateria, baixo e cliques) são sintetizados no próprio aparelho, " +
-                    "com precisão de amostra — o tempo não \"escorrega\" mesmo depois de horas.",
+                    "Tempo gerado com precisão de amostra — não \"escorrega\" mesmo depois de horas.\n\n" +
+                    "Instrumentos reais (domínio público, CC0):\n" +
+                    "• Virtuosity Drums — Versilian Studios & Karoryfer Samples\n" +
+                    "• Big Rusty Drums (vassourinhas) — Karoryfer Samples\n" +
+                    "• Black And Blue Basses (baixo elétrico) — Karoryfer Samples\n" +
+                    "• Meatbass (contrabaixo) — Karoryfer Samples\n" +
+                    "• VCSL (percussão) — Versilian Community Sample Library",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

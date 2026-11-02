@@ -4,9 +4,11 @@ Metrônomo completo para Android com **levadas de bateria e baixo** de blues, ro
 com atenção especial ao blues: shuffle de Chicago, double shuffle texano, boogie-woogie,
 boogie de um acorde, slow blues 12/8, jump blues, train beat, swamp blues, Bo Diddley e mais.
 
-Todos os sons (bateria, baixo e cliques) são **sintetizados no próprio aparelho** — o app não
-tem arquivos de áudio — e o tempo é gerado com **precisão de amostra**: o andamento não
-"escorrega" nem acumula erro, mesmo depois de horas (há teste automatizado para isso).
+A bateria, o baixo elétrico, o contrabaixo e a percussão são **instrumentos reais gravados**
+(bibliotecas em domínio público, veja abaixo), com várias camadas de dinâmica e variações por
+peça. O tempo é gerado com **precisão de amostra**: o andamento não "escorrega" nem acumula
+erro, mesmo depois de horas (há teste automatizado para isso). Uma versão sintetizada de todos
+os sons continua disponível como opção.
 
 ## Funcionalidades
 
@@ -33,7 +35,7 @@ tem arquivos de áudio — e o tempo é gerado com **precisão de amostra**: o a
   mostra o acorde atual e o próximo, e a grade da progressão acende o compasso atual.
 - **Viradas** no fim da progressão e prato de ataque na volta; **humanização** de dinâmica.
 - **Mixer**: bumbo, caixa, pratos, percussão, baixo e clique guia por cima da levada.
-- Todas as levadas têm volume equalizado (−14 LUFS) para trocar sem sustos.
+- Todas as levadas têm volume equalizado (≈ −16 LUFS com instrumentos reais) para trocar sem sustos.
 
 **Treino**
 - Contagem inicial de 1, 2 ou 4 compassos.
@@ -47,6 +49,24 @@ tem arquivos de áudio — e o tempo é gerado com **precisão de amostra**: o a
 - Por padrão **toca junto com outros apps** (para acompanhar gravações); pode pausá-los.
 - Para sozinho em ligações e ao desconectar o fone.
 - Mantém a tela ligada enquanto toca; opção de piscar a tela no tempo 1.
+
+## Instrumentos reais
+
+Todos os samples vêm de bibliotecas **CC0 (domínio público)** — podem ser usados, modificados e
+redistribuídos sem restrições:
+
+| Som | Biblioteca | O que foi usado |
+|---|---|---|
+| Bateria (baquetas) | [Virtuosity Drums](https://github.com/sfzinstruments/virtuosity_drums) — Versilian Studios & Karoryfer Samples | Bumbo (4 camadas), caixa (8 de 36 camadas), cross-stick, chimbal fechado/aberto/pé, condução, cúpula, ataque e 2 tons; microfones do bumbo, da caixa e overhead mixados em mono |
+| Vassourinhas | [Big Rusty Drums](https://github.com/sfzinstruments/karoryfer.big-rusty-drums) — Karoryfer Samples | Toque e varrida de vassourinha na caixa |
+| Baixo elétrico | [Black And Blue Basses](https://github.com/sfzinstruments/karoryfer.black-and-blue-basses) ("darkblack") — Karoryfer Samples | Notas a cada 3 semitons, 2 dinâmicas |
+| Contrabaixo | [Meatbass](https://github.com/sfzinstruments/karoryfer.meatbass) — Karoryfer Samples | Pizzicato de um Otto Rubner de 1958, notas a cada 3 semitons, 2 dinâmicas |
+| Percussão | [VCSL](https://github.com/sgossner/VCSL) — Versilian Community Sample Library | Cowbell, shaker, pandeirola e claves |
+
+O script [`tools/build_samples.py`](tools/build_samples.py) baixa somente os arquivos necessários,
+mixa os microfones, recorta, mede a afinação de cada nota de baixo (corrige o desvio fino em
+cents) e gera `app/src/main/assets/samples/` (formato próprio "BTS1": PCM 16 bits mono, lido em
+Kotlin puro). Para regenerar: `python3 tools/build_samples.py` (precisa de git, ffmpeg e numpy).
 
 ## Levadas incluídas
 
@@ -97,7 +117,7 @@ Requisitos: JDK 17+ e Android SDK (API 35). Pelo Android Studio, basta abrir a p
 ```bash
 cd metronomo-android
 ./gradlew assembleDebug        # APK em app/build/outputs/apk/debug/
-./gradlew testDebugUnitTest    # testes (motor de áudio, teoria musical e um teste do app com Robolectric)
+./gradlew testDebugUnitTest    # testes (motor de áudio, instrumentos reais, teoria musical e o app com Robolectric)
 ./gradlew assembleRelease      # APK minificado (precisa configurar a assinatura)
 ```
 
@@ -113,8 +133,9 @@ BLUESTEMPO_DEMO_DIR=/tmp/demos ./gradlew testDebugUnitTest --tests '*DemoRendere
 app/src/main/java/com/redelar/bluestempo/
 ├── model/      Teoria musical e dados: levadas (DSL), progressões, baixo, configurações
 ├── audio/      Motor de áudio
-│   ├── SoundBank.kt   síntese de bateria, percussão e cliques (sem arquivos de áudio)
-│   ├── Voices.kt      reprodutor polifônico de amostras e sintetizador de baixo
+│   ├── SampleLibrary.kt  carrega os instrumentos reais (camadas de dinâmica, notas de baixo)
+│   ├── SoundBank.kt   escolhe a camada gravada certa; síntese de reserva e cliques
+│   ├── Voices.kt      reprodutor polifônico, baixo por samples (transposição cúbica) e baixo sintetizado
 │   ├── Sequencer.kt   agenda os eventos tempo a tempo, swing, viradas, baixo e treinos
 │   └── AudioEngine.kt thread de áudio + AudioTrack (float estéreo) e sincronia visual
 ├── service/    Foco de áudio, ligações, fone desconectado e serviço em primeiro plano

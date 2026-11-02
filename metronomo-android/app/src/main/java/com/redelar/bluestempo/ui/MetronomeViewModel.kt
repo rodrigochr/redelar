@@ -147,6 +147,7 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
     override fun setFlash(enabled: Boolean) = update { it.copy(flashOnDownbeat = enabled) }
     override fun setUseGrooveTempo(enabled: Boolean) = update { it.copy(useGrooveTempo = enabled) }
     override fun setMixWithOtherApps(enabled: Boolean) = update { it.copy(mixWithOtherApps = enabled) }
+    override fun setRealInstruments(enabled: Boolean) = update { it.copy(realInstruments = enabled) }
 
     // ------------------------------------------------------------------ presets
 

@@ -78,6 +78,8 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
 
     private val samples = SamplePlayer(64, sampleRate)
     private val bass = BassSynth(sampleRate)
+    private val sampledBass = SampledBass(sampleRate, bank.samples?.basses ?: emptyMap())
+    private val hitGain = FloatArray(1)
 
     // ------------------------------------------------------------------ eventos
     private class Event {
@@ -94,6 +96,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         var midi = 0
         var length = 0
         var tone: BassTone = BassTone.ELECTRIC
+        var real = true
     }
 
     private val queue = PriorityQueue<Event>(256) { a, b ->
@@ -163,6 +166,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         while (queue.isNotEmpty()) freeEvents.addLast(queue.poll()!!)
         samples.stopAll()
         bass.stopAll()
+        sampledBass.stopAll()
         frame = 0
         nextBeatFrame = sampleRate * LEAD_IN_SECONDS
         beatInBar = 0
@@ -198,6 +202,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         left.fill(0f, 0, frames)
         right.fill(0f, 0, frames)
         val bassGain = pending.mixer.bass * BASS_LEVEL
+        val sampledBassGain = pending.mixer.bass * SAMPLED_BASS_LEVEL
         var cursor = 0
         while (cursor < frames) {
             val abs = frame + cursor
@@ -209,13 +214,18 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
             val n = (boundary - abs).toInt()
             samples.render(left, right, cursor, n)
             bass.render(left, right, cursor, n, bassGain)
+            sampledBass.render(left, right, cursor, n, sampledBassGain)
             cursor += n
         }
         frame += frames
 
         // Ganho final suavizado (evita degraus ao trocar de modo/levada).
         val target = pending.masterVolume *
-            if (barSettings.mode == PlayMode.CLICK) CLICK_HEADROOM else GROOVE_HEADROOM * barGroove.level
+            if (barSettings.mode == PlayMode.CLICK) {
+                CLICK_HEADROOM
+            } else {
+                GROOVE_HEADROOM * if (pending.realInstruments && bank.hasRealInstruments) barGroove.level else barGroove.synthLevel
+            }
         if (masterGain < 0f) masterGain = target
         for (i in 0 until frames) {
             masterGain += (target - masterGain) * gainSmoothing
@@ -232,7 +242,11 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
     private fun fire(e: Event, now: Long) {
         when (e.kind) {
             KIND_DRUM, KIND_CLICK -> samples.trigger(e.data!!, e.gain, e.pan, e.choke)
-            KIND_BASS -> bass.noteOn(e.midi, e.length, e.gain, e.tone)
+            KIND_BASS -> if (e.real && sampledBass.supports(e.tone)) {
+                sampledBass.noteOn(e.midi, e.length, e.gain, e.tone)
+            } else {
+                bass.noteOn(e.midi, e.length, e.gain, e.tone)
+            }
         }
         listener?.let { l ->
             when (e.kind) {
@@ -416,11 +430,13 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
     private fun addDrum(at: Double, inst: Instrument, velocity: Float, s: AppSettings) {
         var v = velocity
         if (s.humanize) v *= 1f + (random.nextFloat() - 0.5f) * 0.14f
-        val gain = v.coerceIn(0f, 1f).toDouble().pow(1.5).toFloat() * s.mixer.volume(inst.channel)
+        val target = v.coerceIn(0f, 1f).toDouble().pow(1.5).toFloat()
+        val data = bank.drumHit(inst, target, s.realInstruments, hitGain)
+        val gain = hitGain[0] * s.mixer.volume(inst.channel)
         if (gain <= 0f) return
         val e = obtain(at)
         e.kind = KIND_DRUM
-        e.data = bank.drum(inst)
+        e.data = data
         e.gain = gain
         e.pan = inst.pan
         e.choke = inst.chokeGroup
@@ -448,6 +464,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         e.length = lengthFrames.roundToInt()
         e.gain = velocity
         e.tone = tone
+        e.real = pending.realInstruments
         queue.add(e)
         prevBassNote = e.midi
     }
@@ -584,6 +601,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         private const val GROOVE_HEADROOM = 0.8f
         private const val CLICK_HEADROOM = 1.0f
         private const val BASS_LEVEL = 0.9f
+        private const val SAMPLED_BASS_LEVEL = 0.7f
         private const val LIMIT_KNEE = 0.8f
 
         /** Fundamental mais grave usada (E1). */

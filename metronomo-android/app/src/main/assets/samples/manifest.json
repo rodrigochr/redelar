@@ -1,0 +1,718 @@
+{
+ "drums": {
+  "KICK": [
+   {
+    "level": 0.0375,
+    "files": [
+     "kick_0_0.snd",
+     "kick_0_1.snd"
+    ]
+   },
+   {
+    "level": 0.1344,
+    "files": [
+     "kick_1_0.snd",
+     "kick_1_1.snd"
+    ]
+   },
+   {
+    "level": 0.4935,
+    "files": [
+     "kick_2_0.snd",
+     "kick_2_1.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "kick_3_0.snd",
+     "kick_3_1.snd"
+    ]
+   }
+  ],
+  "SNARE": [
+   {
+    "level": 0.036,
+    "files": [
+     "snare_0_0.snd"
+    ]
+   },
+   {
+    "level": 0.0985,
+    "files": [
+     "snare_1_0.snd"
+    ]
+   },
+   {
+    "level": 0.1198,
+    "files": [
+     "snare_2_0.snd"
+    ]
+   },
+   {
+    "level": 0.2126,
+    "files": [
+     "snare_3_0.snd"
+    ]
+   },
+   {
+    "level": 0.2658,
+    "files": [
+     "snare_4_0.snd"
+    ]
+   },
+   {
+    "level": 0.4408,
+    "files": [
+     "snare_5_0.snd"
+    ]
+   },
+   {
+    "level": 0.5603,
+    "files": [
+     "snare_6_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "snare_7_0.snd"
+    ]
+   }
+  ],
+  "RIM": [
+   {
+    "level": 0.0752,
+    "files": [
+     "rim_0_0.snd"
+    ]
+   },
+   {
+    "level": 0.2777,
+    "files": [
+     "rim_1_0.snd"
+    ]
+   },
+   {
+    "level": 0.6993,
+    "files": [
+     "rim_2_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "rim_3_0.snd"
+    ]
+   }
+  ],
+  "HAT_CLOSED": [
+   {
+    "level": 0.0379,
+    "files": [
+     "hat_closed_0_0.snd",
+     "hat_closed_0_1.snd",
+     "hat_closed_0_2.snd"
+    ]
+   },
+   {
+    "level": 0.1186,
+    "files": [
+     "hat_closed_1_0.snd",
+     "hat_closed_1_1.snd",
+     "hat_closed_1_2.snd"
+    ]
+   },
+   {
+    "level": 0.2264,
+    "files": [
+     "hat_closed_2_0.snd",
+     "hat_closed_2_1.snd",
+     "hat_closed_2_2.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "hat_closed_3_0.snd",
+     "hat_closed_3_1.snd",
+     "hat_closed_3_2.snd"
+    ]
+   }
+  ],
+  "HAT_OPEN": [
+   {
+    "level": 0.1096,
+    "files": [
+     "hat_open_0_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "hat_open_1_0.snd"
+    ]
+   }
+  ],
+  "HAT_PEDAL": [
+   {
+    "level": 0.2545,
+    "files": [
+     "hat_pedal_0_0.snd",
+     "hat_pedal_0_1.snd"
+    ]
+   },
+   {
+    "level": 0.6612,
+    "files": [
+     "hat_pedal_1_0.snd",
+     "hat_pedal_1_1.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "hat_pedal_2_0.snd",
+     "hat_pedal_2_1.snd"
+    ]
+   }
+  ],
+  "RIDE": [
+   {
+    "level": 0.1299,
+    "files": [
+     "ride_0_0.snd",
+     "ride_0_1.snd"
+    ]
+   },
+   {
+    "level": 0.5574,
+    "files": [
+     "ride_1_0.snd",
+     "ride_1_1.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "ride_2_0.snd",
+     "ride_2_1.snd"
+    ]
+   }
+  ],
+  "RIDE_BELL": [
+   {
+    "level": 0.5194,
+    "files": [
+     "ride_bell_0_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "ride_bell_1_0.snd"
+    ]
+   }
+  ],
+  "CRASH": [
+   {
+    "level": 0.6119,
+    "files": [
+     "crash_0_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "crash_1_0.snd"
+    ]
+   }
+  ],
+  "TOM_HIGH": [
+   {
+    "level": 0.3387,
+    "files": [
+     "tom_high_0_0.snd"
+    ]
+   },
+   {
+    "level": 0.648,
+    "files": [
+     "tom_high_1_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "tom_high_2_0.snd"
+    ]
+   }
+  ],
+  "TOM_LOW": [
+   {
+    "level": 0.185,
+    "files": [
+     "tom_low_0_0.snd"
+    ]
+   },
+   {
+    "level": 0.5316,
+    "files": [
+     "tom_low_1_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "tom_low_2_0.snd"
+    ]
+   }
+  ],
+  "BRUSH_TAP": [
+   {
+    "level": 0.0758,
+    "files": [
+     "brush_tap_0_0.snd",
+     "brush_tap_0_1.snd"
+    ]
+   },
+   {
+    "level": 0.1691,
+    "files": [
+     "brush_tap_1_0.snd",
+     "brush_tap_1_1.snd"
+    ]
+   },
+   {
+    "level": 0.3788,
+    "files": [
+     "brush_tap_2_0.snd",
+     "brush_tap_2_1.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "brush_tap_3_0.snd",
+     "brush_tap_3_1.snd"
+    ]
+   }
+  ],
+  "BRUSH_SWEEP": [
+   {
+    "level": 0.3793,
+    "files": [
+     "brush_sweep_0_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "brush_sweep_1_0.snd"
+    ]
+   }
+  ],
+  "COWBELL": [
+   {
+    "level": 0.1185,
+    "files": [
+     "cowbell_0_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "cowbell_1_0.snd"
+    ]
+   }
+  ],
+  "TAMBOURINE": [
+   {
+    "level": 0.2205,
+    "files": [
+     "tambourine_0_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "tambourine_1_0.snd"
+    ]
+   }
+  ],
+  "CLAVE": [
+   {
+    "level": 0.4227,
+    "files": [
+     "clave_0_0.snd"
+    ]
+   },
+   {
+    "level": 1.0,
+    "files": [
+     "clave_1_0.snd"
+    ]
+   }
+  ],
+  "SHAKER": [
+   {
+    "level": 1.0,
+    "files": [
+     "shaker_0_0.snd",
+     "shaker_0_1.snd",
+     "shaker_0_2.snd",
+     "shaker_0_3.snd"
+    ]
+   }
+  ]
+ },
+ "bass": {
+  "ELECTRIC": [
+   {
+    "key": 23,
+    "cents": 0,
+    "files": [
+     "bass_electric_23_0.snd",
+     "bass_electric_23_1.snd"
+    ],
+    "levels": [
+     0.519,
+     0.9012
+    ]
+   },
+   {
+    "key": 26,
+    "cents": 2,
+    "files": [
+     "bass_electric_26_0.snd",
+     "bass_electric_26_1.snd"
+    ],
+    "levels": [
+     0.5177,
+     0.8985
+    ]
+   },
+   {
+    "key": 29,
+    "cents": 4,
+    "files": [
+     "bass_electric_29_0.snd",
+     "bass_electric_29_1.snd"
+    ],
+    "levels": [
+     0.5587,
+     0.7166
+    ]
+   },
+   {
+    "key": 32,
+    "cents": -1,
+    "files": [
+     "bass_electric_32_0.snd",
+     "bass_electric_32_1.snd"
+    ],
+    "levels": [
+     0.5282,
+     0.6959
+    ]
+   },
+   {
+    "key": 35,
+    "cents": 4,
+    "files": [
+     "bass_electric_35_0.snd",
+     "bass_electric_35_1.snd"
+    ],
+    "levels": [
+     0.5246,
+     0.6218
+    ]
+   },
+   {
+    "key": 38,
+    "cents": -1,
+    "files": [
+     "bass_electric_38_0.snd",
+     "bass_electric_38_1.snd"
+    ],
+    "levels": [
+     0.485,
+     0.5915
+    ]
+   },
+   {
+    "key": 41,
+    "cents": -4,
+    "files": [
+     "bass_electric_41_0.snd",
+     "bass_electric_41_1.snd"
+    ],
+    "levels": [
+     0.4829,
+     0.5782
+    ]
+   },
+   {
+    "key": 44,
+    "cents": 3,
+    "files": [
+     "bass_electric_44_0.snd",
+     "bass_electric_44_1.snd"
+    ],
+    "levels": [
+     0.409,
+     0.428
+    ]
+   },
+   {
+    "key": 47,
+    "cents": -1,
+    "files": [
+     "bass_electric_47_0.snd",
+     "bass_electric_47_1.snd"
+    ],
+    "levels": [
+     0.4841,
+     0.4886
+    ]
+   },
+   {
+    "key": 50,
+    "cents": -5,
+    "files": [
+     "bass_electric_50_0.snd",
+     "bass_electric_50_1.snd"
+    ],
+    "levels": [
+     0.4304,
+     0.4767
+    ]
+   },
+   {
+    "key": 53,
+    "cents": -7,
+    "files": [
+     "bass_electric_53_0.snd",
+     "bass_electric_53_1.snd"
+    ],
+    "levels": [
+     0.3829,
+     0.4799
+    ]
+   },
+   {
+    "key": 56,
+    "cents": -10,
+    "files": [
+     "bass_electric_56_0.snd",
+     "bass_electric_56_1.snd"
+    ],
+    "levels": [
+     0.4107,
+     0.518
+    ]
+   },
+   {
+    "key": 59,
+    "cents": -14,
+    "files": [
+     "bass_electric_59_0.snd",
+     "bass_electric_59_1.snd"
+    ],
+    "levels": [
+     0.5665,
+     0.6963
+    ]
+   },
+   {
+    "key": 62,
+    "cents": -17,
+    "files": [
+     "bass_electric_62_0.snd",
+     "bass_electric_62_1.snd"
+    ],
+    "levels": [
+     0.6476,
+     1.0
+    ]
+   }
+  ],
+  "UPRIGHT": [
+   {
+    "key": 21,
+    "cents": 16,
+    "files": [
+     "bass_upright_21_0.snd",
+     "bass_upright_21_1.snd"
+    ],
+    "levels": [
+     0.5013,
+     0.5555
+    ]
+   },
+   {
+    "key": 24,
+    "cents": -24,
+    "files": [
+     "bass_upright_24_0.snd",
+     "bass_upright_24_1.snd"
+    ],
+    "levels": [
+     0.5141,
+     0.7113
+    ]
+   },
+   {
+    "key": 27,
+    "cents": -12,
+    "files": [
+     "bass_upright_27_0.snd",
+     "bass_upright_27_1.snd"
+    ],
+    "levels": [
+     0.7389,
+     0.9355
+    ]
+   },
+   {
+    "key": 30,
+    "cents": 5,
+    "files": [
+     "bass_upright_30_0.snd",
+     "bass_upright_30_1.snd"
+    ],
+    "levels": [
+     0.5229,
+     0.6381
+    ]
+   },
+   {
+    "key": 33,
+    "cents": 0,
+    "files": [
+     "bass_upright_33_0.snd",
+     "bass_upright_33_1.snd"
+    ],
+    "levels": [
+     0.663,
+     0.7475
+    ]
+   },
+   {
+    "key": 36,
+    "cents": -4,
+    "files": [
+     "bass_upright_36_0.snd",
+     "bass_upright_36_1.snd"
+    ],
+    "levels": [
+     0.731,
+     0.9591
+    ]
+   },
+   {
+    "key": 39,
+    "cents": 8,
+    "files": [
+     "bass_upright_39_0.snd",
+     "bass_upright_39_1.snd"
+    ],
+    "levels": [
+     0.5887,
+     0.7662
+    ]
+   },
+   {
+    "key": 42,
+    "cents": 7,
+    "files": [
+     "bass_upright_42_0.snd",
+     "bass_upright_42_1.snd"
+    ],
+    "levels": [
+     0.469,
+     0.5633
+    ]
+   },
+   {
+    "key": 45,
+    "cents": -8,
+    "files": [
+     "bass_upright_45_0.snd",
+     "bass_upright_45_1.snd"
+    ],
+    "levels": [
+     0.6231,
+     1.0
+    ]
+   },
+   {
+    "key": 48,
+    "cents": 1,
+    "files": [
+     "bass_upright_48_0.snd",
+     "bass_upright_48_1.snd"
+    ],
+    "levels": [
+     0.4206,
+     0.5266
+    ]
+   },
+   {
+    "key": 51,
+    "cents": -13,
+    "files": [
+     "bass_upright_51_0.snd",
+     "bass_upright_51_1.snd"
+    ],
+    "levels": [
+     0.4288,
+     0.4922
+    ]
+   },
+   {
+    "key": 54,
+    "cents": -1,
+    "files": [
+     "bass_upright_54_0.snd",
+     "bass_upright_54_1.snd"
+    ],
+    "levels": [
+     0.436,
+     0.5607
+    ]
+   },
+   {
+    "key": 57,
+    "cents": -9,
+    "files": [
+     "bass_upright_57_0.snd",
+     "bass_upright_57_1.snd"
+    ],
+    "levels": [
+     0.5824,
+     0.6352
+    ]
+   },
+   {
+    "key": 60,
+    "cents": -3,
+    "files": [
+     "bass_upright_60_0.snd",
+     "bass_upright_60_1.snd"
+    ],
+    "levels": [
+     0.59,
+     0.548
+    ]
+   }
+  ]
+ },
+ "credits": [
+  "Virtuosity Drums — Versilian Studios & Karoryfer Samples (CC0)",
+  "Big Rusty Drums — Karoryfer Samples (CC0)",
+  "Black And Blue Basses — Karoryfer Samples (CC0)",
+  "Meatbass — Karoryfer Samples (CC0)",
+  "VCSL — Versilian Community Sample Library (CC0)"
+ ]
+}

@@ -7,11 +7,10 @@ import kotlin.math.exp
 import kotlin.math.sin
 
 /**
- * Todos os sons do app são sintetizados na inicialização (sem arquivos de áudio):
- * bateria, percussão e os cliques do metrônomo. As amostras são mono, com pico
- * normalizado e um nível relativo por peça para equilibrar a mixagem.
+ * Sons do app. A bateria e a percussão usam instrumentos reais gravados ([samples], quando
+ * disponíveis); a versão sintetizada fica como alternativa (e para os cliques do metrônomo).
  */
-class SoundBank(val sampleRate: Int) {
+class SoundBank(val sampleRate: Int, val samples: SampleLibrary? = null) {
 
     private val drums: Array<FloatArray> = Array(Instrument.entries.size) { synthesize(Instrument.entries[it]) }
 
@@ -22,9 +21,48 @@ class SoundBank(val sampleRate: Int) {
 
     fun drum(instrument: Instrument): FloatArray = drums[instrument.ordinal]
 
+    val hasRealInstruments: Boolean get() = samples != null && samples.drums.isNotEmpty()
+
+    /**
+     * Sample para tocar [instrument] com volume alvo [target] (0..1). Com instrumentos reais,
+     * escolhe a camada de dinâmica gravada adequada; o ganho final fica em [gainOut]`[0]`.
+     */
+    fun drumHit(instrument: Instrument, target: Float, real: Boolean, gainOut: FloatArray): FloatArray {
+        val sampled = if (real) samples?.drums?.get(instrument) else null
+        if (sampled != null) {
+            val data = sampled.pick(target, gainOut)
+            gainOut[0] *= REAL_TRIM[instrument.ordinal]
+            return data
+        }
+        gainOut[0] = target
+        return drums[instrument.ordinal]
+    }
+
     fun click(sound: ClickSound, level: Int): FloatArray = clicks[sound.ordinal][level]
 
     private companion object {
+        /** Ajuste fino do equilíbrio entre as peças gravadas (1 = como no kit original). */
+        val REAL_TRIM = FloatArray(Instrument.entries.size) { 1f }.also {
+            // A normalização do kit segue o pico do microfone do bumbo; pratos, aro e tons
+            // ficam bem abaixo do equilíbrio de uma mixagem típica e são compensados aqui
+            // (valores calibrados medindo cada canal em LUFS nas levadas).
+            it[Instrument.HAT_CLOSED.ordinal] = 2.2f
+            it[Instrument.HAT_OPEN.ordinal] = 2.0f
+            it[Instrument.HAT_PEDAL.ordinal] = 2.2f
+            it[Instrument.RIDE.ordinal] = 3.6f
+            it[Instrument.RIDE_BELL.ordinal] = 2.0f
+            it[Instrument.CRASH.ordinal] = 1.8f
+            it[Instrument.RIM.ordinal] = 2.5f
+            it[Instrument.TOM_HIGH.ordinal] = 1.6f
+            it[Instrument.TOM_LOW.ordinal] = 1.8f
+            it[Instrument.BRUSH_TAP.ordinal] = 0.6f
+            it[Instrument.BRUSH_SWEEP.ordinal] = 0.5f
+            it[Instrument.COWBELL.ordinal] = 0.8f
+            it[Instrument.TAMBOURINE.ordinal] = 0.5f
+            it[Instrument.SHAKER.ordinal] = 0.7f
+            it[Instrument.CLAVE.ordinal] = 0.5f
+        }
+
         // Frequências inarmônicas (inspiradas na TR-808) para o timbre metálico.
         val hatFreqs = doubleArrayOf(205.3, 304.4, 369.6, 522.7, 540.0, 800.0).map { it * 1.7 }.toDoubleArray()
         val rideFreqs = doubleArrayOf(311.0, 427.0, 513.0, 657.0, 773.0, 941.0).map { it * 1.35 }.toDoubleArray()

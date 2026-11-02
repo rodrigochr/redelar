@@ -87,6 +87,7 @@ data class AppSettings(
     val flashOnDownbeat: Boolean = false,
     val useGrooveTempo: Boolean = true,
     val mixWithOtherApps: Boolean = true,
+    val realInstruments: Boolean = true,
 ) {
     val groove: Groove get() = GrooveLibrary.byId(grooveId)
 

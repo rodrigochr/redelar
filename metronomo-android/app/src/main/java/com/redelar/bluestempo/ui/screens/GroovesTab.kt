@@ -81,6 +81,19 @@ fun GroovesTab(settings: AppSettings, engine: EngineState, vm: MetronomeActions)
             }
         }
 
+        Section("Som") {
+            SettingSwitch(
+                "Instrumentos reais",
+                settings.realInstruments,
+                vm::setRealInstruments,
+                subtitle = if (settings.realInstruments) {
+                    "Bateria, baixo elétrico e contrabaixo gravados (várias camadas de dinâmica)."
+                } else {
+                    "Sons sintetizados no aparelho (mais leves e secos)."
+                },
+            )
+        }
+
         Section("Sensação") {
             if (groove.swingEnabled) {
                 LabeledSlider(

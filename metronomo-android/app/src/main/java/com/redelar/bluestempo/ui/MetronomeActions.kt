@@ -59,6 +59,7 @@ interface MetronomeActions {
     fun setFlash(enabled: Boolean) {}
     fun setUseGrooveTempo(enabled: Boolean) {}
     fun setMixWithOtherApps(enabled: Boolean) {}
+    fun setRealInstruments(enabled: Boolean) {}
     fun savePreset(name: String) {}
     fun overwritePreset(id: String) {}
     fun renamePreset(id: String, name: String) {}

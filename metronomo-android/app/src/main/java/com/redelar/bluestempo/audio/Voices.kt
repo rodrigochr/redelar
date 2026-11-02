@@ -220,3 +220,80 @@ internal class BassSynth(private val sampleRate: Int) {
         voices.forEach { it.forceRelease() }
     }
 }
+
+/**
+ * Baixo tocado a partir de notas gravadas (Karoryfer): escolhe a nota gravada mais próxima,
+ * transpõe com interpolação cúbica e abafa a nota anterior como um baixista faria.
+ */
+internal class SampledBass(private val engineRate: Int, private val instruments: Map<BassTone, SampledBassInstrument>) {
+
+    private class Voice {
+        var data: FloatArray? = null
+        var pos = 0.0
+        var step = 1.0
+        var gain = 0f
+        var remaining = 0
+        var releasing = false
+        var envelope = 1f
+        var releaseCoef = 1f
+        var releaseLeft = 0
+    }
+
+    private val voices = Array(3) { Voice() }
+    private val noteReleaseCoef = kotlin.math.exp(-1.0 / (0.03 * engineRate)).toFloat()
+    private val muteCoef = kotlin.math.exp(-1.0 / (0.006 * engineRate)).toFloat()
+
+    fun supports(tone: BassTone): Boolean = instruments.containsKey(tone)
+
+    fun noteOn(midi: Int, lengthFrames: Int, velocity: Float, tone: BassTone) {
+        val instrument = instruments[tone] ?: return
+        for (v in voices) if (v.data != null) startRelease(v, muteCoef, (0.03 * engineRate).toInt())
+        val voice = voices.firstOrNull { it.data == null } ?: voices.minBy { it.envelope }
+        val region = instrument.regionFor(midi)
+        val loud = velocity >= 0.9f && region.layers.size > 1
+        val layer = if (loud) region.layers.size - 1 else 0
+        voice.data = region.layers[layer]
+        voice.pos = 0.0
+        voice.step = 2.0.pow((midi - region.key - region.cents / 100.0) / 12.0) * instrument.dataRate / engineRate
+        voice.gain = (velocity / if (loud) 1f else 0.85f).coerceIn(0.5f, 1.15f)
+        voice.remaining = lengthFrames.coerceAtLeast(1)
+        voice.releasing = false
+        voice.envelope = 1f
+    }
+
+    private fun startRelease(v: Voice, coef: Float, frames: Int) {
+        if (v.releasing && v.releaseCoef <= coef) return
+        v.releasing = true
+        v.releaseCoef = coef
+        v.releaseLeft = frames
+    }
+
+    fun render(left: FloatArray, right: FloatArray, offset: Int, count: Int, gain: Float) {
+        for (v in voices) {
+            val data = v.data ?: continue
+            val last = data.size - 2
+            for (i in offset until offset + count) {
+                if (!v.releasing && v.remaining-- <= 0) startRelease(v, noteReleaseCoef, (0.12 * engineRate).toInt())
+                if (v.releasing) {
+                    v.envelope *= v.releaseCoef
+                    if (v.releaseLeft-- <= 0) {
+                        v.data = null
+                        break
+                    }
+                }
+                if (v.pos >= last) {
+                    v.data = null
+                    break
+                }
+                val y = cubicAt(data, v.pos) * v.gain * v.envelope * gain
+                left[i] += y
+                right[i] += y
+                v.pos += v.step
+            }
+        }
+    }
+
+    fun stopAll() {
+        for (v in voices) v.data = null
+    }
+}

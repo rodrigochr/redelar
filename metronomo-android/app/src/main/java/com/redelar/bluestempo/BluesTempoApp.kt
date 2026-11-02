@@ -1,7 +1,9 @@
 package com.redelar.bluestempo
 
 import android.app.Application
+import android.util.Log
 import com.redelar.bluestempo.audio.AudioEngine
+import com.redelar.bluestempo.audio.SampleLibrary
 import com.redelar.bluestempo.audio.SoundBank
 import com.redelar.bluestempo.data.SettingsRepository
 import com.redelar.bluestempo.model.AppSettings
@@ -12,8 +14,17 @@ import kotlinx.coroutines.launch
 
 class BluesTempoApp : Application() {
 
-    /** Sons sintetizados uma única vez (pré-carregados em segundo plano no início). */
-    val soundBank: SoundBank by lazy { SoundBank(AudioEngine.nativeSampleRate()) }
+    /** Sons do app (instrumentos reais + sintetizados), pré-carregados em segundo plano no início. */
+    val soundBank: SoundBank by lazy {
+        val rate = AudioEngine.nativeSampleRate()
+        val samples = try {
+            SampleLibrary.load({ name -> runCatching { assets.open("samples/$name") }.getOrNull() }, rate)
+        } catch (e: Exception) {
+            Log.e("BluesTempoApp", "Falha ao carregar os instrumentos reais; usando sons sintetizados", e)
+            null
+        }
+        SoundBank(rate, samples)
+    }
 
     lateinit var repository: SettingsRepository
         private set
