@@ -10,6 +10,9 @@ peça. O tempo é gerado com **precisão de amostra**: o andamento não "escorre
 erro, mesmo depois de horas (há teste automatizado para isso). Uma versão sintetizada de todos
 os sons continua disponível como opção.
 
+> **Versão web (iPhone, computador):** veja [`metronomo-web/`](../metronomo-web/README.md) — mesmo
+> motor, mesmas levadas e mesmos instrumentos, no navegador.
+
 ## Funcionalidades
 
 **Metrônomo**

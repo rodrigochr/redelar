@@ -1,0 +1,657 @@
+[
+ {
+  "name": "clique-4-4",
+  "seconds": 9,
+  "settings": {
+   "mode": "CLICK",
+   "bpm": 120
+  }
+ },
+ {
+  "name": "clique-7-8-semicolcheias-swing-contagem",
+  "seconds": 12,
+  "settings": {
+   "mode": "CLICK",
+   "bpm": 97,
+   "beatsPerBar": 7,
+   "beatUnit": 8,
+   "accents": [
+    "ACCENT",
+    "SOFT",
+    "NORMAL",
+    "SOFT",
+    "NORMAL",
+    "SOFT",
+    "SOFT"
+   ],
+   "subdivision": "SIXTEENTHS",
+   "clickSwing": 0.6,
+   "countInBars": 1,
+   "clickSound": "WOOD"
+  }
+ },
+ {
+  "name": "clique-treino-silencio-acentos",
+  "seconds": 20,
+  "settings": {
+   "mode": "CLICK",
+   "bpm": 100,
+   "trainerEnabled": true,
+   "trainerTargetBpm": 112,
+   "trainerStepBpm": 4,
+   "trainerEveryBars": 1,
+   "gapEnabled": true,
+   "gapPlayBars": 2,
+   "gapMuteBars": 1,
+   "subdivision": "SHUFFLE",
+   "accents": [
+    "ACCENT",
+    "MUTE",
+    "SOFT",
+    "NORMAL"
+   ]
+  }
+ },
+ {
+  "name": "chicago_shuffle",
+  "seconds": 31.034,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "chicago_shuffle",
+   "genre": "BLUES",
+   "bpm": 116,
+   "swing": 0.67,
+   "bassStyle": "SHUFFLE_156",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 0,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0.6
+   }
+  }
+ },
+ {
+  "name": "texas_shuffle",
+  "seconds": 26.667,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "texas_shuffle",
+   "genre": "BLUES",
+   "bpm": 126,
+   "swing": 0.67,
+   "bassStyle": "BOOGIE",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 5,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "boogie_woogie",
+  "seconds": 22.4,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "boogie_woogie",
+   "genre": "BLUES",
+   "bpm": 150,
+   "swing": 0.65,
+   "bassStyle": "BOOGIE",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 10,
+   "bassOctave": 1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "hooker_boogie",
+  "seconds": 20,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "hooker_boogie",
+   "genre": "BLUES",
+   "bpm": 168,
+   "swing": 0.64,
+   "bassStyle": "SHUFFLE_156",
+   "bassTone": "ELECTRIC",
+   "progression": "VAMP_DOM",
+   "key": 3,
+   "bassOctave": -1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "slow_blues",
+  "seconds": 57.931,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "slow_blues",
+   "genre": "BLUES",
+   "bpm": 58,
+   "swing": 0.5,
+   "bassStyle": "SLOW_BLUES",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 8,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "jump_blues",
+  "seconds": 19.535,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "jump_blues",
+   "genre": "BLUES",
+   "bpm": 172,
+   "swing": 0.66,
+   "bassStyle": "WALKING",
+   "bassTone": "UPRIGHT",
+   "progression": "BLUES_12",
+   "key": 1,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "train_beat",
+  "seconds": 24,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "train_beat",
+   "genre": "BLUES",
+   "bpm": 140,
+   "swing": 0.55,
+   "bassStyle": "BOOGIE_WALK",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 6,
+   "bassOctave": 1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "swamp_blues",
+  "seconds": 37.5,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "swamp_blues",
+   "genre": "BLUES",
+   "bpm": 96,
+   "swing": 0.58,
+   "bassStyle": "SHUFFLE_156",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 11,
+   "bassOctave": -1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1
+  }
+ },
+ {
+  "name": "bo_diddley",
+  "seconds": 30,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "bo_diddley",
+   "genre": "BLUES",
+   "bpm": 112,
+   "swing": 0.5,
+   "bassStyle": "BO_DIDDLEY",
+   "bassTone": "ELECTRIC",
+   "progression": "VAMP_DOM",
+   "key": 4,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "blues_rock",
+  "seconds": 28,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "blues_rock",
+   "genre": "BLUES",
+   "bpm": 120,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 9,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0.6
+   }
+  }
+ },
+ {
+  "name": "minor_blues",
+  "seconds": 38.182,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "minor_blues",
+   "genre": "BLUES",
+   "bpm": 88,
+   "swing": 0.5,
+   "bassStyle": "MINOR_GROOVE",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_MINOR",
+   "key": 2,
+   "bassOctave": 1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "rock_basic",
+  "seconds": 30.545,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "rock_basic",
+   "genre": "ROCK",
+   "bpm": 110,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "progression": "ROCK_I_IV_V",
+   "key": 7,
+   "bassOctave": -1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "rock_drive",
+  "seconds": 28,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "rock_drive",
+   "genre": "ROCK",
+   "bpm": 120,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "progression": "ROCK_I_IV_V",
+   "key": 0,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "rock_16",
+  "seconds": 36.522,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "rock_16",
+   "genre": "ROCK",
+   "bpm": 92,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "progression": "POP_I_V_VI_IV",
+   "key": 5,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "hard_rock",
+  "seconds": 27.273,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "hard_rock",
+   "genre": "ROCK",
+   "bpm": 132,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "progression": "ROCK_I_IV_V",
+   "key": 10,
+   "bassOctave": 1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1
+  }
+ },
+ {
+  "name": "half_time",
+  "seconds": 24,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "half_time",
+   "genre": "ROCK",
+   "bpm": 140,
+   "swing": 0.5,
+   "bassStyle": "ROOTS",
+   "bassTone": "ELECTRIC",
+   "progression": "POP_I_V_VI_IV",
+   "key": 3,
+   "bassOctave": -1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "rock_and_roll",
+  "seconds": 20.488,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "rock_and_roll",
+   "genre": "ROCK",
+   "bpm": 164,
+   "swing": 0.56,
+   "bassStyle": "SHUFFLE_156",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 8,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "rockabilly",
+  "seconds": 18.667,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "rockabilly",
+   "genre": "ROCK",
+   "bpm": 180,
+   "swing": 0.62,
+   "bassStyle": "BOOGIE_WALK",
+   "bassTone": "UPRIGHT",
+   "progression": "BLUES_12",
+   "key": 1,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "purdie_shuffle",
+  "seconds": 37.333,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "purdie_shuffle",
+   "genre": "ROCK",
+   "bpm": 90,
+   "swing": 0.5,
+   "bassStyle": "SHUFFLE_156",
+   "bassTone": "ELECTRIC",
+   "progression": "BLUES_12",
+   "key": 6,
+   "bassOctave": 1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0.6
+   }
+  }
+ },
+ {
+  "name": "ballad_68",
+  "seconds": 28.966,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "ballad_68",
+   "genre": "ROCK",
+   "bpm": 58,
+   "swing": 0.5,
+   "bassStyle": "ROOTS",
+   "bassTone": "ELECTRIC",
+   "progression": "POP_I_V_VI_IV",
+   "key": 11,
+   "bassOctave": -1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "punk",
+  "seconds": 17.684,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "punk",
+   "genre": "ROCK",
+   "bpm": 190,
+   "swing": 0.5,
+   "bassStyle": "ROCK_EIGHTHS",
+   "bassTone": "ELECTRIC",
+   "progression": "ROCK_I_IV_V",
+   "key": 4,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "swing_medium",
+  "seconds": 25.714,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "swing_medium",
+   "genre": "JAZZ",
+   "bpm": 140,
+   "swing": 0.66,
+   "bassStyle": "WALKING",
+   "bassTone": "UPRIGHT",
+   "progression": "JAZZ_BLUES",
+   "key": 9,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1
+  }
+ },
+ {
+  "name": "bebop",
+  "seconds": 14,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "bebop",
+   "genre": "JAZZ",
+   "bpm": 240,
+   "swing": 0.58,
+   "bassStyle": "WALKING",
+   "bassTone": "UPRIGHT",
+   "progression": "JAZZ_BLUES",
+   "key": 2,
+   "bassOctave": 1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "kc_shuffle",
+  "seconds": 22.4,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "kc_shuffle",
+   "genre": "JAZZ",
+   "bpm": 150,
+   "swing": 0.67,
+   "bassStyle": "WALKING",
+   "bassTone": "UPRIGHT",
+   "progression": "BLUES_12",
+   "key": 7,
+   "bassOctave": -1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "brush_swing",
+  "seconds": 25.455,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "brush_swing",
+   "genre": "JAZZ",
+   "bpm": 132,
+   "swing": 0.66,
+   "bassStyle": "WALKING",
+   "bassTone": "UPRIGHT",
+   "progression": "JAZZ_BLUES",
+   "key": 0,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "jazz_ballad",
+  "seconds": 52.5,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "jazz_ballad",
+   "genre": "JAZZ",
+   "bpm": 64,
+   "swing": 0.66,
+   "bassStyle": "TWO_FEEL",
+   "bassTone": "UPRIGHT",
+   "progression": "II_V_I",
+   "key": 5,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "two_feel",
+  "seconds": 28,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "two_feel",
+   "genre": "JAZZ",
+   "bpm": 120,
+   "swing": 0.66,
+   "bassStyle": "TWO_FEEL",
+   "bassTone": "UPRIGHT",
+   "progression": "JAZZ_BLUES",
+   "key": 10,
+   "bassOctave": 1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ },
+ {
+  "name": "jazz_waltz",
+  "seconds": 16.8,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "jazz_waltz",
+   "genre": "JAZZ",
+   "bpm": 150,
+   "swing": 0.66,
+   "bassStyle": "WALKING",
+   "bassTone": "UPRIGHT",
+   "progression": "JAZZ_BLUES",
+   "key": 3,
+   "bassOctave": -1,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0,
+   "mixer": {
+    "kick": 0.9,
+    "snare": 0.85,
+    "cymbals": 0.7,
+    "percussion": 0.8,
+    "bass": 0.8,
+    "guideClick": 0.6
+   }
+  }
+ },
+ {
+  "name": "bossa_nova",
+  "seconds": 27.273,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "bossa_nova",
+   "genre": "JAZZ",
+   "bpm": 132,
+   "swing": 0.5,
+   "bassStyle": "BOSSA",
+   "bassTone": "UPRIGHT",
+   "progression": "II_V_I",
+   "key": 8,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 1
+  }
+ },
+ {
+  "name": "afro_68",
+  "seconds": 33.6,
+  "settings": {
+   "mode": "GROOVE",
+   "grooveId": "afro_68",
+   "genre": "JAZZ",
+   "bpm": 100,
+   "swing": 0.5,
+   "bassStyle": "AFRO",
+   "bassTone": "UPRIGHT",
+   "progression": "VAMP_MINOR",
+   "key": 1,
+   "bassOctave": 0,
+   "humanize": false,
+   "fills": true,
+   "countInBars": 0
+  }
+ }
+]

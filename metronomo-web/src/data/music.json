@@ -1,0 +1,4045 @@
+{
+    "generatedFrom": "metronomo-android (WebDataExportTest)",
+    "constants": {
+        "leadIn": 0.06,
+        "grooveHeadroom": 0.8,
+        "clickHeadroom": 1.0,
+        "sampledBassLevel": 0.7,
+        "limitKnee": 0.8,
+        "bassLowRoot": 28,
+        "minBassNote": 26,
+        "maxBassNote": 55
+    },
+    "channels": [
+        {
+            "id": "KICK",
+            "label": "Bumbo"
+        },
+        {
+            "id": "SNARE",
+            "label": "Caixa"
+        },
+        {
+            "id": "CYMBALS",
+            "label": "Pratos"
+        },
+        {
+            "id": "PERCUSSION",
+            "label": "Percussão"
+        },
+        {
+            "id": "BASS",
+            "label": "Baixo"
+        },
+        {
+            "id": "GUIDE_CLICK",
+            "label": "Clique guia"
+        }
+    ],
+    "instruments": {
+        "KICK": {
+            "label": "Bumbo",
+            "channel": "KICK",
+            "pan": 0.0,
+            "choke": 0,
+            "fill": false,
+            "trim": 1.0
+        },
+        "SNARE": {
+            "label": "Caixa",
+            "channel": "SNARE",
+            "pan": 0.08,
+            "choke": 0,
+            "fill": true,
+            "trim": 1.0
+        },
+        "RIM": {
+            "label": "Aro",
+            "channel": "SNARE",
+            "pan": 0.08,
+            "choke": 0,
+            "fill": true,
+            "trim": 2.5
+        },
+        "BRUSH_TAP": {
+            "label": "Vassourinha",
+            "channel": "SNARE",
+            "pan": 0.08,
+            "choke": 0,
+            "fill": true,
+            "trim": 0.6
+        },
+        "BRUSH_SWEEP": {
+            "label": "Varrida",
+            "channel": "SNARE",
+            "pan": 0.08,
+            "choke": 0,
+            "fill": true,
+            "trim": 0.5
+        },
+        "HAT_CLOSED": {
+            "label": "Chimbal",
+            "channel": "CYMBALS",
+            "pan": -0.32,
+            "choke": 1,
+            "fill": true,
+            "trim": 2.2
+        },
+        "HAT_OPEN": {
+            "label": "Chimbal aberto",
+            "channel": "CYMBALS",
+            "pan": -0.32,
+            "choke": 1,
+            "fill": true,
+            "trim": 2.0
+        },
+        "HAT_PEDAL": {
+            "label": "Chimbal (pé)",
+            "channel": "CYMBALS",
+            "pan": -0.32,
+            "choke": 1,
+            "fill": false,
+            "trim": 2.2
+        },
+        "RIDE": {
+            "label": "Condução",
+            "channel": "CYMBALS",
+            "pan": 0.38,
+            "choke": 0,
+            "fill": true,
+            "trim": 3.6
+        },
+        "RIDE_BELL": {
+            "label": "Cúpula",
+            "channel": "CYMBALS",
+            "pan": 0.38,
+            "choke": 0,
+            "fill": true,
+            "trim": 2.0
+        },
+        "CRASH": {
+            "label": "Ataque",
+            "channel": "CYMBALS",
+            "pan": -0.45,
+            "choke": 0,
+            "fill": true,
+            "trim": 1.8
+        },
+        "TOM_HIGH": {
+            "label": "Tom",
+            "channel": "PERCUSSION",
+            "pan": -0.15,
+            "choke": 0,
+            "fill": true,
+            "trim": 1.6
+        },
+        "TOM_LOW": {
+            "label": "Surdo",
+            "channel": "PERCUSSION",
+            "pan": 0.25,
+            "choke": 0,
+            "fill": true,
+            "trim": 1.8
+        },
+        "COWBELL": {
+            "label": "Cowbell",
+            "channel": "PERCUSSION",
+            "pan": 0.2,
+            "choke": 0,
+            "fill": false,
+            "trim": 0.8
+        },
+        "SHAKER": {
+            "label": "Shaker",
+            "channel": "PERCUSSION",
+            "pan": -0.2,
+            "choke": 0,
+            "fill": false,
+            "trim": 0.7
+        },
+        "TAMBOURINE": {
+            "label": "Pandeirola",
+            "channel": "PERCUSSION",
+            "pan": 0.3,
+            "choke": 0,
+            "fill": false,
+            "trim": 0.5
+        },
+        "CLAVE": {
+            "label": "Clave",
+            "channel": "PERCUSSION",
+            "pan": 0.15,
+            "choke": 0,
+            "fill": false,
+            "trim": 0.5
+        }
+    },
+    "qualities": {
+        "DOM7": {
+            "suffix": "7",
+            "third": 4,
+            "fifth": 7,
+            "sixth": 9,
+            "seventh": 10
+        },
+        "MIN7": {
+            "suffix": "m7",
+            "third": 3,
+            "fifth": 7,
+            "sixth": 9,
+            "seventh": 10
+        },
+        "MAJ7": {
+            "suffix": "7M",
+            "third": 4,
+            "fifth": 7,
+            "sixth": 9,
+            "seventh": 11
+        },
+        "MAJ": {
+            "suffix": "",
+            "third": 4,
+            "fifth": 7,
+            "sixth": 9,
+            "seventh": 10
+        },
+        "MIN": {
+            "suffix": "m",
+            "third": 3,
+            "fifth": 7,
+            "sixth": 8,
+            "seventh": 10
+        },
+        "DIM7": {
+            "suffix": "°",
+            "third": 3,
+            "fifth": 6,
+            "sixth": 9,
+            "seventh": 9
+        }
+    },
+    "progressions": [
+        {
+            "id": "BLUES_12",
+            "label": "Blues 12 compassos",
+            "description": "I7 nos 4 primeiros, IV7 no 5º e 6º, V7–IV7 no 9º e 10º e turnaround no 12º.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                1,
+                2,
+                3,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "BLUES_12_QUICK",
+            "label": "Blues 12 – quick change",
+            "description": "Igual ao tradicional, mas vai para o IV7 já no 2º compasso.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "BLUES_8",
+            "label": "Blues 8 compassos",
+            "description": "Forma curta de 8 compassos (estilo \"Key to the Highway\").",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "BLUES_MINOR",
+            "label": "Blues menor 12",
+            "description": "Blues em tom menor: im7, ivm7 e bVI7–V7 no final.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 8,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                1,
+                2,
+                3,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "JAZZ_BLUES",
+            "label": "Jazz blues",
+            "description": "Blues com ii–V, VI7 e diminuto de passagem, como nas jams de jazz.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "MIN7"
+                    },
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 6,
+                        "quality": "DIM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 9,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 2,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    },
+                    {
+                        "degree": 9,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 2,
+                        "quality": "MIN7"
+                    },
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "II_V_I",
+            "label": "ii–V–I maior",
+            "description": "A cadência mais comum do jazz.",
+            "bars": [
+                [
+                    {
+                        "degree": 2,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MAJ7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MAJ7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "id": "ROCK_I_IV_V",
+            "label": "Rock I–IV–V–IV",
+            "description": "Sequência clássica de rock com acordes maiores.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MAJ"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "MAJ"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "MAJ"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "MAJ"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "POP_I_V_VI_IV",
+            "label": "I–V–vi–IV",
+            "description": "A progressão de baladas pop/rock.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MAJ"
+                    }
+                ],
+                [
+                    {
+                        "degree": 7,
+                        "quality": "MAJ"
+                    }
+                ],
+                [
+                    {
+                        "degree": 9,
+                        "quality": "MIN"
+                    }
+                ],
+                [
+                    {
+                        "degree": 5,
+                        "quality": "MAJ"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "VAMP_DOM",
+            "label": "Vamp em I7 (um acorde)",
+            "description": "Um acorde só, estilo boogie de John Lee Hooker.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "DOM7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ]
+        },
+        {
+            "id": "VAMP_MINOR",
+            "label": "Vamp menor (im7)",
+            "description": "Um acorde menor, ideal para Afro 6/8 e grooves modais.",
+            "bars": [
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ],
+                [
+                    {
+                        "degree": 0,
+                        "quality": "MIN7"
+                    }
+                ]
+            ],
+            "barsSinceChange": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ]
+        }
+    ],
+    "bassStyles": [
+        {
+            "id": "ROOTS",
+            "label": "Tônica nos tempos",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 1,
+            "gate": 0.9,
+            "variations": [
+                {
+                    "length": 1,
+                    "notes": [
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ROCK_EIGHTHS",
+            "label": "Tônica em colcheias",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 2,
+            "gate": 0.78,
+            "variations": [
+                {
+                    "length": 8,
+                    "notes": [
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "SHUFFLE_156",
+            "label": "Shuffle 1-5-6",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 2,
+            "gate": 0.82,
+            "variations": [
+                {
+                    "length": 8,
+                    "notes": [
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "BOOGIE",
+            "label": "Boogie 1-3-5-6-b7",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 2,
+            "gate": 0.86,
+            "variations": [
+                {
+                    "length": 8,
+                    "notes": [
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 3,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 7,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 3,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "BOOGIE_WALK",
+            "label": "Boogie em semínimas",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 2,
+            "gate": 0.88,
+            "variations": [
+                {
+                    "length": 8,
+                    "notes": [
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 3,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null
+                    ]
+                },
+                {
+                    "length": 8,
+                    "notes": [
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 8,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 3,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "SLOW_BLUES",
+            "label": "Slow blues 12/8",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 3,
+            "gate": 0.9,
+            "variations": [
+                {
+                    "length": 12,
+                    "notes": [
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 3,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 7,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 6,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 1,
+                            "degree": {
+                                "n": 3,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "MINOR_GROOVE",
+            "label": "Groove menor (16ths)",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 4,
+            "gate": 0.85,
+            "variations": [
+                {
+                    "length": 16,
+                    "notes": [
+                        {
+                            "len": 6,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 4,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 7,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 8,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "BO_DIDDLEY",
+            "label": "Bo Diddley",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 4,
+            "gate": 0.8,
+            "variations": [
+                {
+                    "length": 16,
+                    "notes": [
+                        {
+                            "len": 3,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        {
+                            "len": 3,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        {
+                            "len": 3,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        null,
+                        {
+                            "len": 2,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": -1,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        {
+                            "len": 3,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        null
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "BOSSA",
+            "label": "Bossa nova",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 2,
+            "gate": 0.92,
+            "variations": [
+                {
+                    "length": 8,
+                    "notes": [
+                        {
+                            "len": 3,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        {
+                            "len": 5,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": -1,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        null,
+                        null
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "AFRO",
+            "label": "Afro 6/8",
+            "algorithm": "PATTERN",
+            "stepsPerBeat": 3,
+            "gate": 0.92,
+            "variations": [
+                {
+                    "length": 12,
+                    "notes": [
+                        {
+                            "len": 6,
+                            "degree": {
+                                "n": 1,
+                                "acc": 0,
+                                "oct": 0,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        {
+                            "len": 6,
+                            "degree": {
+                                "n": 5,
+                                "acc": 0,
+                                "oct": -1,
+                                "chord": true
+                            }
+                        },
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "WALKING",
+            "label": "Walking bass (jazz)",
+            "algorithm": "WALKING"
+        },
+        {
+            "id": "TWO_FEEL",
+            "label": "Em dois (mínimas)",
+            "algorithm": "TWO_FEEL"
+        }
+    ],
+    "walkTemplates": [
+        [
+            {
+                "n": 3,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            },
+            {
+                "n": 5,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            }
+        ],
+        [
+            {
+                "n": 2,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            },
+            {
+                "n": 3,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            }
+        ],
+        [
+            {
+                "n": 5,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            },
+            {
+                "n": 6,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            }
+        ],
+        [
+            {
+                "n": 8,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            },
+            {
+                "n": 7,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            }
+        ],
+        [
+            {
+                "n": 3,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            },
+            {
+                "n": 4,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            }
+        ],
+        [
+            {
+                "n": 5,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            },
+            {
+                "n": 3,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            }
+        ],
+        [
+            {
+                "n": 2,
+                "acc": 0,
+                "oct": 0,
+                "chord": true
+            },
+            {
+                "n": 3,
+                "acc": -1,
+                "oct": 0,
+                "chord": false
+            }
+        ]
+    ],
+    "genres": [
+        {
+            "id": "BLUES",
+            "label": "Blues"
+        },
+        {
+            "id": "ROCK",
+            "label": "Rock"
+        },
+        {
+            "id": "JAZZ",
+            "label": "Jazz"
+        }
+    ],
+    "bassTones": [
+        {
+            "id": "ELECTRIC",
+            "label": "Elétrico"
+        },
+        {
+            "id": "UPRIGHT",
+            "label": "Acústico"
+        }
+    ],
+    "clickSounds": [
+        {
+            "id": "CLASSIC",
+            "label": "Clássico"
+        },
+        {
+            "id": "WOOD",
+            "label": "Madeira"
+        },
+        {
+            "id": "STICKS",
+            "label": "Baquetas"
+        },
+        {
+            "id": "COWBELL",
+            "label": "Cowbell"
+        },
+        {
+            "id": "DIGITAL",
+            "label": "Digital"
+        }
+    ],
+    "accents": [
+        {
+            "id": "ACCENT",
+            "label": "Forte"
+        },
+        {
+            "id": "NORMAL",
+            "label": "Normal"
+        },
+        {
+            "id": "SOFT",
+            "label": "Fraco"
+        },
+        {
+            "id": "MUTE",
+            "label": "Mudo"
+        }
+    ],
+    "meters": [
+        {
+            "beats": 2,
+            "unit": 4
+        },
+        {
+            "beats": 3,
+            "unit": 4
+        },
+        {
+            "beats": 4,
+            "unit": 4
+        },
+        {
+            "beats": 5,
+            "unit": 4
+        },
+        {
+            "beats": 6,
+            "unit": 4
+        },
+        {
+            "beats": 5,
+            "unit": 8
+        },
+        {
+            "beats": 6,
+            "unit": 8
+        },
+        {
+            "beats": 7,
+            "unit": 8
+        },
+        {
+            "beats": 9,
+            "unit": 8
+        },
+        {
+            "beats": 12,
+            "unit": 8
+        }
+    ],
+    "subdivisions": [
+        {
+            "id": "NONE",
+            "label": "Só o tempo",
+            "positions": [
+                0.0
+            ],
+            "swingPair": null
+        },
+        {
+            "id": "EIGHTHS",
+            "label": "Colcheias",
+            "positions": [
+                0.0,
+                0.5
+            ],
+            "swingPair": 1.0
+        },
+        {
+            "id": "TRIPLETS",
+            "label": "Tercinas",
+            "positions": [
+                0.0,
+                0.3333333333333333,
+                0.6666666666666666
+            ],
+            "swingPair": null
+        },
+        {
+            "id": "SIXTEENTHS",
+            "label": "Semicolcheias",
+            "positions": [
+                0.0,
+                0.25,
+                0.5,
+                0.75
+            ],
+            "swingPair": 0.5
+        },
+        {
+            "id": "SHUFFLE",
+            "label": "Shuffle",
+            "positions": [
+                0.0,
+                0.6666666666666666
+            ],
+            "swingPair": null
+        },
+        {
+            "id": "DOTTED",
+            "label": "Pontuada",
+            "positions": [
+                0.0,
+                0.75
+            ],
+            "swingPair": null
+        },
+        {
+            "id": "GALLOP",
+            "label": "Galope",
+            "positions": [
+                0.0,
+                0.5,
+                0.75
+            ],
+            "swingPair": null
+        },
+        {
+            "id": "REVERSE_GALLOP",
+            "label": "Galope invertido",
+            "positions": [
+                0.0,
+                0.25,
+                0.5
+            ],
+            "swingPair": null
+        },
+        {
+            "id": "QUINTUPLETS",
+            "label": "Quintinas",
+            "positions": [
+                0.0,
+                0.2,
+                0.4,
+                0.6,
+                0.8
+            ],
+            "swingPair": null
+        },
+        {
+            "id": "SEXTUPLETS",
+            "label": "Sextinas",
+            "positions": [
+                0.0,
+                0.16666666666666666,
+                0.3333333333333333,
+                0.5,
+                0.6666666666666666,
+                0.8333333333333334
+            ],
+            "swingPair": null
+        }
+    ],
+    "grooves": [
+        {
+            "id": "chicago_shuffle",
+            "name": "Shuffle de Chicago",
+            "genre": "BLUES",
+            "description": "O shuffle clássico: chimbal \"longa-curta\" em tercinas, caixa no 2 e 4 e baixo 1-5-6. Base de incontáveis jams de blues.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 116,
+            "swingUnit": 1.0,
+            "swing": 0.67,
+            "bass": "SHUFFLE_156",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.76,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.28
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "texas_shuffle",
+            "name": "Shuffle Texano (double shuffle)",
+            "genre": "BLUES",
+            "description": "As duas mãos tocam o shuffle: chimbal e caixa em tercinas, caixa acentuada no 2 e 4 e bumbo nos quatro tempos. Pegada Texas, à la Stevie Ray Vaughan.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 126,
+            "swingUnit": 1.0,
+            "swing": 0.67,
+            "bass": "BOOGIE",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.38,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.28,
+                        0.5,
+                        1.0,
+                        0.28,
+                        0.28,
+                        0.5,
+                        1.0,
+                        0.28
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "boogie_woogie",
+            "name": "Boogie-Woogie",
+            "genre": "BLUES",
+            "description": "Swing acelerado com o famoso baixo de boogie 1-3-5-6-b7-6-5-3 em colcheias. Raiz do piano boogie e do rock'n'roll.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 150,
+            "swingUnit": 1.0,
+            "swing": 0.65,
+            "bass": "BOOGIE",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.57,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.28,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.28,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.5,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.5,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hooker_boogie",
+            "name": "Boogie de um acorde",
+            "genre": "BLUES",
+            "description": "Boogie hipnótico em um acorde só, com bumbo nos quatro tempos — no espírito de John Lee Hooker e Canned Heat.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 168,
+            "swingUnit": 1.0,
+            "swing": 0.64,
+            "bass": "SHUFFLE_156",
+            "tone": "ELECTRIC",
+            "progression": "VAMP_DOM",
+            "fillKit": "STICKS",
+            "level": 1.32,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.78,
+                        1.0,
+                        0.78,
+                        1.0,
+                        0.78,
+                        1.0,
+                        0.78
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "slow_blues",
+            "name": "Slow Blues 12/8",
+            "genre": "BLUES",
+            "description": "Blues lento em 12/8: chimbal em todas as tercinas e caixa pesada no 2 e 4. O andamento conta as semínimas pontuadas.",
+            "meter": "12/8",
+            "beats": 4,
+            "steps": 3,
+            "bars": 1,
+            "bpm": 58,
+            "swingUnit": null,
+            "swing": 0.5,
+            "bass": "SLOW_BLUES",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.82,
+            "beatNote": "♩.",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.5,
+                        0.78,
+                        0.5,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.5,
+                        0.78,
+                        0.5,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.5
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "jump_blues",
+            "name": "Jump Blues",
+            "genre": "BLUES",
+            "description": "Swing de big band aplicado ao blues: condução \"spang-a-lang\", backbeat forte e walking bass. Estilo Louis Jordan e T-Bone Walker.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 172,
+            "swingUnit": 1.0,
+            "swing": 0.66,
+            "bass": "WALKING",
+            "tone": "UPRIGHT",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.72,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.5,
+                        0.0,
+                        0.5,
+                        0.0,
+                        0.5,
+                        0.0,
+                        0.5,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "train_beat",
+            "name": "Train Beat (trem)",
+            "genre": "BLUES",
+            "description": "A caixa imita o trem: semicolcheias contínuas com acento no 2 e 4, sobre baixo caminhando em semínimas. Som de Memphis e Chicago dos anos 50.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 4,
+            "bars": 1,
+            "bpm": 140,
+            "swingUnit": 0.5,
+            "swing": 0.55,
+            "bass": "BOOGIE_WALK",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.66,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.5,
+                        0.28,
+                        0.5,
+                        0.28,
+                        1.0,
+                        0.28,
+                        0.5,
+                        0.28,
+                        0.5,
+                        0.28,
+                        0.5,
+                        0.28,
+                        1.0,
+                        0.28,
+                        0.5,
+                        0.28
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "swamp_blues",
+            "name": "Swamp Blues (Louisiana)",
+            "genre": "BLUES",
+            "description": "Groove preguiçoso da Louisiana: aro da caixa e pandeirola no contratempo, swing leve. Clima de Slim Harpo e Lazy Lester.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 96,
+            "swingUnit": 1.0,
+            "swing": 0.58,
+            "bass": "SHUFFLE_156",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.86,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "RIM",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "TAMBOURINE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "bo_diddley",
+            "name": "Bo Diddley Beat",
+            "genre": "BLUES",
+            "description": "A batida \"jungle\" 3-2 nos tons com maracas em semicolcheias, sobre um acorde só.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 4,
+            "bars": 1,
+            "bpm": 112,
+            "swingUnit": 0.5,
+            "swing": 0.5,
+            "bass": "BO_DIDDLEY",
+            "tone": "ELECTRIC",
+            "progression": "VAMP_DOM",
+            "fillKit": "STICKS",
+            "level": 1.72,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "TOM_LOW",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "SHAKER",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        0.78,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        0.78,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "blues_rock",
+            "name": "Blues Rock (colcheias retas)",
+            "genre": "BLUES",
+            "description": "Colcheias retas e pesadas com o baixo martelando a tônica. Blues com pegada de rock britânico dos anos 60 e 70.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 120,
+            "swingUnit": 1.0,
+            "swing": 0.5,
+            "bass": "ROCK_EIGHTHS",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.62,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.78,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "minor_blues",
+            "name": "Blues Menor (16ths)",
+            "genre": "BLUES",
+            "description": "Groove reto em semicolcheias para blues em tom menor, no clima de \"The Thrill Is Gone\".",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 4,
+            "bars": 1,
+            "bpm": 88,
+            "swingUnit": 0.5,
+            "swing": 0.5,
+            "bass": "MINOR_GROOVE",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_MINOR",
+            "fillKit": "STICKS",
+            "level": 1.86,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rock_basic",
+            "name": "Rock Básico",
+            "genre": "ROCK",
+            "description": "A levada fundamental do rock: chimbal em colcheias, caixa no 2 e 4, bumbo no 1 e 3.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 110,
+            "swingUnit": 1.0,
+            "swing": 0.5,
+            "bass": "ROCK_EIGHTHS",
+            "tone": "ELECTRIC",
+            "progression": "ROCK_I_IV_V",
+            "fillKit": "STICKS",
+            "level": 1.74,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rock_drive",
+            "name": "Rock com Bumbo Sincopado",
+            "genre": "ROCK",
+            "description": "Bumbo no \"e\" do 3 e do 4, empurrando a música para frente.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 120,
+            "swingUnit": 1.0,
+            "swing": 0.5,
+            "bass": "ROCK_EIGHTHS",
+            "tone": "ELECTRIC",
+            "progression": "ROCK_I_IV_V",
+            "fillKit": "STICKS",
+            "level": 1.53,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.78,
+                        0.0,
+                        0.78
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rock_16",
+            "name": "Rock em Semicolcheias",
+            "genre": "ROCK",
+            "description": "Chimbal em semicolcheias para rock e pop-rock de andamento médio.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 4,
+            "bars": 1,
+            "bpm": 92,
+            "swingUnit": 0.5,
+            "swing": 0.5,
+            "bass": "ROCK_EIGHTHS",
+            "tone": "ELECTRIC",
+            "progression": "POP_I_V_VI_IV",
+            "fillKit": "STICKS",
+            "level": 1.6,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hard_rock",
+            "name": "Hard Rock (condução)",
+            "genre": "ROCK",
+            "description": "Mão direita no prato de condução e bumbo antecipando o 3. Peso e energia de arena.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 132,
+            "swingUnit": 1.0,
+            "swing": 0.5,
+            "bass": "ROCK_EIGHTHS",
+            "tone": "ELECTRIC",
+            "progression": "ROCK_I_IV_V",
+            "fillKit": "STICKS",
+            "level": 1.55,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "half_time",
+            "name": "Meio-Tempo (half-time)",
+            "genre": "ROCK",
+            "description": "Caixa só no 3: o andamento parece a metade. Ótimo para refrões pesados.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 140,
+            "swingUnit": 1.0,
+            "swing": 0.5,
+            "bass": "ROOTS",
+            "tone": "ELECTRIC",
+            "progression": "POP_I_V_VI_IV",
+            "fillKit": "STICKS",
+            "level": 1.64,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rock_and_roll",
+            "name": "Rock'n'Roll (Chuck Berry)",
+            "genre": "ROCK",
+            "description": "Blues de 12 compassos acelerado, backbeat forte e o riff 1-5-6 em colcheias quase retas.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 164,
+            "swingUnit": 1.0,
+            "swing": 0.56,
+            "bass": "SHUFFLE_156",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.55,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.78,
+                        1.0,
+                        0.78,
+                        1.0,
+                        0.78,
+                        1.0,
+                        0.78
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rockabilly",
+            "name": "Rockabilly",
+            "genre": "ROCK",
+            "description": "Caixa em shuffle com acento no 2 e 4 e contrabaixo caminhando. Sun Records e Stray Cats.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 180,
+            "swingUnit": 1.0,
+            "swing": 0.62,
+            "bass": "BOOGIE_WALK",
+            "tone": "UPRIGHT",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.38,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.28,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.28,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "purdie_shuffle",
+            "name": "Shuffle Meio-Tempo (Purdie)",
+            "genre": "ROCK",
+            "description": "Shuffle em meio-tempo com notas fantasma na caixa entre as batidas do chimbal. Popularizado por Bernard Purdie.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 3,
+            "bars": 1,
+            "bpm": 90,
+            "swingUnit": null,
+            "swing": 0.5,
+            "bass": "SHUFFLE_156",
+            "tone": "ELECTRIC",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 2.0,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.0,
+                        0.78,
+                        0.78,
+                        0.0,
+                        0.78,
+                        1.0,
+                        0.0,
+                        0.78,
+                        0.78,
+                        0.0,
+                        0.78
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.28,
+                        0.0,
+                        1.0,
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.28,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.5
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ballad_68",
+            "name": "Balada 6/8",
+            "genre": "ROCK",
+            "description": "Balada em 6/8 (dois tempos de semínima pontuada) com chimbal nas seis colcheias.",
+            "meter": "6/8",
+            "beats": 2,
+            "steps": 3,
+            "bars": 1,
+            "bpm": 58,
+            "swingUnit": null,
+            "swing": 0.5,
+            "bass": "ROOTS",
+            "tone": "ELECTRIC",
+            "progression": "POP_I_V_VI_IV",
+            "fillKit": "STICKS",
+            "level": 2.04,
+            "beatNote": "♩.",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.5,
+                        0.78,
+                        0.5,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.5
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "punk",
+            "name": "Punk (polca)",
+            "genre": "ROCK",
+            "description": "Bumbo nos tempos e caixa em todos os contratempos: a polca rápida do punk.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 190,
+            "swingUnit": 1.0,
+            "swing": 0.5,
+            "bass": "ROCK_EIGHTHS",
+            "tone": "ELECTRIC",
+            "progression": "ROCK_I_IV_V",
+            "fillKit": "STICKS",
+            "level": 1.33,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "swing_medium",
+            "name": "Swing Médio",
+            "genre": "JAZZ",
+            "description": "Condução \"spang-a-lang\" no prato, chimbal no 2 e 4, bumbo \"feathering\" e walking bass num jazz blues.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 2,
+            "bpm": 140,
+            "swingUnit": 1.0,
+            "swing": 0.66,
+            "bass": "WALKING",
+            "tone": "UPRIGHT",
+            "progression": "JAZZ_BLUES",
+            "fillKit": "STICKS",
+            "level": 2.51,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "bebop",
+            "name": "Bebop (rápido)",
+            "genre": "JAZZ",
+            "description": "Andamento alto com swing mais reto, comping leve de caixa e \"bombas\" de bumbo.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 2,
+            "bpm": 240,
+            "swingUnit": 1.0,
+            "swing": 0.58,
+            "bass": "WALKING",
+            "tone": "UPRIGHT",
+            "progression": "JAZZ_BLUES",
+            "fillKit": "STICKS",
+            "level": 2.0,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.5
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "kc_shuffle",
+            "name": "Shuffle Kansas City",
+            "genre": "JAZZ",
+            "description": "O shuffle das big bands de Kansas City: bumbo nos quatro, caixa em shuffle e walking bass.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 150,
+            "swingUnit": 1.0,
+            "swing": 0.67,
+            "bass": "WALKING",
+            "tone": "UPRIGHT",
+            "progression": "BLUES_12",
+            "fillKit": "STICKS",
+            "level": 1.5,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.28,
+                        1.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        1.0,
+                        0.28
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "brush_swing",
+            "name": "Swing com Vassourinhas",
+            "genre": "JAZZ",
+            "description": "A condução de swing tocada com vassourinhas na caixa, para trios e combos acústicos.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 132,
+            "swingUnit": 1.0,
+            "swing": 0.66,
+            "bass": "WALKING",
+            "tone": "UPRIGHT",
+            "progression": "JAZZ_BLUES",
+            "fillKit": "BRUSHES",
+            "level": 1.88,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "BRUSH_TAP",
+                    "v": [
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "BRUSH_SWEEP",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.28,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "jazz_ballad",
+            "name": "Balada com Vassourinhas",
+            "genre": "JAZZ",
+            "description": "Vassourinhas varrendo a pele em cada tempo e toques no 2 e 4, com baixo em mínimas.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 64,
+            "swingUnit": 1.0,
+            "swing": 0.66,
+            "bass": "TWO_FEEL",
+            "tone": "UPRIGHT",
+            "progression": "II_V_I",
+            "fillKit": "BRUSHES",
+            "level": 2.37,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "BRUSH_SWEEP",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "BRUSH_TAP",
+                    "v": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.0,
+                        0.0,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.28,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "two_feel",
+            "name": "Two-Feel (em dois)",
+            "genre": "JAZZ",
+            "description": "Baixo em mínimas no 1 e 3 com condução swing — usado na exposição do tema antes do walking.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 120,
+            "swingUnit": 1.0,
+            "swing": 0.66,
+            "bass": "TWO_FEEL",
+            "tone": "UPRIGHT",
+            "progression": "JAZZ_BLUES",
+            "fillKit": "STICKS",
+            "level": 2.57,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.5,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "jazz_waltz",
+            "name": "Valsa Jazz 3/4",
+            "genre": "JAZZ",
+            "description": "Swing em três tempos com walking bass, para valsas de jazz.",
+            "meter": "3/4",
+            "beats": 3,
+            "steps": 2,
+            "bars": 1,
+            "bpm": 150,
+            "swingUnit": 1.0,
+            "swing": 0.66,
+            "bass": "WALKING",
+            "tone": "UPRIGHT",
+            "progression": "JAZZ_BLUES",
+            "fillKit": "STICKS",
+            "level": 2.29,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "RIDE",
+                    "v": [
+                        0.78,
+                        0.0,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.5,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "SNARE",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.28
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "bossa_nova",
+            "name": "Bossa Nova",
+            "genre": "JAZZ",
+            "description": "O aro faz a clave da bossa em dois compassos sobre o chimbal em colcheias e o bumbo imitando o surdo.",
+            "meter": "4/4",
+            "beats": 4,
+            "steps": 2,
+            "bars": 2,
+            "bpm": 132,
+            "swingUnit": null,
+            "swing": 0.5,
+            "bass": "BOSSA",
+            "tone": "UPRIGHT",
+            "progression": "II_V_I",
+            "fillKit": "STICKS",
+            "level": 1.88,
+            "beatNote": "♩",
+            "tracks": [
+                {
+                    "instrument": "HAT_CLOSED",
+                    "v": [
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.78,
+                        0.5
+                    ]
+                },
+                {
+                    "instrument": "RIM",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.5
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "afro_68",
+            "name": "Afro 6/8",
+            "genre": "JAZZ",
+            "description": "O sino em 12/8 (padrão bembé) sobre um vamp menor — o clima de \"Afro Blue\".",
+            "meter": "12/8",
+            "beats": 4,
+            "steps": 3,
+            "bars": 1,
+            "bpm": 100,
+            "swingUnit": null,
+            "swing": 0.5,
+            "bass": "AFRO",
+            "tone": "UPRIGHT",
+            "progression": "VAMP_MINOR",
+            "fillKit": "STICKS",
+            "level": 1.7,
+            "beatNote": "♩.",
+            "tracks": [
+                {
+                    "instrument": "COWBELL",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.78
+                    ]
+                },
+                {
+                    "instrument": "SHAKER",
+                    "v": [
+                        0.78,
+                        0.28,
+                        0.28,
+                        0.78,
+                        0.28,
+                        0.28,
+                        0.78,
+                        0.28,
+                        0.28,
+                        0.78,
+                        0.28,
+                        0.28
+                    ]
+                },
+                {
+                    "instrument": "HAT_PEDAL",
+                    "v": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "instrument": "KICK",
+                    "v": [
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.0,
+                        0.0,
+                        0.78,
+                        0.0,
+                        0.0,
+                        0.5,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        }
+    ]
+}

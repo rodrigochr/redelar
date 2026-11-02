@@ -598,18 +598,18 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         private const val KIND_BASS = 2
         private const val MARKERS = 512
         const val LEAD_IN_SECONDS = 0.06
-        private const val GROOVE_HEADROOM = 0.8f
-        private const val CLICK_HEADROOM = 1.0f
+        internal const val GROOVE_HEADROOM = 0.8f
+        internal const val CLICK_HEADROOM = 1.0f
         private const val BASS_LEVEL = 0.9f
-        private const val SAMPLED_BASS_LEVEL = 0.7f
-        private const val LIMIT_KNEE = 0.8f
+        internal const val SAMPLED_BASS_LEVEL = 0.7f
+        internal const val LIMIT_KNEE = 0.8f
 
         /** Fundamental mais grave usada (E1). */
         const val BASS_LOW_ROOT = 28
         const val MIN_BASS_NOTE = 26
         const val MAX_BASS_NOTE = 55
 
-        private val WALK_TEMPLATES: List<List<Degree>> = listOf(
+        internal val WALK_TEMPLATES: List<List<Degree>> = listOf(
             listOf("3", "5"), listOf("2", "3"), listOf("5", "6"), listOf("8", "7"),
             listOf("3", "4"), listOf("5", "3"), listOf("2", "b3"),
         ).map { t -> t.map { Degree.parse(it) } }

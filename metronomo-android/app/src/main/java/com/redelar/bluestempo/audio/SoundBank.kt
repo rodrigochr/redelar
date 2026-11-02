@@ -40,7 +40,7 @@ class SoundBank(val sampleRate: Int, val samples: SampleLibrary? = null) {
 
     fun click(sound: ClickSound, level: Int): FloatArray = clicks[sound.ordinal][level]
 
-    private companion object {
+    internal companion object {
         /** Ajuste fino do equilíbrio entre as peças gravadas (1 = como no kit original). */
         val REAL_TRIM = FloatArray(Instrument.entries.size) { 1f }.also {
             // A normalização do kit segue o pico do microfone do bumbo; pratos, aro e tons
