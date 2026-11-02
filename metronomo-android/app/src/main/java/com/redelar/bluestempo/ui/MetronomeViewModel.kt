@@ -61,6 +61,8 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
     override fun tap() {
         val now = SystemClock.elapsedRealtime()
         if (taps.isNotEmpty() && now - taps.last() > 2000) taps.clear()
+        // Toque duplo acidental (quique do dedo): mais rápido que qualquer andamento útil.
+        if (taps.isNotEmpty() && now - taps.last() < MIN_TAP_INTERVAL_MS) return
         taps.addLast(now)
         while (taps.size > 6) taps.removeFirst()
         if (taps.size >= 2) {
@@ -144,6 +146,7 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
     override fun setKeepScreenOn(enabled: Boolean) = update { it.copy(keepScreenOn = enabled) }
     override fun setFlash(enabled: Boolean) = update { it.copy(flashOnDownbeat = enabled) }
     override fun setUseGrooveTempo(enabled: Boolean) = update { it.copy(useGrooveTempo = enabled) }
+    override fun setMixWithOtherApps(enabled: Boolean) = update { it.copy(mixWithOtherApps = enabled) }
 
     // ------------------------------------------------------------------ presets
 
@@ -154,4 +157,8 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
     override fun renamePreset(id: String, name: String) = repo.renamePreset(id, name)
     override fun deletePreset(id: String) = repo.deletePreset(id)
     override fun loadPreset(id: String) = repo.loadPreset(id)
+
+    private companion object {
+        const val MIN_TAP_INTERVAL_MS = 150L
+    }
 }

@@ -47,11 +47,19 @@ class PlaybackController(private val context: Context, soundBank: () -> SoundBan
     fun play(settings: AppSettings): Boolean {
         if (engine.isPlaying) return true
         currentSettings = settings
-        if (!requestFocus()) {
+        if (isCallActive()) {
+            Log.w(TAG, "Ligação em andamento")
+            return false
+        }
+        // Por padrão toca junto com outros apps (ex.: acompanhar uma gravação no Spotify).
+        // Só pede o foco de áudio (que pausa os outros apps) se o usuário preferir.
+        if (!settings.mixWithOtherApps && !requestFocus()) {
             Log.w(TAG, "Foco de áudio negado")
             return false
         }
         engine.start(settings)
+        main.removeCallbacks(callWatcher)
+        main.postDelayed(callWatcher, CALL_CHECK_MS)
         if (!noisyRegistered) {
             ContextCompat.registerReceiver(
                 context, noisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
@@ -81,7 +89,21 @@ class PlaybackController(private val context: Context, soundBank: () -> SoundBan
         }
     }
 
+    /** Para durante ligações mesmo sem foco de áudio (verificação leve a cada segundo). */
+    private val callWatcher = object : Runnable {
+        override fun run() {
+            if (!engine.isPlaying) return
+            if (isCallActive()) stop() else main.postDelayed(this, CALL_CHECK_MS)
+        }
+    }
+
+    private fun isCallActive(): Boolean = when (audioManager.mode) {
+        AudioManager.MODE_IN_CALL, AudioManager.MODE_IN_COMMUNICATION, AudioManager.MODE_RINGTONE -> true
+        else -> false
+    }
+
     private fun cleanup() {
+        main.removeCallbacks(callWatcher)
         abandonFocus()
         if (noisyRegistered) {
             try {
@@ -119,5 +141,6 @@ class PlaybackController(private val context: Context, soundBank: () -> SoundBan
 
     companion object {
         private const val TAG = "PlaybackController"
+        private const val CALL_CHECK_MS = 1000L
     }
 }

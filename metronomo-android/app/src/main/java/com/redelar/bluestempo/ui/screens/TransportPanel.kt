@@ -93,8 +93,10 @@ fun TransportPanel(
             } else {
                 "Metrônomo • ${settings.beatsPerBar}/${settings.beatUnit}"
             }
-            Tag(modeText, Modifier.weight(1f, fill = false), color = MaterialTheme.colorScheme.primary)
-            Spacer(Modifier.weight(1f))
+            Box(Modifier.weight(1f)) {
+                Tag(modeText, color = MaterialTheme.colorScheme.primary)
+            }
+            Spacer(Modifier.width(8.dp))
             when {
                 position?.countIn == true -> Tag("Contagem", color = MaterialTheme.colorScheme.secondary)
                 position?.muted == true -> Tag("Silêncio", color = MaterialTheme.colorScheme.tertiary)

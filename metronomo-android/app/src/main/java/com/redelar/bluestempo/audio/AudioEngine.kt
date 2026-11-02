@@ -87,6 +87,8 @@ class AudioEngine(private val soundBank: () -> SoundBank) {
             val seq = Sequencer(sampleRate, soundBank())
             seq.reset(settings)
             sequencer = seq
+            // Garante que nenhuma alteração feita durante a inicialização se perca.
+            seq.update(settings)
 
             val minBytes = AudioTrack.getMinBufferSize(
                 sampleRate, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_FLOAT,
@@ -178,7 +180,7 @@ class AudioEngine(private val soundBank: () -> SoundBank) {
 
     companion object {
         private const val TAG = "AudioEngine"
-        private const val CHUNK = 256
+        private const val CHUNK = 512
         private const val BUFFER_SECONDS = 0.08
 
         fun nativeSampleRate(): Int {

@@ -113,7 +113,7 @@ fun MainContent(
                 onTogglePlay = {
                     if (!engine.playing) onPlayRequested()
                     if (!actions.togglePlay()) {
-                        scope.launch { snackbar.showSnackbar("O áudio está ocupado (ligação ou outro app). Tente de novo.") }
+                        scope.launch { snackbar.showSnackbar("Não foi possível tocar agora (ligação em andamento ou áudio ocupado).") }
                     }
                 },
                 onNudge = actions::nudgeBpm,

@@ -86,6 +86,7 @@ data class AppSettings(
     val keepScreenOn: Boolean = true,
     val flashOnDownbeat: Boolean = false,
     val useGrooveTempo: Boolean = true,
+    val mixWithOtherApps: Boolean = true,
 ) {
     val groove: Groove get() = GrooveLibrary.byId(grooveId)
 
@@ -102,6 +103,7 @@ data class AppSettings(
         keepScreenOn = keepScreenOn,
         flashOnDownbeat = flashOnDownbeat,
         useGrooveTempo = useGrooveTempo,
+        mixWithOtherApps = mixWithOtherApps,
     ).normalized()
 
     /** Garante valores dentro dos limites (útil ao ler dados salvos). */

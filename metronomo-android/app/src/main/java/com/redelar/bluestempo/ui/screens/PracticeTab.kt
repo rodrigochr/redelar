@@ -72,6 +72,13 @@ fun PracticeTab(settings: AppSettings, vm: MetronomeActions) {
                 vm::setBackgroundPlayback,
                 subtitle = "Continua com a tela apagada (mostra uma notificação com botão Parar).",
             )
+            SettingSwitch(
+                "Tocar junto com outros apps",
+                settings.mixWithOtherApps,
+                vm::setMixWithOtherApps,
+                subtitle = "Não pausa a música de outros apps (para tocar junto com gravações). " +
+                    "Desligado, o BluesTempo pausa os outros apps ao começar.",
+            )
             SettingSwitch("Manter a tela ligada", settings.keepScreenOn, vm::setKeepScreenOn, subtitle = "Enquanto estiver tocando.")
             SettingSwitch("Piscar no tempo 1", settings.flashOnDownbeat, vm::setFlash, subtitle = "Referência visual para palco e ensaio.")
             SettingSwitch(

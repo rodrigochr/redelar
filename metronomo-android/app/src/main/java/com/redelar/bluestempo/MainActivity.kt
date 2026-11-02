@@ -2,6 +2,7 @@ package com.redelar.bluestempo
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,6 +25,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // Botões de volume controlam o volume de mídia mesmo com o metrônomo parado.
+        volumeControlStream = AudioManager.STREAM_MUSIC
         setContent {
             BluesTempoTheme {
                 MainScreen(viewModel, onPlayRequested = ::maybeAskNotificationPermission)

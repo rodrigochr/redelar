@@ -101,12 +101,23 @@ internal class BassSynth(private val sampleRate: Int) {
         var dt = 0.0
         var t = 0
         var length = 0
-        var releaseLevel = 1.0
         var released = false
-        var releaseT = 0
         var velocity = 1.0
         var params = electric
         val filter = StateVariableFilter(sampleRate)
+
+        // Envelopes calculados de forma incremental (multiplicação por amostra).
+        private var attack = 0.0
+        private var attackStep = 0.0
+        private var decayEnv = 1.0
+        private var decayCoef = 1.0
+        private var longEnv = 1.0
+        private var longCoef = 1.0
+        private var filterEnv = 1.0
+        private var filterCoef = 1.0
+        private var releaseLevel = 0.0
+        private var releaseCoef = 1.0
+        private var releaseLeft = 0
 
         fun start(freq: Double, lengthFrames: Int, vel: Double, p: Params) {
             active = true
@@ -115,60 +126,62 @@ internal class BassSynth(private val sampleRate: Int) {
             t = 0
             length = lengthFrames
             released = false
-            releaseT = 0
             velocity = vel
             params = p
+            attack = 0.0
+            attackStep = 1.0 / (0.004 * sampleRate)
+            decayEnv = 1.0
+            decayCoef = exp(-1.0 / (p.decayTau * sampleRate))
+            longEnv = 1.0
+            longCoef = exp(-1.0 / (p.longTau * sampleRate))
+            filterEnv = 1.0
+            filterCoef = exp(-16.0 / (p.filterTau * sampleRate))
+            releaseCoef = exp(-1.0 / (0.0075 * sampleRate))
             filter.reset()
         }
 
         fun forceRelease() {
-            if (active && !released) {
-                released = true
-                releaseT = 0
-                releaseLevel = currentAmp()
-            }
+            if (active && !released) beginRelease()
         }
 
-        private fun currentAmp(): Double {
-            val time = t.toDouble() / sampleRate
-            val attack = (time / 0.004).coerceAtMost(1.0)
-            val decay = params.sustain + (1 - params.sustain) * exp(-time / params.decayTau)
-            return attack * decay * exp(-time / params.longTau)
+        private fun beginRelease() {
+            released = true
+            releaseLevel = currentAmp()
+            releaseLeft = (0.03 * sampleRate).toInt()
         }
+
+        private fun currentAmp(): Double =
+            attack * (params.sustain + (1 - params.sustain) * decayEnv) * longEnv
 
         fun render(left: FloatArray, right: FloatArray, offset: Int, count: Int, gain: Float) {
             if (!active) return
-            val releaseFrames = sampleRate * 0.03
             for (i in offset until offset + count) {
-                if (!released && t >= length) {
-                    released = true
-                    releaseT = 0
-                    releaseLevel = currentAmp()
-                }
+                if (!released && t >= length) beginRelease()
                 val amp = if (released) {
-                    val r = releaseLevel * exp(-releaseT / (releaseFrames / 4))
-                    releaseT++
-                    if (releaseT > releaseFrames) {
+                    if (releaseLeft-- <= 0) {
                         active = false
                         return
                     }
-                    r
+                    releaseLevel *= releaseCoef
+                    releaseLevel
                 } else {
+                    attack = (attack + attackStep).coerceAtMost(1.0)
+                    decayEnv *= decayCoef
+                    longEnv *= longCoef
                     currentAmp()
                 }
                 if (t % 16 == 0) {
-                    val time = t.toDouble() / sampleRate
-                    val cutoff = params.baseCutoff + params.envCutoff * exp(-time / params.filterTau)
-                    filter.setCutoff(cutoff, params.resonance)
+                    filter.setCutoff(params.baseCutoff + params.envCutoff * filterEnv, params.resonance)
+                    filterEnv *= filterCoef
                 }
                 // Dente-de-serra com polyBLEP (reduz aliasing).
                 var saw = 2.0 * phase - 1.0
                 saw -= polyBlep(phase, dt)
                 val sine = sin(2 * PI * phase)
                 val osc = sine * params.sineMix + saw * params.sawMix
-                val y = filter.lowPass(osc) * amp * velocity * gain
-                left[i] += y.toFloat()
-                right[i] += y.toFloat()
+                val y = (filter.lowPass(osc) * amp * velocity * gain).toFloat()
+                left[i] += y
+                right[i] += y
                 phase += dt
                 if (phase >= 1.0) phase -= 1.0
                 t++
