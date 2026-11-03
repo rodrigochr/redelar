@@ -103,11 +103,13 @@ async function main() {
     writeFileSync(join(dir, 'app.css'), appCss);
     writeFileSync(join(dir, 'samples.bin'), samples);
   }
-  // Hospedagens que só servem tipos "web" (texto, mídia…) recebem os sons em base64.
+  // Hospedagens que só servem tipos "web" (texto, mídia…) recebem os sons em base64. O nome leva
+  // a impressão digital do conteúdo: quando os sons mudam, o navegador não reaproveita o antigo.
+  const samplesName = `samples-${createHash('sha1').update(samples).digest('hex').slice(0, 10)}.txt`;
   rmSync(join(artifact, 'samples.bin'));
-  writeFileSync(join(artifact, 'samples.txt'), samples.toString('base64'));
+  writeFileSync(join(artifact, samplesName), samples.toString('base64'));
   writeFileSync(join(artifact, 'index.html'), fragment.replace('<script src="app.js"></script>',
-    '<script>window.BT_SAMPLES_URL = "samples.txt";</script>\n<script src="app.js"></script>'));
+    `<script>window.BT_SAMPLES_URL = "${samplesName}";</script>\n<script src="app.js"></script>`));
 
   // Site/PWA
   writeFileSync(join(dist, 'index.html'), `${pageHead(version)}${fragment.replace('<script src="app.js"></script>', `<script src="app.js?v=${version}"></script>`)}\n</body>\n</html>\n`);
