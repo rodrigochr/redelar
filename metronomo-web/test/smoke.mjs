@@ -192,6 +192,33 @@ check(await currentVisible() === false, 'com "Acompanhar" desligado, a tela fica
 await page.evaluate(() => document.getElementById('play').click());
 await page.evaluate(() => BluesTempo.update({ followChart: true }));
 
+// Trocar de música ou de levada tocando recomeça a contagem de compassos e o relógio.
+const counter = () => page.evaluate(() => ({ status: document.getElementById('status').textContent, clock: document.getElementById('clock').textContent }));
+await page.tap('[data-tab="songs"]');
+await page.evaluate(() => { document.getElementById('tab').scrollTop = 0; });
+await page.locator('[data-action="song"][data-id="roadhouse_blues"]').scrollIntoViewIfNeeded();
+await page.tap('[data-action="song"][data-id="roadhouse_blues"]');
+await page.evaluate(() => BluesTempo.update({ bpm: 280 }, { rerender: false }));
+await page.evaluate(() => document.getElementById('play').click());
+await page.waitForTimeout(4200);
+const before = await counter();
+await page.evaluate(() => {
+  const s = window.BluesTempoInternals.songById('in_between_days');
+  BluesTempo.update({ songId: s.id, grooveId: s.groove, key: s.key, bpm: 280, songPart: -1 });
+});
+await page.waitForTimeout(1900);
+const after = await counter();
+check(Number(before.status.replace(/\D/g, '')) >= 5 && Number(after.status.replace(/\D/g, '')) <= 2 && ['0:00', '0:01'].includes(after.clock),
+  `trocar de música recomeça compassos e relógio (${before.status} ${before.clock} → ${after.status} ${after.clock})`);
+await page.waitForTimeout(2500);
+const mid = await counter();
+await page.evaluate(() => BluesTempo.update({ grooveId: 'rock_basic' }));
+await page.waitForTimeout(1900);
+const afterGroove = await counter();
+check(Number(mid.status.replace(/\D/g, '')) >= 4 && Number(afterGroove.status.replace(/\D/g, '')) <= 2,
+  `trocar de levada recomeça os compassos (${mid.status} → ${afterGroove.status})`);
+await page.evaluate(() => document.getElementById('play').click());
+
 // Tela estreita (352 px) com o nome de música mais longo tocando: nada pode alargar a página.
 await page.setViewportSize({ width: 352, height: 760 });
 await page.tap('[data-tab="songs"]');

@@ -71,6 +71,9 @@ function tickerWorker() {
   }
 }
 
+/** O que define "a mesma execução": trocar qualquer uma destas coisas recomeça a contagem. */
+const timelineKey = (s) => `${s.mode}|${s.grooveId}|${s.songId || ''}|${s.songId ? '' : s.progression}`;
+
 export class Engine {
   constructor({ onStop } = {}) {
     this.onStop = onStop || (() => {});
@@ -183,6 +186,7 @@ export class Engine {
       this.reset(settings, ctx.currentTime + C.leadIn + 0.05);
       this.playing = true;
       this.startedAt = ctx.currentTime;
+      this.clockStart = ctx.currentTime;
       // Dois despertadores: o worker (continua em segundo plano) e um intervalo comum,
       // caso o navegador bloqueie workers. Agendar duas vezes é inofensivo.
       if (this.worker === undefined) this.worker = tickerWorker();
@@ -252,6 +256,8 @@ export class Engine {
     this.progBar = 0;
     this.barProg = activeProgression(settings);
     this.progStartBar = 0;
+    this.timeline = timelineKey(settings);
+    this.clockStart = t0;
     this.isEnding = false;
     this.finished = false;
     this.stopAt = -1;
@@ -348,8 +354,17 @@ export class Engine {
       return;
     }
     this.isCountIn = false;
+    // Trocar de levada, de música ou de progressão recomeça a contagem: compassos, treinos e relógio.
+    const timeline = timelineKey(s);
+    if (timeline !== this.timeline) {
+      this.timeline = timeline;
+      this.barsPlayed = 0;
+      this.progStartBar = 0;
+      this.barProg = activeProgression(s);
+      this.clockStart = time;
+    }
     this.musicalBar = this.barsPlayed;
-    // Trocar de música ou de parte recomeça a progressão no compasso seguinte.
+    // Trocar de parte da mesma música recomeça a progressão no compasso seguinte.
     const prog = activeProgression(s);
     if (prog !== this.barProg) {
       this.progStartBar = this.musicalBar - prog.entryBar(this.barProg, this.progBar);

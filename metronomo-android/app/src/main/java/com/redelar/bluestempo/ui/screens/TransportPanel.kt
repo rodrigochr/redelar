@@ -276,7 +276,12 @@ private fun ElapsedClock(engine: EngineState) {
             delay(250)
         }
     }
-    val seconds = if (engine.playing) ((now - engine.startedAt) / 1000).coerceAtLeast(0) else 0
+    // Relógio da execução atual (recomeça ao trocar de levada ou de música); antes do 1º tempo, desde o play.
+    val seconds = when {
+        !engine.playing -> 0
+        engine.position != null -> engine.position.elapsedSeconds.toLong()
+        else -> ((now - engine.startedAt) / 1000).coerceAtLeast(0)
+    }
     Text(
         "%d:%02d".format(seconds / 60, seconds % 60),
         style = MaterialTheme.typography.labelLarge,

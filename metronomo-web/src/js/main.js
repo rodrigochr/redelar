@@ -671,7 +671,8 @@ function clock() {
     el.classList.remove('on');
     return;
   }
-  const secs = Math.max(0, Math.floor(engine.ctx.currentTime - engine.startedAt));
+  // Relógio da execução atual (recomeça ao trocar de levada ou de música).
+  const secs = Math.max(0, Math.floor(engine.ctx.currentTime - engine.clockStart));
   el.textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`;
   el.classList.add('on');
 }

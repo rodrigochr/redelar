@@ -171,6 +171,48 @@ class SongTest {
         assertFalse(chord.bassPitchClass(song.key) == chord.rootPitchClass(song.key))
     }
 
+    @Test
+    fun `trocar de musica ou de levada recomeca a contagem de compassos e o relogio`() {
+        val a = SongBook.byId("roadhouse_blues")!!
+        val b = SongBook.byId("black")!!
+        val bpm = 240
+        val barFrames = RATE * 60.0 / bpm * 4
+        var settings = AppSettings(mode = PlayMode.GROOVE, songId = a.id, grooveId = a.grooveId, bpm = bpm, useGrooveTempo = false)
+        val seq = sequencer()
+        seq.reset(settings)
+        val l = FloatArray(CHUNK)
+        val r = FloatArray(CHUNK)
+        fun playBars(bars: Double) {
+            val target = seq.framesRendered + (bars * barFrames).toLong()
+            while (seq.framesRendered < target) seq.render(l, r, CHUNK)
+        }
+        fun now() = seq.positionAt(seq.framesRendered)!!
+
+        playBars(6.5)
+        assertEquals(6, now().bar)
+        // Outra parte da mesma música: a contagem continua.
+        settings = settings.copy(songPart = 1)
+        seq.update(settings)
+        playBars(1.0)
+        assertEquals(7, now().bar)
+        // Outra música: volta ao compasso 1, do começo da cifra, e o relógio recomeça.
+        settings = settings.copy(songId = b.id, grooveId = b.grooveId, songPart = -1)
+        seq.update(settings)
+        playBars(1.0)
+        now().let {
+            assertEquals(0, it.bar)
+            assertEquals(0, it.progressionBar)
+            assertTrue("relógio ${it.elapsedSeconds}", it.elapsedSeconds < barFrames / RATE)
+        }
+        playBars(2.0)
+        assertEquals(2, now().bar)
+        // Outra levada (mesma música): também recomeça.
+        settings = settings.copy(grooveId = "rock_basic")
+        seq.update(settings)
+        playBars(1.0)
+        assertEquals(0, now().bar)
+    }
+
     private companion object {
         const val RATE = 48000
         const val CHUNK = 256

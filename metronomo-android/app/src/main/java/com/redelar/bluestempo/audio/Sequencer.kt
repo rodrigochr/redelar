@@ -43,6 +43,8 @@ data class PlaybackPosition(
     val bpm: Int,
     /** Compasso final da música (só o acorde de encerramento). */
     val ending: Boolean = false,
+    /** Segundos desde o começo da execução atual (recomeça ao trocar de levada ou de música). */
+    val elapsedSeconds: Double = 0.0,
 )
 
 /** Evento disparado (exposto apenas para testes). */
@@ -138,6 +140,8 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
     private var progBar = 0
     private var barProg: Progression = barSettings.activeProgression
     private var progStartBar = 0
+    private var timeline = ""
+    private var clockStartFrame = 0.0
     private var isEnding = false
     private var finished = false
     private var stopAtFrame = -1L
@@ -189,6 +193,8 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         segmentRootNote = -1
         barProg = settings.activeProgression
         progStartBar = 0
+        timeline = timelineKey(settings)
+        clockStartFrame = 0.0
         isEnding = false
         finished = false
         stopAtFrame = -1L
@@ -317,9 +323,18 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
             return
         }
         isCountIn = false
+        // Trocar de levada, de música ou de progressão recomeça a contagem: compassos, treinos e relógio.
+        val key = timelineKey(s)
+        if (key != timeline) {
+            timeline = key
+            barsPlayed = 0
+            progStartBar = 0
+            barProg = s.activeProgression
+            clockStartFrame = start
+        }
         musicalBar = barsPlayed
 
-        // Trocar de música ou de parte recomeça a progressão no compasso seguinte.
+        // Trocar de parte da mesma música recomeça a progressão no compasso seguinte.
         val prog = s.activeProgression
         if (prog !== barProg) {
             progStartBar = musicalBar - prog.entryBar(barProg, progBar)
@@ -375,6 +390,7 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
             muted = isMuted,
             bpm = currentBpm.roundToInt(),
             ending = isEnding,
+            elapsedSeconds = max(0.0, (at - clockStartFrame) / sampleRate),
         )
         markerHead = (markerHead + 1) % MARKERS
         markerCount = min(markerCount + 1, MARKERS)
@@ -678,6 +694,10 @@ class Sequencer(val sampleRate: Int, private val bank: SoundBank) {
         const val BASS_LOW_ROOT = 28
         const val MIN_BASS_NOTE = 26
         const val MAX_BASS_NOTE = 55
+
+        /** O que define "a mesma execução": trocar qualquer uma destas coisas recomeça a contagem. */
+        internal fun timelineKey(s: AppSettings): String =
+            "${s.mode}|${s.grooveId}|${s.songId ?: ""}|${if (s.songId == null) s.progression.name else ""}"
 
         /**
          * Tempo da grade da levada usado no tempo [beat] de um compasso: compassos mais longos que
