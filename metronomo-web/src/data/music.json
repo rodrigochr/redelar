@@ -73,9 +73,9 @@
             "label": "Varrida",
             "channel": "SNARE",
             "pan": 0.08,
-            "choke": 0,
+            "choke": 2,
             "fill": true,
-            "trim": 0.5
+            "trim": 0.6
         },
         "HAT_CLOSED": {
             "label": "Chimbal",
@@ -14089,7 +14089,7 @@
             "tone": "UPRIGHT",
             "progression": "JAZZ_BLUES",
             "fillKit": "BRUSHES",
-            "level": 1.95,
+            "level": 2.51,
             "mix": {
                 "kick": 0.4,
                 "snare": 0.9,
@@ -14170,7 +14170,7 @@
             "tone": "UPRIGHT",
             "progression": "II_V_I",
             "fillKit": "BRUSHES",
-            "level": 2.29,
+            "level": 3.2,
             "mix": {
                 "kick": 0.5,
                 "snare": 0.9,

@@ -30,7 +30,8 @@ enum class Instrument(
     SNARE("Caixa", Channel.SNARE, 0.08f),
     RIM("Aro", Channel.SNARE, 0.08f),
     BRUSH_TAP("Vassourinha", Channel.SNARE, 0.08f),
-    BRUSH_SWEEP("Varrida", Channel.SNARE, 0.08f),
+    // Cada varrida nova abafa a anterior (a mão faz um gesto contínuo; sem isso o chiado se acumula).
+    BRUSH_SWEEP("Varrida", Channel.SNARE, 0.08f, chokeGroup = 2),
     HAT_CLOSED("Chimbal", Channel.CYMBALS, -0.32f, chokeGroup = 1),
     HAT_OPEN("Chimbal aberto", Channel.CYMBALS, -0.32f, chokeGroup = 1),
     HAT_PEDAL("Chimbal (pé)", Channel.CYMBALS, -0.32f, chokeGroup = 1, replacedByFill = false),

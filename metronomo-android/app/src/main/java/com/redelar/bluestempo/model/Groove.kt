@@ -474,7 +474,7 @@ object GrooveLibrary {
         groove(
             "brush_swing", "Swing com Vassourinhas", Genre.JAZZ,
             "A condução de swing tocada com vassourinhas na caixa, para trios e combos acústicos.",
-            level = 1.95f, synthLevel = 1.86f, mix = mix(0.4f, 0.9f, 1f, 0.85f, 0.7f),
+            level = 2.51f, synthLevel = 1.86f, mix = mix(0.4f, 0.9f, 1f, 0.85f, 0.7f),
             bpm = 132, bass = BassStyle.WALKING, progression = ProgressionType.JAZZ_BLUES, swing = 0.66f,
             tone = BassTone.UPRIGHT, fillKit = FillKit.BRUSHES,
         ) {
@@ -486,7 +486,7 @@ object GrooveLibrary {
         groove(
             "jazz_ballad", "Balada com Vassourinhas", Genre.JAZZ,
             "Vassourinhas varrendo a pele em cada tempo e toques no 2 e 4, com baixo em mínimas.",
-            level = 2.29f, synthLevel = 2.63f, mix = mix(0.5f, 0.9f, 1f, 0.85f, 0.8f),
+            level = 3.2f, synthLevel = 2.63f, mix = mix(0.5f, 0.9f, 1f, 0.85f, 0.8f),
             bpm = 64, bass = BassStyle.TWO_FEEL, progression = ProgressionType.II_V_I, swing = 0.66f,
             tone = BassTone.UPRIGHT, fillKit = FillKit.BRUSHES,
         ) {

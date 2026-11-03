@@ -55,8 +55,9 @@ class SoundBank(val sampleRate: Int, val samples: SampleLibrary? = null) {
             it[Instrument.RIM.ordinal] = 2.5f
             it[Instrument.TOM_HIGH.ordinal] = 1.6f
             it[Instrument.TOM_LOW.ordinal] = 1.8f
+            // Toque e varrida já saem do gerador no equilíbrio certo entre si (mesmo ajuste).
             it[Instrument.BRUSH_TAP.ordinal] = 0.6f
-            it[Instrument.BRUSH_SWEEP.ordinal] = 0.5f
+            it[Instrument.BRUSH_SWEEP.ordinal] = 0.6f
             it[Instrument.COWBELL.ordinal] = 0.8f
             it[Instrument.TAMBOURINE.ordinal] = 0.5f
             it[Instrument.SHAKER.ordinal] = 0.7f

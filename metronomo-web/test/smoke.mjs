@@ -226,7 +226,7 @@ await page.evaluate(() => { document.getElementById('tab').scrollTop = 1700; });
 await page.screenshot({ path: join(OUT, '5-levadas-baixo.png') });
 
 // Áudio real renderizado pelo grafo do Web Audio (OfflineAudioContext)
-for (const id of ['chicago_shuffle', 'swing_medium', 'rock_basic', 'bo_diddley']) {
+for (const id of ['chicago_shuffle', 'swing_medium', 'rock_basic', 'bo_diddley', 'jazz_ballad', 'brush_swing']) {
   const audio = await page.evaluate(async (grooveId) => {
     const { Engine } = window.BluesTempoInternals;
     const src = BluesTempo.engine;

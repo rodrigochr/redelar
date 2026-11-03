@@ -188,22 +188,58 @@ def virtuosity(cache):
 
 # --------------------------------------------------------------------------- vassourinhas
 
+def lowpass(x, rate, fc):
+    """Passa-baixas de 2ª ordem (Butterworth) — escurece o chiado agudo da varrida."""
+    w = 2 * np.pi * fc / rate
+    c, s = np.cos(w), np.sin(w)
+    a = s / np.sqrt(2)
+    b0, b1, b2 = (1 - c) / 2, 1 - c, (1 - c) / 2
+    a0, a1, a2 = 1 + a, -2 * c, 1 - a
+    y = np.zeros_like(x)
+    x1 = x2 = y1 = y2 = 0.0
+    for i, v in enumerate(x):
+        o = (b0 * v + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2) / a0
+        x2, x1, y2, y1 = x1, v, y1, o
+        y[i] = o
+    return y
+
+
+# Varrida: gesto de "chhh" que começa na batida e vai sumindo (a próxima varrida abafa esta).
+SWEEP_SECONDS = 1.1
+# Na gravação a varrida fica ~18 dB abaixo do toque; numa levada ela precisa aparecer mais.
+SWEEP_GAIN_DB = 12.0
+
+
+def swish(x, rate, start):
+    seg = x[int(start * rate):int((start + SWEEP_SECONDS) * rate)].copy()
+    seg = lowpass(seg, rate, 7000.0)
+    t = np.arange(len(seg)) / rate
+    attack = 0.035
+    env = np.where(t < attack, 0.3 + 0.7 * np.sin(np.pi / 2 * t / attack) ** 2,
+                   10 ** (-13 * (t - attack) / 0.9 / 20))
+    fade = int(0.15 * rate)
+    env[-fade:] *= np.linspace(1, 0, fade) ** 2
+    return seg * env
+
+
 def rusty_brushes(cache):
-    def load_mix(folder, fname):
-        mics = {"top": 1.0, "btm": 0.35, "oh": 0.9}
+    def load_mix(folder, fname, mics):
         parts = []
         for mic, g in mics.items():
             path = fetch(cache, "rusty", [f"Samples/snare_14/{folder}/{mic}/{fname}"])[0]
             parts.append((channel(load(path, DRUM_RATE), "loud" if mic == "oh" else 0), g))
         return mix(parts)
 
-    taps = [[trim(load_mix("brush", f"sn_b_vl{vl}_rr{rr}.flac"), DRUM_RATE, 0.8) for rr in (1, 2)]
+    # Toques: 4 intensidades × 4 variações (evita o efeito "metralhadora").
+    tap_mics = {"top": 1.0, "btm": 0.35, "oh": 0.9}
+    taps = [[trim(load_mix("brush", f"sn_b_vl{vl}_rr{rr}.flac", tap_mics), DRUM_RATE, 0.6) for rr in (1, 2, 3, 4)]
             for vl in (2, 4, 6, 8)]
-    # A varrida é um gesto contínuo: mantém o começo suave (sem recorte agressivo do ataque).
-    sweeps = []
-    for dl in (2, 4):
-        x = load_mix("bstir", f"sn_stir_dl{dl}_rr1.wav")
-        sweeps.append([trim(x, DRUM_RATE, 1.2, pre_ms=30)])
+    # Varridas: trechos das gravações de mexida contínua (as rápidas, "dl4", pulsam fora do tempo),
+    # com menos microfone de cima (o mais chiado) e um passa-baixas.
+    sweep_mics = {"top": 0.45, "btm": 0.5, "oh": 1.0}
+    gain = 10 ** (SWEEP_GAIN_DB / 20)
+    sweeps = [[swish(load_mix("bstir", f"sn_stir_dl{dl}_rr{rr}.wav", sweep_mics), DRUM_RATE, 1.0 + 0.61 * rr) * gain
+               for rr in (1, 2, 3, 4)] for dl in (2, 3)]
     return {"BRUSH_TAP": taps, "BRUSH_SWEEP": sweeps}
 
 
@@ -267,12 +303,60 @@ def basses(cache):
 
 # --------------------------------------------------------------------------- saída
 
+BRUSHES = ("BRUSH_TAP", "BRUSH_SWEEP")
+
+
+def write_drums(drums, kit_peak):
+    """Grava as camadas e devolve as entradas do manifesto."""
+    result = {}
+    # As vassourinhas (toque e varrida) vêm da mesma sessão: normalização conjunta, pelo toque.
+    brush_peak = max((np.max(np.abs(h)) for inst in BRUSHES if inst in drums for layer in drums[inst] for h in layer),
+                     default=1.0)
+    for inst, layers in drums.items():
+        # Percussão e vassourinhas vêm de outras gravações: normaliza à parte com nível próprio.
+        own = inst in BRUSHES + ("COWBELL", "TAMBOURINE", "CLAVE", "SHAKER")
+        if inst in BRUSHES:
+            peak = brush_peak
+        elif own:
+            peak = max(np.max(np.abs(h)) for layer in layers for h in layer)
+        else:
+            peak = kit_peak
+        target = 0.95 if not own else 0.9
+        loud = max(np.mean([attack_level(h, DRUM_RATE) for h in layer]) for layer in layers)
+        entries = []
+        for li, layer in enumerate(layers):
+            files = []
+            for ri, hit in enumerate(layer):
+                name = f"{inst.lower()}_{li}_{ri}.snd"
+                write_snd(name, hit * target / peak, DRUM_RATE)
+                files.append(name)
+            level = np.mean([attack_level(h, DRUM_RATE) for h in layer]) / loud
+            entries.append({"level": round(float(level), 4), "files": files})
+        entries.sort(key=lambda e: e["level"])
+        result[inst] = entries
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--cache", default=os.path.expanduser("~/.cache/bluestempo-samples"))
+    parser.add_argument("--only-brushes", action="store_true",
+                        help="refaz só as vassourinhas, mantendo os demais arquivos e o manifesto")
     args = parser.parse_args()
     os.makedirs(args.cache, exist_ok=True)
     os.makedirs(OUT, exist_ok=True)
+    if args.only_brushes:
+        with open(os.path.join(OUT, "manifest.json")) as f:
+            manifest = json.load(f)
+        for inst in BRUSHES:
+            for layer in manifest["drums"].get(inst, []):
+                for name in layer["files"]:
+                    os.remove(os.path.join(OUT, name))
+        print("Vassourinhas (Big Rusty Drums)...")
+        manifest["drums"].update(write_drums(rusty_brushes(args.cache), None))
+        with open(os.path.join(OUT, "manifest.json"), "w") as f:
+            json.dump(manifest, f, indent=1, ensure_ascii=False)
+        return
     for f in os.listdir(OUT):
         if f.endswith(".snd") or f == "manifest.json":
             os.remove(os.path.join(OUT, f))
@@ -286,24 +370,7 @@ def main():
     print("Percussão (VCSL)...")
     drums.update(vcsl(args.cache))
 
-    manifest = {"drums": {}, "bass": {}}
-    for inst, layers in drums.items():
-        # Percussão e vassourinhas vêm de outras gravações: normaliza à parte com nível próprio.
-        own = inst in ("BRUSH_TAP", "BRUSH_SWEEP", "COWBELL", "TAMBOURINE", "CLAVE", "SHAKER")
-        peak = max(np.max(np.abs(h)) for layer in layers for h in layer) if own else kit_peak
-        target = 0.95 if not own else 0.9
-        loud = max(np.mean([attack_level(h, DRUM_RATE) for h in layer]) for layer in layers)
-        entries = []
-        for li, layer in enumerate(layers):
-            files = []
-            for ri, hit in enumerate(layer):
-                name = f"{inst.lower()}_{li}_{ri}.snd"
-                write_snd(name, hit * target / peak, DRUM_RATE)
-                files.append(name)
-            level = np.mean([attack_level(h, DRUM_RATE) for h in layer]) / loud
-            entries.append({"level": round(float(level), 4), "files": files})
-        entries.sort(key=lambda e: e["level"])
-        manifest["drums"][inst] = entries
+    manifest = {"drums": write_drums(drums, kit_peak), "bass": {}}
 
     print("Baixos (Black And Blue Basses + Meatbass)...")
     for tone, regions in basses(args.cache).items():

@@ -270,45 +270,59 @@
   ],
   "BRUSH_TAP": [
    {
-    "level": 0.0758,
+    "level": 0.0826,
     "files": [
      "brush_tap_0_0.snd",
-     "brush_tap_0_1.snd"
+     "brush_tap_0_1.snd",
+     "brush_tap_0_2.snd",
+     "brush_tap_0_3.snd"
     ]
    },
    {
-    "level": 0.1691,
+    "level": 0.1789,
     "files": [
      "brush_tap_1_0.snd",
-     "brush_tap_1_1.snd"
+     "brush_tap_1_1.snd",
+     "brush_tap_1_2.snd",
+     "brush_tap_1_3.snd"
     ]
    },
    {
-    "level": 0.3788,
+    "level": 0.409,
     "files": [
      "brush_tap_2_0.snd",
-     "brush_tap_2_1.snd"
+     "brush_tap_2_1.snd",
+     "brush_tap_2_2.snd",
+     "brush_tap_2_3.snd"
     ]
    },
    {
     "level": 1.0,
     "files": [
      "brush_tap_3_0.snd",
-     "brush_tap_3_1.snd"
+     "brush_tap_3_1.snd",
+     "brush_tap_3_2.snd",
+     "brush_tap_3_3.snd"
     ]
    }
   ],
   "BRUSH_SWEEP": [
    {
-    "level": 0.3793,
+    "level": 0.8492,
     "files": [
-     "brush_sweep_0_0.snd"
+     "brush_sweep_0_0.snd",
+     "brush_sweep_0_1.snd",
+     "brush_sweep_0_2.snd",
+     "brush_sweep_0_3.snd"
     ]
    },
    {
     "level": 1.0,
     "files": [
-     "brush_sweep_1_0.snd"
+     "brush_sweep_1_0.snd",
+     "brush_sweep_1_1.snd",
+     "brush_sweep_1_2.snd",
+     "brush_sweep_1_3.snd"
     ]
    }
   ],
