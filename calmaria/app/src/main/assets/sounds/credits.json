@@ -1,0 +1,322 @@
+[
+ {
+  "id": "rain_light",
+  "work": "Rain (loopable) #4",
+  "author": "Ylmir",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/rain-loopable",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "rain_medium",
+  "work": "AMB Rain Loop 2",
+  "author": "Kresiek The Furry",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/amb-rain-loop-2",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "rain_heavy",
+  "work": "Rain (loopable) #2",
+  "author": "Ylmir",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/rain-loopable",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "rain_thunder",
+  "work": "AMB Rain Loop 2 + Thunder / Lightning Ambience",
+  "author": "Kresiek The Furry (rain, CC0); Gregor Quendel (thunder)",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/thunder-lightning-ambience-field-recording",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "thunder",
+  "work": "Thunder / Lightning Ambience – Field Recording",
+  "author": "Gregor Quendel",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/thunder-lightning-ambience-field-recording",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "rain_roof",
+  "work": "Rain falling on a metal roof (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/free-general-ambience-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "rain_window",
+  "work": "Rain on Window Loop",
+  "author": "alxl",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/rain-on-window-loop",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "rain_leaves",
+  "work": "Rain dropping on various textures (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/free-general-ambience-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "water_drops",
+  "work": "Dripping water loop",
+  "author": "qubodup",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/dripping-water-loop",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "ocean",
+  "work": "Sea and river wave sounds (Vistula)",
+  "author": "RandomMind",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/sea-and-river-wave-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "shore",
+  "work": "Sea and river wave sounds (Vistula)",
+  "author": "RandomMind",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/sea-and-river-wave-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "stream",
+  "work": "Water stream VIII (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/free-general-ambience-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "river",
+  "work": "Park ambiences – river",
+  "author": "Thimras",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/park-ambiences",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "waterfall",
+  "work": "Stream Sounds – waterfall 3",
+  "author": "kurt",
+  "license": "CC BY 3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/stream-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "wind",
+  "work": "Park ambiences – wind",
+  "author": "Thimras",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/park-ambiences",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "wind_trees",
+  "work": "Autumn wind with leaves rustling (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/free-general-ambience-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "howling_wind",
+  "work": "Storm Arwen 2022",
+  "author": "Tsorthan Grove",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/storm-arwen-2022",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "forest_birds",
+  "work": "Park ambiences – birds",
+  "author": "Thimras",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/park-ambiences",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "morning_birds",
+  "work": "Park ambiences – birds",
+  "author": "Thimras",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/park-ambiences",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "crickets",
+  "work": "cricket sounds",
+  "author": "syncopika",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/cricket-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "cicadas",
+  "work": "cicada sounds #2",
+  "author": "syncopika",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/cicada-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "fireplace",
+  "work": "Fireplace Sound loop",
+  "author": "PagDev",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/fireplace-sound-loop",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "campfire",
+  "work": "Fireplace Sound loop",
+  "author": "PagDev",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/fireplace-sound-loop",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "city",
+  "work": "Interstate 405, Fountain Valley (American Interstates)",
+  "author": "freetousesounds",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/american-interstates-from-iowa-to-california-sound-including-jake-brake-in-las-vegas",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "train",
+  "work": "DEMAND – inside a metro train (TMETRO)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "Zenodo (DEMAND dataset)",
+  "source_url": "https://zenodo.org/records/1227121",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "car",
+  "work": "DEMAND – inside a moving car (TCAR)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "Zenodo (DEMAND dataset)",
+  "source_url": "https://zenodo.org/records/1227121",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "cafe",
+  "work": "DEMAND – restaurant (PRESTO)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "Zenodo (DEMAND dataset)",
+  "source_url": "https://zenodo.org/records/1227121",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "clock",
+  "work": "Clock ticking",
+  "author": "christoph",
+  "license": "CC BY 3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/clock-ticking",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "fan",
+  "work": "Ambient machinery – fan 1 (OLPC sound library)",
+  "author": "Dr. Richard Boulanger (OLPC sound library); recorded by Berklee College of Music students supervised by Michael Brigida; edited by Diane Douglas and Colman O’Reilly",
+  "license": "CC BY 3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/12-ambient-machine-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "air_conditioner",
+  "work": "Ambient machinery – fan reso 3 (OLPC sound library)",
+  "author": "Dr. Richard Boulanger (OLPC sound library); recorded by Berklee College of Music students supervised by Michael Brigida; edited by Diane Douglas and Colman O’Reilly",
+  "license": "CC BY 3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/13-ambient-machine-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "hair_dryer",
+  "work": "Ambient machinery – fan noise (OLPC sound library)",
+  "author": "Dr. Richard Boulanger (OLPC sound library); recorded by Berklee College of Music students supervised by Michael Brigida; edited by Diane Douglas and Colman O’Reilly",
+  "license": "CC BY 3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "source": "OpenGameArt.org",
+  "source_url": "https://opengameart.org/content/13-ambient-machine-sounds",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ },
+ {
+  "id": "washing_machine",
+  "work": "DEMAND – laundry room with a washing machine (DWASHING)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source": "Zenodo (DEMAND dataset)",
+  "source_url": "https://zenodo.org/records/1227121",
+  "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
+ }
+]

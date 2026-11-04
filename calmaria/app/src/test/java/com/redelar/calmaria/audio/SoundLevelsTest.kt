@@ -21,7 +21,8 @@ class SoundLevelsTest {
         val buf = FloatArray(MAX_FRAMES * 2)
         val report = StringBuilder()
         val problems = mutableListOf<String>()
-        for (sound in SoundCatalog.all) {
+        // Bundled recordings are checked by RecordingAssetsTest (they decode with MediaCodec).
+        for (sound in SoundCatalog.all.filter { it.asset == null }) {
             val gen = sound.create(sr)
             // Warm up the JIT so timing reflects steady state.
             repeat(200) { gen.render(buf, block) }

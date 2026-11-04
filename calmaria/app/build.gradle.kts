@@ -14,8 +14,8 @@ android {
         applicationId = "com.redelar.calmaria"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.1.0"
     }
 
     signingConfigs {
@@ -49,6 +49,11 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    androidResources {
+        // Recordings are streamed with MediaExtractor through a file descriptor: keep them uncompressed.
+        noCompress += "ogg"
     }
 
     testOptions {
@@ -88,4 +93,5 @@ dependencies {
 // UI screenshots are opt-in: ./gradlew :app:testDebugUnitTest -Pscreenshots
 tasks.withType<Test>().configureEach {
     if (project.hasProperty("screenshots")) systemProperty("calmaria.screenshots", "true")
+    if (project.hasProperty("export-synth")) systemProperty("calmaria.exportSynth", "true")
 }

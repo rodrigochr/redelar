@@ -4,12 +4,15 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import com.redelar.calmaria.CalmariaApp
 import com.redelar.calmaria.data.Presets
 import com.redelar.calmaria.ui.theme.CalmariaTheme
+import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Rule
@@ -74,6 +77,16 @@ class ScreenshotTest {
         shot("06_alarm")
         compose.onNodeWithText("Ajustes").performClick()
         shot("07_settings")
+        compose.onNodeWithText("Créditos dos sons").performScrollTo().performClick()
+        compose.waitForIdle()
+        // The credits list is read from assets/sounds/credits.json.
+        assertTrue(compose.onAllNodesWithText("Ylmir", substring = true).fetchSemanticsNodes().isNotEmpty())
+        val dialog = org.robolectric.shadows.ShadowDialog.getLatestDialog()
+        val view = dialog.window!!.decorView
+        val bitmap = compose.runOnUiThread {
+            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888).also { view.draw(Canvas(it)) }
+        }
+        File("build/screenshots/11_credits.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
     @Test

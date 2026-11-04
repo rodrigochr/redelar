@@ -185,7 +185,11 @@
     <string name="set_battery_desc">Alguns celulares (Samsung, Xiaomi…) interrompem o áudio em segundo plano para poupar bateria. Liberar a Calmaria garante que ela toque até de manhã.</string>
     <string name="set_battery_ok">A Calmaria já está liberada da otimização de bateria.</string>
     <string name="set_section_about">Sobre</string>
-    <string name="set_about_body">Todos os %1$d sons são gerados ao vivo no seu celular: sem downloads, sem internet e sem repetições perceptíveis.</string>
+    <string name="set_about_body">A maioria dos sons de natureza e ambiente são gravações reais compartilhadas com licenças livres. Ruídos, batidas binaurais, as músicas generativas e alguns outros são criados ao vivo no celular. Tudo funciona offline.</string>
+    <string name="set_credits">Créditos dos sons</string>
+    <string name="credits_title">Créditos dos sons</string>
+    <string name="credits_intro">Gravações reais compartilhadas com licenças livres. Obrigado a quem gravou! Cada uma foi cortada em um loop contínuo, teve o volume equalizado e foi recodificada.</string>
+    <string name="credits_work_author">“%1$s”, de %2$s</string>
     <string name="set_version">Versão %1$s</string>
 
     <!-- Notifications -->

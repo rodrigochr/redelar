@@ -14,6 +14,9 @@ abstract class SoundGenerator(protected val sr: Int) {
 
     /** Overwrites the first [frames] interleaved stereo frames of [out]. */
     abstract fun render(out: FloatArray, frames: Int)
+
+    /** Frees background resources (decoder threads). Rendering afterwards must stay safe. */
+    open fun release() {}
 }
 
 /** Several generators summed with fixed gains, e.g. heavy rain plus thunder. */
@@ -30,4 +33,6 @@ class Layered(sr: Int, layers: List<Pair<SoundGenerator, Float>>) : SoundGenerat
             for (i in 0 until frames * 2) out[i] += scratch[i] * g
         }
     }
+
+    override fun release() = gens.forEach { it.release() }
 }

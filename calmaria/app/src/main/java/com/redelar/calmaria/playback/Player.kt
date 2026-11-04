@@ -148,7 +148,7 @@ class Player(private val context: Context, private val store: Store) {
     fun remove(id: String) {
         detachJourney()
         _state.update { s -> s.copy(items = s.items.filterNot { it.soundId == id }) }
-        engine.mixer.remove(id, 500)
+        removeFromMixer(id, 500)
         persist()
         if (_state.value.items.isEmpty()) stop()
     }
@@ -176,10 +176,23 @@ class Player(private val context: Context, private val store: Store) {
     private fun replaceMix(items: List<MixItem>, fadeMs: Int) {
         val valid = items.filter { SoundCatalog[it.soundId] != null }.take(MAX_SOUNDS)
         val keep = valid.mapTo(HashSet()) { it.soundId }
-        for (old in _state.value.items) if (old.soundId !in keep) engine.mixer.remove(old.soundId, fadeMs)
+        for (old in _state.value.items) if (old.soundId !in keep) removeFromMixer(old.soundId, fadeMs)
         for (item in valid) applyItem(item, fadeMs)
         _state.update { it.copy(items = valid) }
         persist()
+    }
+
+    /** Fades a sound out while playing; when silent anyway, drops it at once so its decoder stops. */
+    private fun removeFromMixer(id: String, fadeMs: Int) {
+        if (engine.isRunning) engine.mixer.remove(id, fadeMs) else engine.mixer.dropNow(id)
+    }
+
+    /** Once a fade-out has finished, releases whatever was fading (recordings hold a decoder). */
+    private fun releaseFadedSoon(afterMs: Long = 1_000) {
+        scope.launch {
+            delay(afterMs)
+            if (!engine.isRunning) engine.mixer.dropRemoving()
+        }
     }
 
     private fun detachJourney() {
@@ -251,6 +264,7 @@ class Player(private val context: Context, private val store: Store) {
         for (item in _state.value.items) engine.mixer.remove(item.soundId, 500)
         _state.value = PlayerState()
         persist()
+        releaseFadedSoon()
     }
 
     private fun ensureForeground() {
@@ -354,6 +368,7 @@ class Player(private val context: Context, private val store: Store) {
         for (item in restore) applyItem(item, 0)
         _state.value = PlayerState(items = restore)
         persist()
+        releaseFadedSoon()
     }
 
     fun snoozeAlarm() {

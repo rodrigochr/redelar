@@ -187,7 +187,11 @@
     <string name="set_battery_desc">Some phones (Samsung, Xiaomi…) stop background audio to save battery. Excluding Calmaria keeps it playing until morning.</string>
     <string name="set_battery_ok">Calmaria is already excluded from battery optimization.</string>
     <string name="set_section_about">About</string>
-    <string name="set_about_body">All %1$d sounds are synthesized live on your phone: no downloads, no internet and no audible loops.</string>
+    <string name="set_about_body">Most nature and ambience sounds are real recordings shared under free licenses. Noises, binaural beats, the generative music and a few others are synthesized live on your phone. Everything works offline.</string>
+    <string name="set_credits">Sound credits</string>
+    <string name="credits_title">Sound credits</string>
+    <string name="credits_intro">Real recordings shared under free licenses. Thank you to everyone who recorded them! Each one was trimmed into a seamless loop, loudness-matched and re-encoded.</string>
+    <string name="credits_work_author">“%1$s” by %2$s</string>
     <string name="set_version">Version %1$s</string>
 
     <!-- Notifications -->

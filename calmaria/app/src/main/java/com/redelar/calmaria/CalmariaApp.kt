@@ -2,6 +2,8 @@ package com.redelar.calmaria
 
 import android.app.Application
 import android.content.Context
+import com.redelar.calmaria.audio.MediaCodecPcmSource
+import com.redelar.calmaria.audio.Recordings
 import com.redelar.calmaria.data.Store
 import com.redelar.calmaria.playback.Notifications
 import com.redelar.calmaria.playback.Player
@@ -14,6 +16,7 @@ class CalmariaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Recordings.opener = { asset -> MediaCodecPcmSource(assets.openFd(asset)) }
         store = Store(this)
         player = Player(this, store)
         Notifications.createChannels(this)

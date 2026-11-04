@@ -1,0 +1,598 @@
+{
+ "rain_light": {
+  "work": "Rain (loopable) #4",
+  "author": "Ylmir",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/rain-loopable",
+  "source_file": "4.ogg",
+  "segment_seconds": [
+   0.2,
+   37.8
+  ],
+  "channel": 0,
+  "texture_extended": true,
+  "loop_seconds": 55.2,
+  "crossfade_seconds": 3,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": -1.3
+ },
+ "rain_medium": {
+  "work": "AMB Rain Loop 2",
+  "author": "Kresiek The Furry",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/amb-rain-loop-2",
+  "source_file": "amb_rain2.flac",
+  "segment_seconds": [
+   280,
+   350
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 61.2,
+  "crossfade_seconds": 4,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": -2.3
+ },
+ "rain_heavy": {
+  "work": "Rain (loopable) #2",
+  "author": "Ylmir",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/rain-loopable",
+  "source_file": "2.ogg",
+  "segment_seconds": [
+   0.2,
+   25.8
+  ],
+  "channel": 0,
+  "texture_extended": true,
+  "loop_seconds": 56.4,
+  "crossfade_seconds": 3,
+  "target_lufs": -17,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "rain_thunder": {
+  "work": "AMB Rain Loop 2 + Thunder / Lightning Ambience",
+  "author": "Kresiek The Furry (rain, CC0); Gregor Quendel (thunder)",
+  "license": "CC BY 4.0",
+  "source_page": "https://opengameart.org/content/thunder-lightning-ambience-field-recording",
+  "source_file": "mix (see \"mix\")",
+  "segment_seconds": [
+   0,
+   135
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 127.2,
+  "crossfade_seconds": 6,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": -6.0,
+  "mix": [
+   {
+    "source_page": "https://opengameart.org/content/amb-rain-loop-2",
+    "source_file": "amb_rain2.flac",
+    "segment_seconds": [
+     360,
+     495
+    ],
+    "gain_db": -3
+   },
+   {
+    "source_page": "https://opengameart.org/content/thunder-lightning-ambience-field-recording",
+    "source_file": "gregor_quendel_-_free_thunder_ambience_-_mp3_0.mp3",
+    "segment_seconds": [
+     100,
+     235
+    ],
+    "gain_db": 4
+   }
+  ]
+ },
+ "thunder": {
+  "work": "Thunder / Lightning Ambience – Field Recording",
+  "author": "Gregor Quendel",
+  "license": "CC BY 4.0",
+  "source_page": "https://opengameart.org/content/thunder-lightning-ambience-field-recording",
+  "source_file": "gregor_quendel_-_free_thunder_ambience_-_mp3_0.mp3",
+  "segment_seconds": [
+   490,
+   625
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 110.4,
+  "crossfade_seconds": 8,
+  "target_lufs": -22,
+  "highpass_hz": 30.0,
+  "limiter_db": -3.5
+ },
+ "rain_roof": {
+  "work": "Rain falling on a metal roof (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "source_page": "https://opengameart.org/content/free-general-ambience-sounds",
+  "source_file": "rain_-_falling_on_a_metal_roof.mp3",
+  "segment_seconds": [
+   0.6,
+   38.4
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 56.4,
+  "crossfade_seconds": 3,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": -5.0
+ },
+ "rain_window": {
+  "work": "Rain on Window Loop",
+  "author": "alxl",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/rain-on-window-loop",
+  "source_file": "rain_on_window_loop.wav",
+  "segment_seconds": [
+   0.0,
+   10.8
+  ],
+  "channel": 0,
+  "texture_extended": true,
+  "loop_seconds": 45.9,
+  "crossfade_seconds": 2,
+  "target_lufs": -19,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "rain_leaves": {
+  "work": "Rain dropping on various textures (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "source_page": "https://opengameart.org/content/free-general-ambience-sounds",
+  "source_file": "rain_-_dropping_on_various_textures.mp3",
+  "segment_seconds": [
+   0.6,
+   49.4
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 62.4,
+  "crossfade_seconds": 3,
+  "target_lufs": -19,
+  "highpass_hz": 30.0,
+  "limiter_db": -4.8
+ },
+ "water_drops": {
+  "work": "Dripping water loop",
+  "author": "qubodup",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/dripping-water-loop",
+  "source_file": "atmosbasement.mp3_.flac",
+  "segment_seconds": [
+   0.0,
+   19.8
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 66.0,
+  "crossfade_seconds": 2,
+  "target_lufs": -24,
+  "highpass_hz": 30.0,
+  "limiter_db": -5.8
+ },
+ "ocean": {
+  "work": "Sea and river wave sounds (Vistula)",
+  "author": "RandomMind",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/sea-and-river-wave-sounds",
+  "source_file": "Vistula.mp3",
+  "segment_seconds": [
+   500,
+   625
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 93.6,
+  "crossfade_seconds": 6,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "shore": {
+  "work": "Sea and river wave sounds (Vistula)",
+  "author": "RandomMind",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/sea-and-river-wave-sounds",
+  "source_file": "Vistula.mp3",
+  "segment_seconds": [
+   950,
+   1075
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 84.6,
+  "crossfade_seconds": 6,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "stream": {
+  "work": "Water stream VIII (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "source_page": "https://opengameart.org/content/free-general-ambience-sounds",
+  "source_file": "water_stream_-_viii.mp3",
+  "segment_seconds": [
+   0.6,
+   41.4
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 58.8,
+  "crossfade_seconds": 3,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "river": {
+  "work": "Park ambiences – river",
+  "author": "Thimras",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/park-ambiences",
+  "source_file": "park_ambience_river.wav",
+  "segment_seconds": [
+   100,
+   205
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 81.0,
+  "crossfade_seconds": 5,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "waterfall": {
+  "work": "Stream Sounds – waterfall 3",
+  "author": "kurt",
+  "license": "CC BY 3.0",
+  "source_page": "https://opengameart.org/content/stream-sounds",
+  "source_file": "stream-waterfall_waterfall3.ogg",
+  "segment_seconds": [
+   0.3,
+   40.6
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 62.4,
+  "crossfade_seconds": 3,
+  "target_lufs": -17,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "wind": {
+  "work": "Park ambiences – wind",
+  "author": "Thimras",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/park-ambiences",
+  "source_file": "park_ambience_wind.wav",
+  "segment_seconds": [
+   100,
+   205
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 81.0,
+  "crossfade_seconds": 6,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": -6.0
+ },
+ "wind_trees": {
+  "work": "Autumn wind with leaves rustling (Free General Ambience Sounds)",
+  "author": "Gregor Quendel",
+  "license": "CC BY-SA 4.0",
+  "source_page": "https://opengameart.org/content/free-general-ambience-sounds",
+  "source_file": "wind_-_autumn_wind_with_leaves_rustling.mp3",
+  "segment_seconds": [
+   0.6,
+   49.4
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 64.8,
+  "crossfade_seconds": 3,
+  "target_lufs": -19,
+  "highpass_hz": 30.0,
+  "limiter_db": -1.1
+ },
+ "howling_wind": {
+  "work": "Storm Arwen 2022",
+  "author": "Tsorthan Grove",
+  "license": "CC BY 4.0",
+  "source_page": "https://opengameart.org/content/storm-arwen-2022",
+  "source_file": "storm_arwen_2022.flac",
+  "segment_seconds": [
+   0,
+   171
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 99.0,
+  "crossfade_seconds": 6,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": -3.5
+ },
+ "forest_birds": {
+  "work": "Park ambiences – birds",
+  "author": "Thimras",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/park-ambiences",
+  "source_file": "park_ambience_birds.wav",
+  "segment_seconds": [
+   20,
+   125
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 82.8,
+  "crossfade_seconds": 6,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "morning_birds": {
+  "work": "Park ambiences – birds",
+  "author": "Thimras",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/park-ambiences",
+  "source_file": "park_ambience_birds.wav",
+  "segment_seconds": [
+   300,
+   405
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 84.6,
+  "crossfade_seconds": 6,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "crickets": {
+  "work": "cricket sounds",
+  "author": "syncopika",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/cricket-sounds",
+  "source_file": "cricketsounds090613.wav",
+  "segment_seconds": [
+   0.5,
+   38.5
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 34.3,
+  "crossfade_seconds": 1.5,
+  "target_lufs": -22,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "cicadas": {
+  "work": "cicada sounds #2",
+  "author": "syncopika",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/cicada-sounds",
+  "source_file": "082526-cicadasounds2_0.ogg",
+  "segment_seconds": [
+   1.6,
+   34.6
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 27.0,
+  "crossfade_seconds": 2,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "fireplace": {
+  "work": "Fireplace Sound loop",
+  "author": "PagDev",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/fireplace-sound-loop",
+  "source_file": "fire.wav",
+  "segment_seconds": [
+   0.0,
+   29.0
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 64.8,
+  "crossfade_seconds": 2,
+  "target_lufs": -21,
+  "highpass_hz": 30.0,
+  "limiter_db": -5.7
+ },
+ "campfire": {
+  "work": "Fireplace Sound loop",
+  "author": "PagDev",
+  "license": "CC0",
+  "source_page": "https://opengameart.org/content/fireplace-sound-loop",
+  "source_file": "fire.wav",
+  "segment_seconds": [
+   0.0,
+   29.0
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 56.4,
+  "crossfade_seconds": 2,
+  "target_lufs": -20,
+  "highpass_hz": 60,
+  "limiter_db": -5.0
+ },
+ "city": {
+  "work": "Interstate 405, Fountain Valley (American Interstates)",
+  "author": "freetousesounds",
+  "license": "CC BY 4.0",
+  "source_page": "https://opengameart.org/content/american-interstates-from-iowa-to-california-sound-including-jake-brake-in-las-vegas",
+  "source_file": "Interstate_405_Fountain_Valley.WAV",
+  "segment_seconds": [
+   0,
+   350
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 81.0,
+  "crossfade_seconds": 6,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "train": {
+  "work": "DEMAND – inside a metro train (TMETRO)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "source_page": "https://zenodo.org/records/1227121",
+  "source_file": "TMETRO_48k.zip – channels 1 and 16 as left/right",
+  "segment_seconds": [
+   160,
+   265
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 81.0,
+  "crossfade_seconds": 6,
+  "target_lufs": -19,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "car": {
+  "work": "DEMAND – inside a moving car (TCAR)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "source_page": "https://zenodo.org/records/1227121",
+  "source_file": "TCAR_48k.zip – channels 1 and 16 as left/right",
+  "segment_seconds": [
+   30,
+   135
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 86.4,
+  "crossfade_seconds": 6,
+  "target_lufs": -19,
+  "highpass_hz": 22,
+  "limiter_db": -6.0
+ },
+ "cafe": {
+  "work": "DEMAND – restaurant (PRESTO)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "source_page": "https://zenodo.org/records/1227121",
+  "source_file": "PRESTO_48k.zip – channels 1 and 16 as left/right",
+  "segment_seconds": [
+   40,
+   145
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 81.0,
+  "crossfade_seconds": 6,
+  "target_lufs": -20,
+  "highpass_hz": 30.0,
+  "limiter_db": -5.8
+ },
+ "clock": {
+  "work": "Clock ticking",
+  "author": "christoph",
+  "license": "CC BY 3.0",
+  "source_page": "https://opengameart.org/content/clock-ticking",
+  "source_file": "clock.ogg",
+  "segment_seconds": [
+   0.35,
+   59.4
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 58.0,
+  "crossfade_seconds": 0.05,
+  "target_lufs": -26,
+  "highpass_hz": 80,
+  "limiter_db": 0.0
+ },
+ "fan": {
+  "work": "Ambient machinery – fan 1 (OLPC sound library)",
+  "author": "Dr. Richard Boulanger (OLPC sound library); recorded by Berklee College of Music students supervised by Michael Brigida; edited by Diane Douglas and Colman O’Reilly",
+  "license": "CC BY 3.0",
+  "source_page": "https://opengameart.org/content/12-ambient-machine-sounds",
+  "source_file": "ambient_machinery_1_fan_1.wav",
+  "segment_seconds": [
+   0.4,
+   23.4
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 64.8,
+  "crossfade_seconds": 3,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "air_conditioner": {
+  "work": "Ambient machinery – fan reso 3 (OLPC sound library)",
+  "author": "Dr. Richard Boulanger (OLPC sound library); recorded by Berklee College of Music students supervised by Michael Brigida; edited by Diane Douglas and Colman O’Reilly",
+  "license": "CC BY 3.0",
+  "source_page": "https://opengameart.org/content/13-ambient-machine-sounds",
+  "source_file": "ambient_machinery_2_fan_reso_3.wav",
+  "segment_seconds": [
+   0.4,
+   28.6
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 61.2,
+  "crossfade_seconds": 3,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "hair_dryer": {
+  "work": "Ambient machinery – fan noise (OLPC sound library)",
+  "author": "Dr. Richard Boulanger (OLPC sound library); recorded by Berklee College of Music students supervised by Michael Brigida; edited by Diane Douglas and Colman O’Reilly",
+  "license": "CC BY 3.0",
+  "source_page": "https://opengameart.org/content/13-ambient-machine-sounds",
+  "source_file": "ambient_machinery_2_fan_noise.wav",
+  "segment_seconds": [
+   0.4,
+   17.2
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 63.6,
+  "crossfade_seconds": 3,
+  "target_lufs": -18,
+  "highpass_hz": 30.0,
+  "limiter_db": 0.0
+ },
+ "washing_machine": {
+  "work": "DEMAND – laundry room with a washing machine (DWASHING)",
+  "author": "Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent",
+  "license": "CC BY 4.0",
+  "source_page": "https://zenodo.org/records/1227121",
+  "source_file": "DWASHING_48k.zip – channels 1 and 16 as left/right",
+  "segment_seconds": [
+   78,
+   183
+  ],
+  "channel": null,
+  "texture_extended": false,
+  "loop_seconds": 95.4,
+  "crossfade_seconds": 6,
+  "target_lufs": -21,
+  "highpass_hz": 30.0,
+  "limiter_db": -1.9
+ }
+}

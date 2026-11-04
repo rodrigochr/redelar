@@ -69,6 +69,24 @@ class Mixer(private val sampleRate: Int) {
 
     fun ids(): Set<String> = channels.filter { !it.removing }.mapTo(HashSet()) { it.id }
 
+    /** Drops a sound immediately, without a fade: for when nothing is playing. */
+    fun dropNow(id: String) {
+        synchronized(lock) {
+            val gone = channels.filter { it.id == id }
+            channels = channels.filterNot { it.id == id }.toTypedArray()
+            gone.forEach { it.gen.release() }
+        }
+    }
+
+    /** Drops every sound that is fading out, e.g. once playback has stopped. */
+    fun dropRemoving() {
+        synchronized(lock) {
+            val gone = channels.filter { it.removing }
+            channels = channels.filterNot { it.removing }.toTypedArray()
+            gone.forEach { it.gen.release() }
+        }
+    }
+
     fun setMaster(target: Float, fadeMs: Int) {
         masterStep = stepFor(fadeMs)
         masterTarget = target
@@ -144,7 +162,9 @@ class Mixer(private val sampleRate: Int) {
 
     private fun dropFinished() {
         synchronized(lock) {
+            val gone = channels.filter { it.removing && it.current <= 0f }
             channels = channels.filterNot { it.removing && it.current <= 0f }.toTypedArray()
+            gone.forEach { it.gen.release() }
         }
     }
 

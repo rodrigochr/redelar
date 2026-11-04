@@ -36,7 +36,7 @@ music pauses while you wake up.
 
 | Tab | What it does |
 | --- | --- |
-| **Sons** | 60 sounds in 5 swipeable categories (rain & water, nature, city & home, noise, meditation & music). Tap to add/remove; the mixer panel has play/pause, per-sound sliders, timer and ♥. |
+| **Sons** | 60 sounds (32 real recordings) in 5 swipeable categories (rain & water, nature, city & home, noise, meditation & music). Tap to add/remove; the mixer panel has play/pause, per-sound sliders, timer and ♥. |
 | **Viagens** | 10 journeys: curated mixes that slowly crossfade between stages over the night (e.g. fireplace → storm → light rain). |
 | **Favoritos** | Saved mixes; play, rename, delete. |
 | **Alarme** | Daily/one-off alarm with repeat days, wake scene or any favorite, gradual 1-minute fade-in, snooze, full-screen over the lock screen. |
@@ -47,12 +47,22 @@ play/pause/close.
 
 ## The sounds
 
-Every sound is **synthesized live on the phone** (`app/src/main/java/.../audio`): filtered noise
-beds, thousands of tiny resonant "drops", bubble models, chirp synthesis for birds and insects,
-additive synthesis for bowls/chimes/piano, and a Freeverb reverb. That means no audio files, no
-downloads, a ~1.6 MB APK, and no audible loop points, but they are synthesized approximations rather
-than field recordings. Levels are calibrated so every sound is similarly loud at the same slider
-position (`SoundLevelsTest` prints the table), and a limiter keeps any mix clean.
+**32 sounds are real field recordings** — rain (light, medium, heavy, on a metal roof, on a window, on
+leaves), a thunderstorm and distant thunder, drips, ocean waves and a calm shore, a stream, river and
+waterfall, wind, wind in the trees, a storm, birds, crickets, cicadas, fireplace/campfire, city traffic,
+a train, a car, a café, a clock, a fan, an air conditioner, a hair dryer and a washing machine. Each one
+was shared by its author under CC0, CC BY or CC BY-SA, cut into a seamless loop (no audible seam,
+verified by spectrogram and sample-level checks), loudness-matched and encoded as 48 kHz Ogg Vorbis
+(about 30 MB in total). They stream from the APK with MediaCodec into the same mixer as before, so
+fades, timer, alarm and the limiter all work the same. Who recorded what is in [CREDITS.md](CREDITS.md)
+and in the app under **Ajustes → Sobre → Créditos dos sons**; how the loops were made is in
+[tools/sounds](tools/sounds).
+
+The rest are **synthesized live** (`app/src/main/java/.../audio/sounds`): the noise colors and binaural
+beats (synthetic by nature), the generative music (pad, kalimba, piano, music box) and, for now, the
+sounds no freely licensed recording was found for — rain on an umbrella and a tent, underwater,
+snowstorm, doves, owl, frogs, night forest, airplane cabin, keyboard, heartbeat, womb, shush, singing
+bowl, wind chimes and Om.
 
 ## Build
 
@@ -60,7 +70,7 @@ Requires JDK 17+ and the Android SDK (platform 36).
 
 ```sh
 ./gradlew :app:assembleRelease       # app/build/outputs/apk/release/app-release.apk
-./gradlew :app:testDebugUnitTest      # DSP levels/CPU, mixer, alarm scheduling tests
+./gradlew :app:testDebugUnitTest      # mixer, streaming, recordings/credits, DSP levels, alarm tests
 ./gradlew :app:testDebugUnitTest -Pscreenshots   # renders UI screenshots to app/build/screenshots
 ```
 
