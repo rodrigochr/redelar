@@ -52,18 +52,29 @@ fun CreditsDialog(onDismiss: () -> Unit) {
                             style = MaterialTheme.typography.bodySmall,
                             color = p.text,
                         )
-                        Text(
-                            c.license,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = p.accent,
-                            modifier = Modifier.clickable(role = Role.Button) { runCatching { uri.openUri(c.licenseUrl) } },
-                        )
-                        Text(
-                            c.source,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = p.accent,
-                            modifier = Modifier.clickable(role = Role.Button) { runCatching { uri.openUri(c.sourceUrl) } },
-                        )
+                        if (c.licenseUrl.isBlank()) {
+                            // Recorded for the app itself: no license page or source to link to.
+                            Text(
+                                stringResource(R.string.credits_original),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = p.textMuted,
+                            )
+                        } else {
+                            Text(
+                                c.license,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = p.accent,
+                                modifier = Modifier.clickable(role = Role.Button) { runCatching { uri.openUri(c.licenseUrl) } },
+                            )
+                        }
+                        if (c.source.isNotBlank()) {
+                            Text(
+                                c.source,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = p.accent,
+                                modifier = Modifier.clickable(role = Role.Button) { runCatching { uri.openUri(c.sourceUrl) } },
+                            )
+                        }
                     }
                 }
             }

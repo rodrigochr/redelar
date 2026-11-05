@@ -25,6 +25,7 @@
     <string name="s_rain_roof">Rain on roof</string>
     <string name="s_rain_window">Rain on window</string>
     <string name="s_rain_leaves">Rain on leaves</string>
+    <string name="s_rain_road">Rain on the road</string>
     <string name="s_rain_tent">Rain on tent</string>
     <string name="s_water_drops">Water drops</string>
     <string name="s_ocean">Ocean waves</string>
@@ -192,6 +193,7 @@
     <string name="credits_title">Sound credits</string>
     <string name="credits_intro">Real recordings shared under free licenses. Thank you to everyone who recorded them! Each one was trimmed into a seamless loop, loudness-matched and re-encoded.</string>
     <string name="credits_work_author">“%1$s” by %2$s</string>
+    <string name="credits_original">Original recording for Calmaria</string>
     <string name="set_version">Version %1$s</string>
 
     <!-- Notifications -->

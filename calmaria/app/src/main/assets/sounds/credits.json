@@ -80,6 +80,16 @@
   "changes": "Trimmed, crossfaded into a seamless loop, high-passed, loudness-normalized, re-encoded as Ogg Vorbis."
  },
  {
+  "id": "rain_road",
+  "work": "Chuva na estrada",
+  "author": "rodrigochr",
+  "license": "Original recording",
+  "license_url": "",
+  "source": "",
+  "source_url": "",
+  "changes": "Recorded on a phone for Calmaria. Trimmed, rumble reduced and tone balanced with EQ, re-stitched into a seamless stereo loop, loudness-normalized, encoded as Ogg Vorbis."
+ },
+ {
   "id": "water_drops",
   "work": "Dripping water loop",
   "author": "qubodup",

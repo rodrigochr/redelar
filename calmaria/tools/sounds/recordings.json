@@ -163,6 +163,46 @@
   "highpass_hz": 30.0,
   "limiter_db": -4.8
  },
+ "rain_road": {
+  "work": "Chuva na estrada",
+  "author": "rodrigochr",
+  "license": "Original recording",
+  "source_page": null,
+  "source_file": "chuva.m4a (phone recording, 13.4 s mono AAC 44.1 kHz; not in the repository)",
+  "segment_seconds": [
+   0.25,
+   13.32
+  ],
+  "channel": null,
+  "texture_extended": true,
+  "loop_seconds": 61.65,
+  "crossfade_seconds": 0.8,
+  "target_lufs": -19,
+  "highpass_hz": 25.0,
+  "limiter_db": 0.0,
+  "polish": {
+   "script": "polish_recording.py",
+   "eq_db": {
+    "20": -36,
+    "31": -30,
+    "63": -26,
+    "125": -21,
+    "250": -10,
+    "500": -3,
+    "1000": 0,
+    "2000": 2,
+    "4000": 2.5,
+    "8000": 3,
+    "16000": 1
+   },
+   "chunk_seconds": [
+    2.5,
+    4.5
+   ],
+   "seed": 22,
+   "stereo": "right channel = the loop delayed by 30.85 s (never closer than 0.63 s of source to the left channel)"
+  }
+ },
  "water_drops": {
   "work": "Dripping water loop",
   "author": "qubodup",

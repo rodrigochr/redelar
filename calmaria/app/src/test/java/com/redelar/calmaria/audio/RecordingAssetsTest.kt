@@ -39,10 +39,22 @@ class RecordingAssetsTest {
         val recordings = SoundCatalog.all.filter { it.asset != null }.map { it.id }.toSet()
         assertEquals("credits must match the bundled recordings", recordings, byId.keys)
         for ((id, obj) in byId) {
-            for (name in listOf("work", "author", "license", "license_url", "source", "source_url")) {
+            val license = field(obj, "license")
+            // Recordings made for the app itself have no license page or external source.
+            val original = license == ORIGINAL
+            val required = if (original) listOf("work", "author") else listOf("work", "author", "license_url", "source", "source_url")
+            for (name in required) {
                 assertTrue("$id has no $name", field(obj, name).isNotBlank())
             }
-            assertTrue("$id has an unexpected license", field(obj, "license").matches(Regex("CC0|CC BY(-SA)? [34]\\.0|Public domain")))
+            if (original) {
+                assertTrue("$id: an original recording must not link a license", field(obj, "license_url").isBlank())
+            } else {
+                assertTrue("$id has an unexpected license", license.matches(Regex("CC0|CC BY(-SA)? [34]\\.0|Public domain")))
+            }
         }
+    }
+
+    private companion object {
+        const val ORIGINAL = "Original recording"
     }
 }

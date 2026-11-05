@@ -1,12 +1,15 @@
 # Sound credits
 
-Calmaria bundles 32 real field recordings, each shared by its author under a free license.
+Calmaria bundles 33 real field recordings: “Chuva na estrada”, recorded for the app by rodrigochr, and 32
+shared by their authors under free licenses.
 Every file was trimmed to a segment, crossfaded into a seamless loop, high-passed, loudness-normalized
 (with gentle peak limiting where needed) and re-encoded as 48 kHz Ogg Vorbis. Exact segments and settings
 are in [`tools/sounds/recordings.json`](tools/sounds/recordings.json). The app shows the same list under
 **Ajustes → Sobre → Créditos dos sons**.
 
 The adapted loops are offered under the same license as their source (CC BY-SA sources stay CC BY-SA).
+“Chuva na estrada” is an original recording for Calmaria; it was cleaned up (rumble reduced, tone balanced)
+and re-stitched into a wide stereo loop with [`tools/sounds/polish_recording.py`](tools/sounds/polish_recording.py).
 The remaining sounds (noises, binaural beats, generative music and a few others) are synthesized by the app.
 
 | Sound | Recording | Author | License | Source |
@@ -19,6 +22,7 @@ The remaining sounds (noises, binaural beats, generative music and a few others)
 | `rain_roof` | Rain falling on a metal roof (Free General Ambience Sounds) | Gregor Quendel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [OpenGameArt.org](https://opengameart.org/content/free-general-ambience-sounds) |
 | `rain_window` | Rain on Window Loop | alxl | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | [OpenGameArt.org](https://opengameart.org/content/rain-on-window-loop) |
 | `rain_leaves` | Rain dropping on various textures (Free General Ambience Sounds) | Gregor Quendel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [OpenGameArt.org](https://opengameart.org/content/free-general-ambience-sounds) |
+| `rain_road` | Chuva na estrada | rodrigochr | Original recording for Calmaria | — |
 | `water_drops` | Dripping water loop | qubodup | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | [OpenGameArt.org](https://opengameart.org/content/dripping-water-loop) |
 | `ocean` | Sea and river wave sounds (Vistula) | RandomMind | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | [OpenGameArt.org](https://opengameart.org/content/sea-and-river-wave-sounds) |
 | `shore` | Sea and river wave sounds (Vistula) | RandomMind | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | [OpenGameArt.org](https://opengameart.org/content/sea-and-river-wave-sounds) |

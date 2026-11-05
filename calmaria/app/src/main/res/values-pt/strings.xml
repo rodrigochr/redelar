@@ -23,6 +23,7 @@
     <string name="s_rain_roof">Chuva no telhado</string>
     <string name="s_rain_window">Chuva na janela</string>
     <string name="s_rain_leaves">Chuva nas folhas</string>
+    <string name="s_rain_road">Chuva na estrada</string>
     <string name="s_rain_tent">Chuva na barraca</string>
     <string name="s_water_drops">Gotas d\'água</string>
     <string name="s_ocean">Ondas do mar</string>
@@ -190,6 +191,7 @@
     <string name="credits_title">Créditos dos sons</string>
     <string name="credits_intro">Gravações reais compartilhadas com licenças livres. Obrigado a quem gravou! Cada uma foi cortada em um loop contínuo, teve o volume equalizado e foi recodificada.</string>
     <string name="credits_work_author">“%1$s”, de %2$s</string>
+    <string name="credits_original">Gravação original para o Calmaria</string>
     <string name="set_version">Versão %1$s</string>
 
     <!-- Notifications -->

@@ -48,6 +48,7 @@ import androidx.compose.material.icons.outlined.Piano
 import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.RiceBowl
 import androidx.compose.material.icons.outlined.Roofing
+import androidx.compose.material.icons.outlined.Route
 import androidx.compose.material.icons.outlined.ScubaDiving
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.SelfImprovement
@@ -72,6 +73,7 @@ fun soundIcon(id: String): ImageVector = when (id) {
     "rain_roof" -> Icons.Outlined.Roofing
     "rain_window" -> Icons.Outlined.Window
     "rain_leaves" -> Icons.Outlined.Eco
+    "rain_road" -> Icons.Outlined.Route
     "rain_tent" -> Icons.Outlined.Festival
     "water_drops" -> Icons.Outlined.Opacity
     "ocean" -> Icons.Outlined.Waves

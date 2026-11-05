@@ -9,6 +9,9 @@ How the bundled recordings in `app/src/main/assets/sounds` were made. Requires P
   target loudness (EBU R128, with up to 6 dB of transparent look-ahead limiting on peaks), encodes 48 kHz
   Ogg Vorbis and verifies the decoded length and the seam. Short, steady recordings can be extended by
   re-stitching random chunks so they don't repeat every few seconds.
+- `polish_recording.py` cleans up a short phone recording (trim, EQ against road/handling rumble) and
+  re-stitches it into a long, wide stereo loop: the right channel is the same loop half a turn later,
+  checked to never play the same moment of the recording as the left one. Used for “Chuva na estrada”.
 - `audio_analysis.py` has the decoding and measurement helpers (and the CLAP scoring used to check that
   candidates sound like what they should, contain no speech/music, etc.).
 - `recordings.json` records, for every bundled sound, the source page and file, the exact segment and

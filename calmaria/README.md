@@ -36,7 +36,7 @@ music pauses while you wake up.
 
 | Tab | What it does |
 | --- | --- |
-| **Sons** | 60 sounds (32 real recordings) in 5 swipeable categories (rain & water, nature, city & home, noise, meditation & music). Tap to add/remove; the mixer panel has play/pause, per-sound sliders, timer and ♥. |
+| **Sons** | 61 sounds (33 real recordings) in 5 swipeable categories (rain & water, nature, city & home, noise, meditation & music). Tap to add/remove; the mixer panel has play/pause, per-sound sliders, timer and ♥. |
 | **Viagens** | 10 journeys: curated mixes that slowly crossfade between stages over the night (e.g. fireplace → storm → light rain). |
 | **Favoritos** | Saved mixes; play, rename, delete. |
 | **Alarme** | Daily/one-off alarm with repeat days, wake scene or any favorite, gradual 1-minute fade-in, snooze, full-screen over the lock screen. |
@@ -47,10 +47,10 @@ play/pause/close.
 
 ## The sounds
 
-**32 sounds are real field recordings** — rain (light, medium, heavy, on a metal roof, on a window, on
-leaves), a thunderstorm and distant thunder, drips, ocean waves and a calm shore, a stream, river and
+**33 sounds are real field recordings** — rain (light, medium, heavy, on a metal roof, on a window, on
+leaves, on the road), a thunderstorm and distant thunder, drips, ocean waves and a calm shore, a stream, river and
 waterfall, wind, wind in the trees, a storm, birds, crickets, cicadas, fireplace/campfire, city traffic,
-a train, a car, a café, a clock, a fan, an air conditioner, a hair dryer and a washing machine. Each one
+a train, a car, a café, a clock, a fan, an air conditioner, a hair dryer and a washing machine. “Chuva na estrada” was recorded for the app; every other one
 was shared by its author under CC0, CC BY or CC BY-SA, cut into a seamless loop (no audible seam,
 verified by spectrogram and sample-level checks), loudness-matched and encoded as 48 kHz Ogg Vorbis
 (about 30 MB in total). They stream from the APK with MediaCodec into the same mixer as before, so

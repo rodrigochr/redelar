@@ -83,6 +83,7 @@ object SoundCatalog {
         recording("rain_roof", R.string.s_rain_roof, Category.RAIN, 1.82f),
         recording("rain_window", R.string.s_rain_window, Category.RAIN, 1.04f),
         recording("rain_leaves", R.string.s_rain_leaves, Category.RAIN, 1.19f),
+        recording("rain_road", R.string.s_rain_road, Category.RAIN, 1.02f),
         Sound("rain_tent", R.string.s_rain_tent, Category.RAIN, 0.98f) {
             Rain(
                 it,
