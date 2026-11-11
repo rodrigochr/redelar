@@ -4938,6 +4938,310 @@
             ]
         },
         {
+            "id": "beatle_george",
+            "number": 9,
+            "label": "9",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
+            "title": "Beatle George",
+            "artist": "Júpiter Maçã",
+            "reference": "Uma Tarde na Fruteira (ed. brasileira, 2008); single de 2006",
+            "key": 7,
+            "minor": false,
+            "bpm": 121,
+            "groove": "rock_basic",
+            "bass": "ROCK_EIGHTHS",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Homenagem a George Harrison. Gravação de estúdio levemente desafinada: soa entre G e Ab (para tocar junto com o disco, capo 1 com as cordas um pouco abaixadas); as cifras e o próprio Júpiter ao vivo usam G, a ~118 BPM. A guitarra abre com uma anacruse de 1 tempo antes do 1º compasso. Ponte e refrão têm os mesmos acordes (Em–D).",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 2,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 9,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ]
+                    ]
+                },
+                {
+                    "name": "Ponte",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                1,
+                3,
+                4,
+                1,
+                3,
+                3,
+                5
+            ]
+        },
+        {
             "id": "enjoy_the_silence",
             "number": 10,
             "label": "10",

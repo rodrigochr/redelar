@@ -200,6 +200,21 @@ private val SONGS: List<SongSpec> = listOf(
         ),
     ),
     song(
+        9, "beatle_george", "Beatle George", "Júpiter Maçã", "Uma Tarde na Fruteira (ed. brasileira, 2008); single de 2006",
+        key = "G", bpm = 121, groove = "rock_basic", bass = BassStyle.ROCK_EIGHTHS,
+        confidence = Confidence.HIGH,
+        notes = "Homenagem a George Harrison. Gravação de estúdio levemente desafinada: soa entre G e Ab (para tocar junto com o disco, capo 1 com as cordas um pouco abaixadas); as cifras e o próprio Júpiter ao vivo usam G, a ~118 BPM. A guitarra abre com uma anacruse de 1 tempo antes do 1º compasso. Ponte e refrão têm os mesmos acordes (Em–D).",
+        form = "Intro, Verso, Ponte, Verso, Refrão, Solo, Verso, Refrão x2, Final",
+        sections = listOf(
+            "Intro" to "G | Am | Em | D | G | Am | Em | D | G | Am | Em | D | G | Am | Em | D",
+            "Verso" to "G | Am | Em | D | G | Am | Em | D",
+            "Ponte" to "Em | D | Em | D | Em | D | Em | D",
+            "Refrão" to "Em | D | Em | D | Em | D | Em | D",
+            "Solo" to "G | Am | Em | D | G | Am | Em | D | G | Am | Em | D | G | Am | Em | D",
+            "Final" to "G | Am | Em | D | G | Am | Em | D | G | Am | Em | D | G | Am | Em | D | G",
+        ),
+    ),
+    song(
         10, "enjoy_the_silence", "Enjoy the Silence", "Depeche Mode", "Violator (1990), versão do single",
         key = "Cm", bpm = 113, groove = "synth_pop", bass = BassStyle.ROCK_EIGHTHS,
         confidence = Confidence.MEDIUM,

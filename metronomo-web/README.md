@@ -1,7 +1,7 @@
 # BluesTempo Web — metrônomo e levadas no navegador (iPhone, Android, computador)
 
 Versão web do [BluesTempo](../metronomo-android/README.md): as mesmas 35 levadas de blues, rock e
-jazz, a mesma setlist de 31 músicas com cifra compasso a compasso, os mesmos instrumentos reais (bateria, baixo elétrico, contrabaixo e percussão em domínio
+jazz, a mesma setlist (21 músicas + 3 extras, e as que saíram guardadas à parte) com cifra compasso a compasso, os mesmos instrumentos reais (bateria, baixo elétrico, contrabaixo e percussão em domínio
 público) e o mesmo motor de tempo do app Android, rodando no navegador com o Web Audio.
 
 No iPhone, abra o endereço no Safari e use **Compartilhar → Adicionar à Tela de Início**: o
@@ -13,7 +13,7 @@ BluesTempo vira um ícone, abre em tela cheia e funciona offline depois do prime
   5 sons de clique.
 - Levadas com bateria e baixo reais, swing, viradas, humanização, 12 tons, 10 progressões
   (blues 12/8 compassos, quick change, menor, jazz blues…), 20 estilos de baixo e mixer.
-- Músicas: 31 músicas com andamento, tom, levada e cifra compasso a compasso que acompanha a
+- Músicas: a setlist (21 + 3 extras) com andamento, tom, levada e cifra compasso a compasso que acompanha a
   execução; transposição, andamento de estudo (50–100%), loop de uma parte e fim com acorde final.
 - Treino: contagem inicial, treinador de andamento, compassos em silêncio e timer.
 - Presets salvos no navegador.
@@ -41,7 +41,7 @@ suspende o áudio de páginas web). Para tocar com a tela apagada, só um app na
   As sugestões saem da análise das notas dos acordes de cada parte (`src/js/scales.js`); a aba
   Músicas do metrônomo mostra as mesmas sugestões em resumo.
 
-`test/cifras.mjs` confere no navegador que as 31 músicas cabem inteiras em celular em pé, celular
+`test/cifras.mjs` confere no navegador que as 32 músicas (setlist, extras e as que saíram) cabem inteiras em celular em pé, celular
 deitado e tablet, com letra legível (no celular em pé, o menor acorde fica com 20 px).
 
 ## Como funciona

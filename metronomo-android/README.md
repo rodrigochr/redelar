@@ -41,7 +41,7 @@ os sons continua disponível como opção.
 - Todas as levadas têm volume equalizado (≈ −16 LUFS com instrumentos reais) para trocar sem sustos.
 
 **Músicas (setlist com cifra)**
-- 31 músicas da setlist (Ira!, Legião Urbana, Pink Floyd, Rolling Stones, The Doors, The Cure,
+- A setlist (21 músicas + 3 extras; as que saíram ficam guardadas à parte): Ira!, Júpiter Maçã, Legião Urbana, Rolling Stones, The Doors, The Cure,
   Beatles, Raul Seixas…) com **andamento, tom, levada, baixo e a cifra compasso a compasso**
   de cada parte da gravação de referência (intro, versos, refrões, solos, final).
 - Ao escolher uma música, o app ajusta tudo e a cifra acompanha a execução: o compasso atual
