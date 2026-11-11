@@ -15,6 +15,7 @@
       <span class="num" id="num">1</span>
       <span class="name"><strong id="title">—</strong><small id="meta"></small></span>
     </button>
+    <div class="row2">
     <div class="key" role="group" aria-label="Tom">
       <button type="button" id="key-down" aria-label="Meio tom abaixo" aria-keyshortcuts="Minus">−</button>
       <button type="button" id="key-label" class="key-label" aria-label="Tom atual. Toque para voltar ao original">
@@ -22,12 +23,22 @@
       </button>
       <button type="button" id="key-up" aria-label="Meio tom acima" aria-keyshortcuts="Plus">+</button>
     </div>
+    <span class="tools">
+      <button type="button" id="scales-btn" aria-pressed="true">Escalas</button>
+      <button type="button" id="notes-btn">Notas</button>
+      <button type="button" id="stage-btn" aria-pressed="false">Palco</button>
+      <button type="button" id="full-btn" aria-label="Tela cheia" title="Tela cheia">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+    </span>
+    </div>
     <button type="button" class="nav" id="next" aria-label="Próxima música" aria-keyshortcuts="ArrowRight ArrowDown PageDown Space">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
     </button>
   </header>
 
   <p class="road" id="road" aria-label="Roteiro da música"></p>
+  <p class="impro" id="impro" aria-label="Escalas para improvisar"></p>
 
   <main class="chart" id="chart" aria-live="polite">
     <div class="chart-inner" id="chart-inner"></div>
@@ -35,17 +46,19 @@
 
   <footer class="foot">
     <button type="button" class="next-song" id="next-song"></button>
-    <span class="tools">
-      <button type="button" id="notes-btn">Notas</button>
-      <button type="button" id="stage-btn" aria-pressed="false">Palco</button>
-      <button type="button" id="full-btn">Tela cheia</button>
-    </span>
   </footer>
 
   <div class="sheet" id="list" hidden>
     <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="list-title">
       <div class="sheet-head"><h2 id="list-title">Setlist</h2><button type="button" class="close" data-close="list">Fechar</button></div>
       <ol class="setlist" id="setlist"></ol>
+    </div>
+  </div>
+
+  <div class="sheet" id="scale" hidden>
+    <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="scale-title">
+      <div class="sheet-head"><h2 id="scale-title">Escala</h2><button type="button" class="close" data-close="scale">Fechar</button></div>
+      <div class="scale-body" id="scale-body"></div>
     </div>
   </div>
 

@@ -111,6 +111,39 @@ const stageOk = await page.evaluate(() => {
 check(stageOk, 'modo palco: fundo preto e cifra dentro da tela');
 await page.screenshot({ path: join(OUT, 'cifras-palco.png') });
 
+// Escalas para improvisar: faixa no alto, sugestão nas partes que mudam e painel com braço da guitarra.
+await page.goto(`${base}#roadhouse-blues`);
+await page.waitForFunction(() => window.Cifras);
+const chips = await page.$$eval('#impro .sc', (els) => els.map((e) => e.textContent));
+check(chips[0] === 'E blues' && chips.length >= 2, `faixa de improviso (${chips.join(' · ')})`);
+await page.tap('#impro .sc');
+const notesOf = () => page.$$eval('#scale-body .note b', (els) => els.map((e) => e.textContent).join(' '));
+check((await notesOf()) === 'E G A Bb B D' && (await page.isVisible('#scale-body svg')), `painel da escala blues com notas e braço (${await notesOf()})`);
+await page.screenshot({ path: join(OUT, 'cifras-escala.png') });
+await page.tap('[data-scale-tab="2"]');
+check((await page.textContent('#scale-title')).startsWith('E mixolídio'), 'troca de opção no painel (mixolídio)');
+await page.tap('[data-close="scale"]');
+await page.tap('#key-up');
+await page.tap('#key-up');
+await page.tap('#impro .sc');
+check((await notesOf()) === 'F# A B C C# E', `escala acompanha o tom (+2: ${await notesOf()})`);
+await page.tap('[data-close="scale"]');
+await page.tap('#key-label');
+await page.goto(`${base}#black`);
+await page.waitForFunction(() => window.Cifras);
+const secChip = page.locator('.sec-sc').first();
+check((await secChip.textContent()).includes('E pent. maior'), `parte com outra escala ganha sugestão própria (Black: ${await secChip.textContent()})`);
+await secChip.tap();
+check((await page.textContent('#scale-title')).startsWith('E pentatônica maior'), 'sugestão da parte abre o painel dela');
+await page.tap('[data-close="scale"]');
+await page.goto(`${base}#needles-and-pins`);
+await page.waitForFunction(() => window.Cifras);
+const needles = await page.$$eval('.sec-sc', (els) => els.map((e) => e.textContent).join(' | '));
+check(needles.includes('Bb') && !needles.includes('A#'), `modulação com a grafia do tom novo (${needles})`);
+await page.tap('#scales-btn');
+check(await page.isHidden('#impro') && (await page.locator('.sec-sc').count()) === 0, 'botão Escalas esconde as sugestões');
+await page.tap('#scales-btn');
+
 check(errors.filter((e) => e.startsWith('pageerror')).length === 0, 'sem erros no console');
 await browser.close();
 server.close();

@@ -45,8 +45,9 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 
 .app {
   height: 100%;
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  /* Cabeçalho, roteiro, improviso e rodapé no tamanho do conteúdo; a cifra fica com o resto. */
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   padding-block: 8px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
@@ -57,7 +58,9 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 }
 
 /* ------------------------------------------------------------ cabeçalho */
-.top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 8px; }
+.top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 8px; }
+/* Tom e botões: na mesma linha da música em telas largas; numa linha própria no celular. */
+.row2 { display: contents; }
 .nav {
   width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line);
   background: var(--panel); display: grid; place-items: center;
@@ -102,8 +105,23 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 .road .arrow { color: var(--line); }
 .road .times { color: var(--accent); font-weight: 600; }
 
+/* ------------------------------------------------------------ improviso */
+.impro { margin: 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 0; }
+.impro .lbl { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-right: 2px; }
+.sc {
+  border: 1px solid var(--line); background: var(--panel); border-radius: 999px;
+  padding: 3px 10px; font-size: 13px; font-weight: 600; white-space: nowrap;
+}
+.sc:active { background: var(--accent-soft); }
+.sc .fitp { color: var(--muted); font-weight: 500; margin-left: 4px; }
+.sec-sc {
+  border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 0.1em 0.7em;
+  font: 600 1em/1.2 var(--font-body); letter-spacing: 0.01em; text-transform: none; color: var(--repeat); white-space: nowrap;
+}
+
 /* ------------------------------------------------------------ cifra */
-.chart { min-height: 0; overflow: hidden; position: relative; }
+.chart { flex: 1 1 0; min-height: 0; overflow: hidden; position: relative; }
+.top, .road, .impro, .foot { flex: none; }
 .chart-inner {
   --fs: 24px;
   --per: 4;
@@ -114,7 +132,7 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 .sec h3 {
   margin: 0; font: 600 calc(var(--fs) * 0.52)/1.15 var(--font-body);
   letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent);
-  display: flex; gap: 0.6em; align-items: baseline;
+  display: flex; flex-wrap: wrap; gap: 0.3em 0.6em; align-items: baseline;
 }
 .sec h3 small { color: var(--muted); letter-spacing: 0.02em; text-transform: none; font-weight: 500; }
 .sec.same h3 { color: var(--muted); }
@@ -149,11 +167,42 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
   color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .next-song b { color: var(--ink); font-weight: 600; }
-.tools { display: flex; gap: 6px; flex: none; }
+.tools { display: flex; gap: 6px; flex: none; align-items: center; }
 .tools button {
   border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 11px; font-size: 13px;
+  height: 32px; display: inline-flex; align-items: center;
 }
+.tools svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .tools button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+
+/* ------------------------------------------------------------ painel da escala */
+.scale-body { padding: 12px 16px 18px; overflow-y: auto; display: grid; gap: 12px; }
+.scale-body .where { margin: 0; color: var(--muted); font-size: 13px; }
+.scale-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.scale-tabs .sc[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.notes-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.note {
+  min-width: 46px; padding: 6px 8px 4px; border-radius: 10px; border: 1px solid var(--line);
+  display: grid; justify-items: center; gap: 2px;
+}
+.note b { font: 800 26px/1 var(--font-chord); }
+.note small { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.note.root { background: var(--accent); border-color: transparent; color: var(--accent-ink); }
+.note.root small { color: var(--accent-ink); opacity: 0.8; }
+.tip { margin: 0; font-size: 13.5px; max-width: 65ch; }
+.fret { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; padding: 6px 4px; }
+.fret svg { display: block; width: 100%; min-width: 600px; height: auto; }
+.fret .wood { fill: var(--bg); }
+.fret .str { stroke: var(--muted); }
+.fret .fw { stroke: var(--line); stroke-width: 2; }
+.fret .nut { stroke: var(--ink); stroke-width: 5; }
+.fret .mk { fill: var(--line); }
+.fret .num { fill: var(--muted); font: 600 11px var(--font-body); text-anchor: middle; }
+.fret .dot { fill: var(--panel); stroke: var(--ink); stroke-width: 1.5; }
+.fret .dot.root { fill: var(--accent); stroke: var(--accent); }
+.fret .lbl { fill: var(--ink); font: 700 10.5px var(--font-body); text-anchor: middle; dominant-baseline: central; }
+.fret .lbl.root { fill: var(--accent-ink); }
+.fret-cap { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
 
 /* ------------------------------------------------------------ painéis (lista e notas) */
 .sheet {
@@ -185,10 +234,12 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 .notes-body p { margin: 0; }
 .notes-body .muted { color: var(--muted); font-size: 13px; }
 
-@media (max-width: 420px) {
+@media (max-width: 560px) {
   .top { grid-template-columns: auto minmax(0, 1fr) auto; }
-  .key { grid-column: 1 / -1; order: 5; justify-self: start; }
-  .tools button { padding: 5px 9px; }
+  .row2 { display: flex; grid-column: 1 / -1; order: 5; justify-content: space-between; align-items: center; gap: 8px; min-width: 0; }
+  .key > button:first-child, .key > button:last-child { width: 34px; }
+  .tools { gap: 4px; }
+  .tools button { padding: 4px 9px; font-size: 12.5px; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .chart-inner.enter { animation: enter 0.18s ease-out; }

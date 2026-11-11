@@ -356,6 +356,10 @@ select {
 .outline:active { background: var(--raised-2); }
 .stepper.key { grid-template-columns: 1fr auto 112px auto; }
 .grow { flex: 1; }
+.impro-line { margin: 0; font-size: 14px; }
+.impro-line .label { margin: 0; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.impro-line b { color: var(--amber); font-weight: 600; }
+.impro-line small { color: var(--muted); font-size: 12.5px; }
 .outline.sm { padding: 6px 12px; font-size: 14px; }
 .loop-bar { display: flex; align-items: center; gap: 8px; background: var(--amber-soft); border-radius: 12px; padding: 8px 8px 8px 12px; }
 .loop-bar span { flex: 1; }

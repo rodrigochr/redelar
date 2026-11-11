@@ -34,6 +34,12 @@ suspende o áudio de páginas web). Para tocar com a tela apagada, só um app na
 - Troca de música pelos botões, deslizando o dedo, pela lista ou pelo **teclado / pedal de virar
   página** (setas, PageUp/PageDown, espaço). O rodapé mostra a próxima música.
 - Modo palco (fundo preto), tela sempre acesa e tela cheia onde o aparelho permite.
+- **Escalas para improvisar**: no alto, as opções para a música (pentatônica, modo e, nos blues,
+  a escala blues); as partes que pedem outra escala (modulação, ou maior ↔ menor) mostram a
+  sugestão ao lado do nome. Tocando numa escala abre o painel com as notas, a fórmula
+  (1 b3 4 5 b7…), dicas de uso e o desenho no braço da guitarra. Tudo acompanha a troca de tom.
+  As sugestões saem da análise das notas dos acordes de cada parte (`src/js/scales.js`); a aba
+  Músicas do metrônomo mostra as mesmas sugestões em resumo.
 
 `test/cifras.mjs` confere no navegador que as 31 músicas cabem inteiras em celular em pé, celular
 deitado e tablet, com letra legível (no celular em pé, o menor acorde fica com 20 px).

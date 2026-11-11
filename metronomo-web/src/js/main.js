@@ -5,6 +5,7 @@ import {
   chordName, defaultAccents, effectiveAccents, grooveById, grooveMix, keyName, mod, normalizeSettings, progressionById, sameChord, songById,
   subdivisionById, tempoMarking,
 } from './music.js';
+import { analyzeSong, optionLabel } from './scales.js';
 import { loadSampleBundle } from './sounds.js';
 import { applyPreset, loadPresets, loadSettings, savePresets, saveSettings } from './store.js';
 
@@ -324,6 +325,7 @@ function songPanel(song) {
       <button type="button" class="round sm" data-action="song-key" data-v="1" aria-label="Meio tom acima">+</button></div>
     ${settings.key !== song.key ? `<div class="row end"><button type="button" class="text" data-action="song-key-reset">Voltar ao tom original (${esc(song.keyName)})</button></div>` : ''}
     <p class="label">Andamento de estudo</p><div class="chips scroll">${tempos}</div>
+    ${improLine(song)}
     ${select('song-groove', 'Levada desta música', 'grooveId', M.grooves.map((x) => [x.id, x.id === song.groove ? `${x.name} (sugerida)` : x.name]))}`,
   `${song.artist} · ${song.reference}`, LEAVE_SONG);
   const about = section('Sobre esta cifra', `${song.notes ? `<p class="hint">${esc(song.notes)}</p>` : ''}
@@ -331,6 +333,16 @@ function songPanel(song) {
     <div class="row end"><button type="button" class="text" data-action="song-leave">Tirar a música (voltar às levadas)</button></div>`,
   `Confiança ${song.confidenceLabel.toLowerCase()} · ${song.reference}`);
   return head + section('Cifra', follow + playMode + songChart(song, g), `${song.length} compassos · ${g.meter} · toque numa parte para repeti-la em loop`) + about;
+}
+
+/** Escalas sugeridas para improvisar (a página Cifras da Setlist mostra os detalhes e o braço). */
+function improLine(song) {
+  const a = analyzeSong(song);
+  if (!a.main) return '';
+  const main = a.main.options.map((o) => optionLabel(song, settings.key, o)).join(' · ');
+  const parts = Object.entries(a.sections).map(([s, r]) =>
+    `${song.sections[s].name}: ${r.options.slice(0, 2).map((o) => optionLabel(song, settings.key, o)).join(' · ')}`);
+  return `<p class="impro-line"><span class="label">Improviso</span> <b>${esc(main)}</b>${parts.length ? `<br><small>${esc(parts.join(' — '))}</small>` : ''}</p>`;
 }
 
 function songChart(song, g) {

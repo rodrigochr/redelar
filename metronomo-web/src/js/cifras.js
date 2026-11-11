@@ -1,6 +1,7 @@
 // Cifras da Setlist: cada música inteira numa tela, com troca de tom, para ler no palco.
 // As cifras são as mesmas do metrônomo (data/music.json, gerado pelo app Android).
 import { SONG_LIST, grooveById, keyName, mod, spelledName } from './music.js';
+import { SCALES, analyzeSong, intervalNames, optionLabel, rootName, scaleNotes, scalePitchClasses } from './scales.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -8,7 +9,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&
 // ------------------------------------------------------------------ estado (guardado só neste aparelho)
 
 const STORE_KEY = 'bt-cifras-v1';
-let state = { index: 0, shifts: {}, stage: false };
+let state = { index: 0, shifts: {}, stage: false, scales: true };
 try {
   const saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
   if (saved && typeof saved === 'object') state = { ...state, ...saved, shifts: { ...(saved.shifts || {}) } };
@@ -26,6 +27,8 @@ const shiftOf = (song) => {
   return mod(v + 6, 12) - 6; // de −6 a +5
 };
 const keyOf = (song) => mod(song.key + shiftOf(song), 12);
+const analyses = {};
+const analysisOf = (song) => analyses[song.id] || (analyses[song.id] = analyzeSong(song));
 
 // ------------------------------------------------------------------ cifra compacta
 
@@ -66,7 +69,7 @@ function roadmap(song) {
   return items;
 }
 
-function chartHtml(song, key) {
+function chartHtml(song, key, analysis) {
   const name = (c) => spelledName(c, key, song.minor);
   const g = grooveById(song.groove);
   const compound = g.steps === 3 && g.meter.endsWith('/8');
@@ -103,7 +106,12 @@ function chartHtml(song, key) {
         cells.push(`<div class="${cls.join(' ')}"><b>${esc(shown.join(' '))}</b>${x}${m}</div>`);
       });
     }
-    return `<section class="sec"><h3>${esc(sec.name)} ${times}</h3><div class="bars">${cells.join('')}</div></section>`;
+    // Parte que pede outra escala (modulação, ou maior ↔ menor): sugestão ao lado do nome.
+    const local = state.scales && analysis.sections[s];
+    const scaleTag = local
+      ? ` <button type="button" class="sec-sc" data-scale="sec:${s}" aria-label="Escalas para ${esc(sec.name)}">${local.options.slice(0, 2).map((o) => esc(optionLabel(song, key, o))).join(' · ')}</button>`
+      : '';
+    return `<section class="sec"><h3>${esc(sec.name)} ${times}${scaleTag}</h3><div class="bars">${cells.join('')}</div></section>`;
   }).join('');
 }
 
@@ -163,8 +171,15 @@ function render(direction = 0) {
   $('key-label').setAttribute('aria-label', shift ? `Tom ${keyName(key, song.minor)}, ${shift > 0 ? 'mais' : 'menos'} ${Math.abs(shift)} semitom. Toque para voltar a ${song.keyName}` : `Tom original ${song.keyName}`);
   $('road').innerHTML = roadmap(song).map((it, i) =>
     `${i ? '<span class="arrow" aria-hidden="true">›</span>' : ''}<span><b>${esc(it.name)}</b>${it.times > 1 ? ` <span class="times">×${it.times}</span>` : ''}</span>`).join('');
+  const analysis = analysisOf(song);
+  const impro = $('impro');
+  impro.hidden = !state.scales || !analysis.main;
+  if (!impro.hidden) {
+    impro.innerHTML = `<span class="lbl">Improviso</span>${analysis.main.options.map((o, i) =>
+      `<button type="button" class="sc" data-scale="main:${i}">${esc(optionLabel(song, key, o))}</button>`).join('')}`;
+  }
   const inner = $('chart-inner');
-  inner.innerHTML = chartHtml(song, key);
+  inner.innerHTML = chartHtml(song, key, analysis);
   const next = SONG_LIST[(state.index + 1) % SONG_LIST.length];
   $('next-song').innerHTML = `Próxima › <b>${next.number}. ${esc(next.title)}</b> · ${esc(keyName(keyOf(next), next.minor))} · ${next.bpm} BPM`;
   fit();
@@ -226,6 +241,87 @@ function openNotes() {
   openSheet('notes');
 }
 
+// ------------------------------------------------------------------ painel da escala
+
+const STRINGS = [64, 59, 55, 50, 45, 40]; // mi, si, sol, ré, lá, mi (de cima para baixo, como na tablatura)
+const FRETS = 12;
+
+/** Braço da guitarra (afinação padrão) com as notas da escala; a tônica em destaque. */
+function fretboard(option, key, names) {
+  const pcs = scalePitchClasses(key, option);
+  const rootPc = pcs[0];
+  const nameOf = Object.fromEntries(pcs.map((pc, i) => [pc, names[i]]));
+  const fw = 52; const x0 = 44; const y0 = 22; const sh = 28;
+  const W = x0 + FRETS * fw + 14; const H = y0 + 5 * sh + 40;
+  const parts = [`<rect class="wood" x="${x0}" y="${y0 - 10}" width="${FRETS * fw}" height="${5 * sh + 20}" rx="4"/>`];
+  for (const f of [3, 5, 7, 9]) parts.push(`<circle class="mk" cx="${x0 + (f - 0.5) * fw}" cy="${y0 + 2.5 * sh}" r="6"/>`);
+  parts.push(`<circle class="mk" cx="${x0 + 11.5 * fw}" cy="${y0 + 1.5 * sh}" r="6"/><circle class="mk" cx="${x0 + 11.5 * fw}" cy="${y0 + 3.5 * sh}" r="6"/>`);
+  for (let f = 1; f <= FRETS; f++) parts.push(`<line class="fw" x1="${x0 + f * fw}" y1="${y0 - 10}" x2="${x0 + f * fw}" y2="${y0 + 5 * sh + 10}"/>`);
+  parts.push(`<line class="nut" x1="${x0}" y1="${y0 - 10}" x2="${x0}" y2="${y0 + 5 * sh + 10}"/>`);
+  STRINGS.forEach((open, i) => parts.push(`<line class="str" x1="${x0 - 30}" y1="${y0 + i * sh}" x2="${x0 + FRETS * fw}" y2="${y0 + i * sh}" stroke-width="${1 + i * 0.35}"/>`));
+  for (const f of [3, 5, 7, 9, 12]) parts.push(`<text class="num" x="${x0 + (f - 0.5) * fw}" y="${y0 + 5 * sh + 28}">${f}</text>`);
+  STRINGS.forEach((open, i) => {
+    for (let f = 0; f <= FRETS; f++) {
+      const pc = mod(open + f, 12);
+      if (!(pc in nameOf)) continue;
+      const cx = f === 0 ? x0 - 18 : x0 + (f - 0.5) * fw;
+      const cy = y0 + i * sh;
+      const root = pc === rootPc ? ' root' : '';
+      parts.push(`<circle class="dot${root}" cx="${cx}" cy="${cy}" r="11.5"/><text class="lbl${root}" x="${cx}" y="${cy}">${esc(nameOf[pc])}</text>`);
+    }
+  });
+  return `<div class="fret"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Escala no braço da guitarra, casas 0 a ${FRETS}">${parts.join('')}</svg></div>
+    <p class="fret-cap">Guitarra em afinação padrão, casas 0 a ${FRETS} (corda mais aguda em cima). Em laranja, a tônica.</p>`;
+}
+
+let scaleRef = null; // { kind: 'main' | 'sec', section, index }
+
+function scaleGroup(song, ref) {
+  const a = analysisOf(song);
+  if (ref.kind === 'sec') {
+    const sec = song.sections[ref.section];
+    return { res: a.sections[ref.section], where: `Para a parte ${sec.name}.` };
+  }
+  const others = Object.keys(a.sections).map((s) => song.sections[s].name);
+  return { res: a.main, where: others.length ? `Para a música, exceto: ${others.join(', ')} (veja a sugestão ao lado do nome de cada uma).` : 'Para a música inteira.' };
+}
+
+function renderScale() {
+  const song = current();
+  const key = keyOf(song);
+  const { res, where } = scaleGroup(song, scaleRef);
+  if (!res) return;
+  const opt = res.options[Math.min(scaleRef.index, res.options.length - 1)];
+  const root = rootName(song, key, opt);
+  const names = scaleNotes(root, opt.type);
+  const ints = intervalNames(opt.type);
+  $('scale-title').textContent = `${root} ${SCALES[opt.type].name}`;
+  const tabs = res.options.map((o, i) =>
+    `<button type="button" class="sc" data-scale-tab="${i}" aria-pressed="${i === scaleRef.index}">${esc(optionLabel(song, key, o))}</button>`).join('');
+  const notes = names.map((n, i) => `<span class="note${i === 0 ? ' root' : ''}"><b>${esc(n)}</b><small>${ints[i]}</small></span>`).join('');
+  let tip = '';
+  if (opt.type === 'blues') tip = 'A b5 é nota de passagem: resolva na 4 ou na 5. Sobre cada acorde com sétima, o mixolídio dele também funciona.';
+  else if (opt.type === 'majorPent') tip = 'Sem as notas que brigam com os acordes: é a escolha mais segura sobre a música toda.';
+  else if (opt.type === 'minorPent') tip = 'O som clássico do rock e do blues; termine as frases na tônica ou na 5.';
+  else if (opt.type === 'mixolydian') tip = 'Maior com a 7 menor (b7): o som do rock com o acorde de bVII.';
+  else if (opt.type === 'dorian') tip = 'Menor com a 6 maior: dá cor de soul e funk sobre acordes menores.';
+  else if (opt.type === 'harmonicMinor') tip = 'Use sobre o acorde maior do quinto grau (V), quando ele aparece; a 7 maior puxa de volta para a tônica.';
+  else if (opt.type === 'lydian') tip = 'Maior com a 4 aumentada (#4): som aberto, de trilha.';
+  $('scale-body').innerHTML = `
+    <p class="where">${esc(where)} Encaixa em ${Math.round(opt.fit * 100)}% das notas dos acordes.</p>
+    <div class="scale-tabs" role="group" aria-label="Outras opções">${tabs}</div>
+    <div class="notes-row">${notes}</div>
+    ${tip ? `<p class="tip">${esc(tip)}</p>` : ''}
+    ${fretboard(opt, key, names)}`;
+}
+
+function openScale(ref) {
+  const [kind, a] = ref.split(':');
+  scaleRef = kind === 'sec' ? { kind, section: Number(a), index: 0 } : { kind: 'main', index: Number(a) || 0 };
+  renderScale();
+  openSheet('scale');
+}
+
 let lastFocus = null;
 function openSheet(id) {
   lastFocus = document.activeElement;
@@ -234,10 +330,10 @@ function openSheet(id) {
   if (close) close.focus();
 }
 function closeSheets() {
-  for (const id of ['list', 'notes']) $(id).hidden = true;
+  for (const id of ['list', 'notes', 'scale']) $(id).hidden = true;
   if (lastFocus && lastFocus.focus) lastFocus.focus();
 }
-const sheetOpen = () => !$('list').hidden || !$('notes').hidden;
+const sheetOpen = () => !$('list').hidden || !$('notes').hidden || !$('scale').hidden;
 
 // ------------------------------------------------------------------ controles
 
@@ -249,6 +345,15 @@ $('key-up').addEventListener('click', () => transpose(1));
 $('key-label').addEventListener('click', resetKey);
 $('open-list').addEventListener('click', openList);
 $('notes-btn').addEventListener('click', openNotes);
+document.addEventListener('click', (e) => {
+  const sc = e.target.closest('[data-scale]');
+  if (sc) { openScale(sc.dataset.scale); return; }
+  const tab = e.target.closest('[data-scale-tab]');
+  if (tab && scaleRef) { scaleRef.index = Number(tab.dataset.scaleTab); renderScale(); }
+});
+function applyScales() { $('scales-btn').setAttribute('aria-pressed', String(!!state.scales)); }
+$('scales-btn').addEventListener('click', () => { state.scales = !state.scales; applyScales(); render(); });
+applyScales();
 $('setlist').addEventListener('click', (e) => {
   const b = e.target.closest('[data-index]');
   if (!b) return;
@@ -331,4 +436,4 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit).catch
 render();
 
 // Exposto para testes automatizados.
-window.Cifras = { go, transpose, fit, get index() { return state.index; }, songs: SONG_LIST };
+window.Cifras = { go, transpose, fit, get index() { return state.index; }, songs: SONG_LIST, analysisOf };
