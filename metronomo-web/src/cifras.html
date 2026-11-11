@@ -1,0 +1,60 @@
+<title>Cifras da Setlist</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Cifras das músicas da setlist, cada uma inteira numa tela, com troca de tom — para usar no palco.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Work+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="cifras.css">
+
+<div class="app" id="app">
+  <header class="top">
+    <button type="button" class="nav" id="prev" aria-label="Música anterior" aria-keyshortcuts="ArrowLeft ArrowUp PageUp">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <button type="button" class="song" id="open-list" aria-label="Escolher música da setlist">
+      <span class="num" id="num">1</span>
+      <span class="name"><strong id="title">—</strong><small id="meta"></small></span>
+    </button>
+    <div class="key" role="group" aria-label="Tom">
+      <button type="button" id="key-down" aria-label="Meio tom abaixo" aria-keyshortcuts="Minus">−</button>
+      <button type="button" id="key-label" class="key-label" aria-label="Tom atual. Toque para voltar ao original">
+        <b id="key-name">C</b><small id="key-shift"></small>
+      </button>
+      <button type="button" id="key-up" aria-label="Meio tom acima" aria-keyshortcuts="Plus">+</button>
+    </div>
+    <button type="button" class="nav" id="next" aria-label="Próxima música" aria-keyshortcuts="ArrowRight ArrowDown PageDown Space">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </header>
+
+  <p class="road" id="road" aria-label="Roteiro da música"></p>
+
+  <main class="chart" id="chart" aria-live="polite">
+    <div class="chart-inner" id="chart-inner"></div>
+  </main>
+
+  <footer class="foot">
+    <button type="button" class="next-song" id="next-song"></button>
+    <span class="tools">
+      <button type="button" id="notes-btn">Notas</button>
+      <button type="button" id="stage-btn" aria-pressed="false">Palco</button>
+      <button type="button" id="full-btn">Tela cheia</button>
+    </span>
+  </footer>
+
+  <div class="sheet" id="list" hidden>
+    <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="list-title">
+      <div class="sheet-head"><h2 id="list-title">Setlist</h2><button type="button" class="close" data-close="list">Fechar</button></div>
+      <ol class="setlist" id="setlist"></ol>
+    </div>
+  </div>
+
+  <div class="sheet" id="notes" hidden>
+    <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="notes-title">
+      <div class="sheet-head"><h2 id="notes-title">Notas</h2><button type="button" class="close" data-close="notes">Fechar</button></div>
+      <div class="notes-body" id="notes-body"></div>
+    </div>
+  </div>
+</div>
+
+<script src="cifras.js"></script>

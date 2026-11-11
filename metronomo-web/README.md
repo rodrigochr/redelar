@@ -22,6 +22,22 @@ BluesTempo vira um ícone, abre em tela cheia e funciona offline depois do prime
 **Limitação do iPhone:** o som para quando a tela bloqueia ou quando você troca de app (o iOS
 suspende o áudio de páginas web). Para tocar com a tela apagada, só um app nativo.
 
+## Cifras da Setlist (página para o palco)
+
+`cifras.html` é uma página à parte, sem som, para ler as cifras durante a apresentação:
+
+- Cada música aparece **inteira numa tela, sem rolar**: trechos repetidos viram ritornelo com "×N",
+  partes iguais aparecem uma vez ("Solo = Verso") e o tamanho da letra se ajusta sozinho
+  (em tela deitada ou tablet, usa 2 ou 3 colunas). No alto, o roteiro da música
+  (Intro › Verso ×2 › Refrão…).
+- **Tom por música** (− / +; toque no tom para voltar ao original), guardado no aparelho.
+- Troca de música pelos botões, deslizando o dedo, pela lista ou pelo **teclado / pedal de virar
+  página** (setas, PageUp/PageDown, espaço). O rodapé mostra a próxima música.
+- Modo palco (fundo preto), tela sempre acesa e tela cheia onde o aparelho permite.
+
+`test/cifras.mjs` confere no navegador que as 31 músicas cabem inteiras em celular em pé, celular
+deitado e tablet, com letra legível (no celular em pé, o menor acorde fica com 20 px).
+
 ## Como funciona
 
 - `src/data/music.json` é **gerado pelo app Android** (`WebDataExportTest`): levadas, progressões,

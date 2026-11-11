@@ -1,0 +1,196 @@
+/* Cifras da Setlist — uma música inteira por tela, para ler no palco.
+   Layout: cabeçalho (música, tom) · roteiro · cifra que se ajusta à tela · rodapé (próxima). */
+:root {
+  --bg: #eef1f6;
+  --panel: #ffffff;
+  --line: #cfd6e3;
+  --ink: #0e1630;
+  --muted: #56627e;
+  --accent: #a85f00;
+  --accent-soft: rgba(168, 95, 0, 0.12);
+  --accent-ink: #ffffff;
+  --repeat: #2f5fbf;
+  --font-chord: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-body: "Work Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1020; --panel: #141b2e; --line: #2c3753; --ink: #eef2fa; --muted: #95a1bc;
+    --accent: #f5a623; --accent-soft: rgba(245, 166, 35, 0.14); --accent-ink: #1c1300; --repeat: #7fa6f5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"],
+:root.stage {
+  --bg: #0b1020; --panel: #141b2e; --line: #2c3753; --ink: #eef2fa; --muted: #95a1bc;
+  --accent: #f5a623; --accent-soft: rgba(245, 166, 35, 0.14); --accent-ink: #1c1300; --repeat: #7fa6f5;
+  color-scheme: dark;
+}
+/* Modo palco: fundo preto de verdade, para não ofuscar. */
+:root.stage { --bg: #000000; --panel: #0d1220; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.4 var(--font-body);
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 8px;
+  padding-block: 8px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ------------------------------------------------------------ cabeçalho */
+.top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 8px; }
+.nav {
+  width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--panel); display: grid; place-items: center;
+}
+.nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.nav:active { background: var(--accent-soft); }
+.top .nav:last-child { order: 4; }
+.song {
+  min-width: 0; display: flex; align-items: center; gap: 10px; text-align: left;
+  border: 0; background: none; padding: 2px 4px; border-radius: 10px;
+}
+.song:active { background: var(--accent-soft); }
+.num {
+  flex: none; min-width: 30px; height: 30px; padding-inline: 6px; border-radius: 8px; display: grid; place-items: center;
+  background: var(--accent); color: var(--accent-ink); font: 800 18px/1 var(--font-chord); font-variant-numeric: tabular-nums;
+}
+.name { min-width: 0; display: grid; }
+.name strong {
+  font: 800 clamp(20px, 5.2vw, 30px)/1.05 var(--font-chord); letter-spacing: 0.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.name small { color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.key { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow: hidden; }
+.key button { border: 0; background: none; height: 42px; }
+.key > button:first-child, .key > button:last-child { width: 38px; font-size: 22px; line-height: 1; }
+.key > button:active { background: var(--accent-soft); }
+.key-label {
+  min-width: 58px; padding-inline: 4px; display: grid; justify-items: center; align-content: center;
+  border-inline: 1px solid var(--line) !important;
+}
+.key-label b { font: 800 24px/1 var(--font-chord); color: var(--accent); }
+.key-label small { font-size: 10.5px; color: var(--muted); line-height: 1.1; }
+
+/* ------------------------------------------------------------ roteiro */
+.road {
+  margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5;
+  display: flex; flex-wrap: wrap; gap: 2px 6px; align-items: baseline;
+}
+.road span { white-space: nowrap; }
+.road b { color: var(--ink); font-weight: 600; }
+.road .arrow { color: var(--line); }
+.road .times { color: var(--accent); font-weight: 600; }
+
+/* ------------------------------------------------------------ cifra */
+.chart { min-height: 0; overflow: hidden; position: relative; }
+.chart-inner {
+  --fs: 24px;
+  --per: 4;
+  column-gap: calc(var(--fs) * 0.9);
+  column-rule: 1px solid var(--line);
+}
+.sec { break-inside: avoid; padding-bottom: calc(var(--fs) * 0.42); display: grid; gap: calc(var(--fs) * 0.14); }
+.sec h3 {
+  margin: 0; font: 600 calc(var(--fs) * 0.52)/1.15 var(--font-body);
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent);
+  display: flex; gap: 0.6em; align-items: baseline;
+}
+.sec h3 small { color: var(--muted); letter-spacing: 0.02em; text-transform: none; font-weight: 500; }
+.sec.same h3 { color: var(--muted); }
+.bars { display: grid; grid-template-columns: repeat(var(--per), minmax(0, 1fr)); gap: calc(var(--fs) * 0.12); }
+.bar {
+  position: relative; min-width: 0; height: calc(var(--fs) * 1.5);
+  display: grid; place-items: center; padding-inline: calc(var(--fs) * 0.12);
+  background: var(--panel); border: 1px solid var(--line); border-radius: calc(var(--fs) * 0.18);
+}
+.bar b {
+  display: block; max-width: 100%; overflow: hidden; white-space: nowrap;
+  font: 800 var(--fs)/1 var(--font-chord); letter-spacing: 0.01em;
+}
+.bar.multi b { font-size: calc(var(--fs) * 0.78); }
+.bar.nc b { color: var(--muted); font-weight: 600; font-size: calc(var(--fs) * 0.62); }
+/* Repetição de um trecho: barras duplas de ritornelo nas pontas, com o número de vezes. */
+.bar.rs { border-left: calc(var(--fs) * 0.14) double var(--repeat); }
+.bar.re { border-right: calc(var(--fs) * 0.14) double var(--repeat); }
+.bar .x, .bar .m {
+  position: absolute; font: 600 calc(var(--fs) * 0.4)/1 var(--font-body); font-variant-numeric: tabular-nums;
+}
+.bar .x { right: calc(var(--fs) * 0.1); top: calc(var(--fs) * 0.08); color: var(--repeat); }
+/* Espaço reservado para as marcas, para nunca cobrirem o acorde. */
+.bar.has-x { padding-right: calc(var(--fs) * 0.62); }
+.bar.has-m { padding-left: calc(var(--fs) * 0.62); }
+.bar .m { left: calc(var(--fs) * 0.1); bottom: calc(var(--fs) * 0.06); color: var(--muted); }
+
+/* ------------------------------------------------------------ rodapé */
+.foot { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.next-song {
+  flex: 1; min-width: 0; text-align: left; border: 0; background: none; padding: 4px 0;
+  color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.next-song b { color: var(--ink); font-weight: 600; }
+.tools { display: flex; gap: 6px; flex: none; }
+.tools button {
+  border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 11px; font-size: 13px;
+}
+.tools button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+
+/* ------------------------------------------------------------ painéis (lista e notas) */
+.sheet {
+  position: fixed; inset: 0; z-index: 20; background: rgba(5, 8, 18, 0.55);
+  display: grid; place-items: end center;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+}
+.sheet-box {
+  width: min(560px, 100%); max-height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr);
+  background: var(--panel); color: var(--ink); border-radius: 16px; border: 1px solid var(--line); overflow: hidden;
+}
+.sheet-head { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px 16px; border-bottom: 1px solid var(--line); }
+.sheet-head h2 { margin: 0; flex: 1; font: 800 24px/1 var(--font-chord); letter-spacing: 0.01em; }
+.close { border: 1px solid var(--line); background: none; border-radius: 999px; padding: 6px 12px; font-size: 14px; }
+.setlist { list-style: none; margin: 0; padding: 6px; overflow-y: auto; }
+.setlist button {
+  width: 100%; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: center;
+  border: 0; background: none; text-align: left; padding: 8px 10px; border-radius: 10px;
+}
+.setlist button:active, .setlist button:hover { background: var(--accent-soft); }
+.setlist button[aria-current="true"] { background: var(--accent-soft); }
+.setlist .n { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 15px; }
+.setlist .t { min-width: 0; display: grid; }
+.setlist .t strong { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.setlist .t small { color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.setlist .k { font: 800 20px/1 var(--font-chord); color: var(--accent); text-align: right; }
+.setlist .k small { display: block; font: 500 11px/1.3 var(--font-body); color: var(--muted); font-variant-numeric: tabular-nums; }
+.notes-body { padding: 14px 16px 18px; overflow-y: auto; display: grid; gap: 10px; max-width: 65ch; }
+.notes-body p { margin: 0; }
+.notes-body .muted { color: var(--muted); font-size: 13px; }
+
+@media (max-width: 420px) {
+  .top { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .key { grid-column: 1 / -1; order: 5; justify-self: start; }
+  .tools button { padding: 5px 9px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .chart-inner.enter { animation: enter 0.18s ease-out; }
+  @keyframes enter { from { opacity: 0.2; transform: translateX(var(--dx, 0)); } to { opacity: 1; transform: none; } }
+}

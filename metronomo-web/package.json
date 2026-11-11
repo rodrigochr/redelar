@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node test/smoke.mjs"
+    "test": "node test/smoke.mjs",
+    "test:cifras": "node test/cifras.mjs"
   },
   "devDependencies": {
     "esbuild": "0.24.0"

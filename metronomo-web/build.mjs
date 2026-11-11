@@ -71,8 +71,10 @@ const pageHead = (version) => `<!doctype html>
 async function main() {
   const dist = join(ROOT, 'dist');
   const artifact = join(ROOT, 'dist-artifact');
+  const cifrasArtifact = join(ROOT, 'dist-cifras');
   reset(dist);
   reset(artifact);
+  reset(cifrasArtifact);
 
   const js = await build({
     entryPoints: [join(SRC, 'js', 'main.js')],
@@ -85,6 +87,20 @@ async function main() {
     legalComments: 'none',
   });
   const appJs = js.outputFiles[0].contents;
+  // Página de cifras (independente do metrônomo, sem sons).
+  const cifrasJs = (await build({
+    entryPoints: [join(SRC, 'js', 'cifras.js')],
+    bundle: true,
+    minify: true,
+    format: 'iife',
+    target: ['es2019', 'safari13'],
+    write: false,
+    loader: { '.json': 'json' },
+    legalComments: 'none',
+  })).outputFiles[0].contents;
+  const cifrasCss = readFileSync(join(SRC, 'cifras.css'));
+  const cifrasHtml = readFileSync(join(SRC, 'cifras.html'), 'utf8');
+  const cifrasVersion = createHash('sha1').update(cifrasJs).update(cifrasCss).update(cifrasHtml).digest('hex').slice(0, 10);
   const appCss = readFileSync(join(SRC, 'app.css'));
   const fragment = readFileSync(join(SRC, 'app.html'), 'utf8');
   const samples = sampleBundle();
@@ -135,8 +151,30 @@ async function main() {
   writeFileSync(join(dist, 'sw.js'), sw);
   writeFileSync(join(dist, '.nojekyll'), '');
 
+  // Cifras: página própria no site (cifras.html) e pacote para publicar à parte (dist-cifras/).
+  writeFileSync(join(dist, 'cifras.js'), cifrasJs);
+  writeFileSync(join(dist, 'cifras.css'), cifrasCss);
+  writeFileSync(join(dist, 'cifras.html'), `<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="icons/icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+${cifrasHtml.replace('<script src="cifras.js"></script>', `<script src="cifras.js?v=${cifrasVersion}"></script>`)}
+</body>
+</html>
+`);
+  writeFileSync(join(cifrasArtifact, 'index.html'), cifrasHtml);
+  writeFileSync(join(cifrasArtifact, 'cifras.js'), cifrasJs);
+  writeFileSync(join(cifrasArtifact, 'cifras.css'), cifrasCss);
+
   const kb = (b) => `${(b.length / 1024).toFixed(0)} KB`;
   console.log(`versão ${version}: app.js ${kb(appJs)}, app.css ${kb(appCss)}, samples.bin ${kb(samples)}`);
+  console.log(`cifras ${cifrasVersion}: cifras.js ${kb(cifrasJs)}, cifras.css ${kb(cifrasCss)}`);
   if (!existsSync(join(dist, 'icons', 'apple-touch-icon.png'))) console.warn('aviso: ícones ausentes em src/icons');
 }
 
