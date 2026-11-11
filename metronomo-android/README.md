@@ -42,7 +42,7 @@ os sons continua disponível como opção.
 
 **Músicas (setlist com cifra)**
 - A setlist (21 músicas + 3 extras; as que saíram ficam guardadas à parte): Ira!, Júpiter Maçã, Legião Urbana, Rolling Stones, The Doors, The Cure,
-  Beatles, Raul Seixas…) com **andamento, tom, levada, baixo e a cifra compasso a compasso**
+  Beatles, Raul Seixas…, com **andamento, tom, levada, baixo e a cifra compasso a compasso**
   de cada parte da gravação de referência (intro, versos, refrões, solos, final).
 - Ao escolher uma música, o app ajusta tudo e a cifra acompanha a execução: o compasso atual
   acende, o painel mostra a parte e o próximo acorde, e a tela rola junto.
