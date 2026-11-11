@@ -2095,6 +2095,9 @@
         {
             "id": "nucleo_base",
             "number": 1,
+            "label": "1",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Núcleo Base",
             "artist": "Ira!",
             "reference": "Mudança de Comportamento (1985)",
@@ -2654,6 +2657,9 @@
         {
             "id": "nao_consigo_ser_alegre",
             "number": 2,
+            "label": "2",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Eu Não Consigo Ser Alegre o Tempo Inteiro",
             "artist": "Wander Wildner",
             "reference": "Wander Wildner, Acústico MTV Bandas Gaúchas (2005)",
@@ -2931,6 +2937,9 @@
         {
             "id": "needles_and_pins",
             "number": 3,
+            "label": "3",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Needles and Pins",
             "artist": "Ramones",
             "reference": "Ramones, Road to Ruin (1978)",
@@ -3208,6 +3217,9 @@
         {
             "id": "borracho_y_loco",
             "number": 4,
+            "label": "4",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Borracho y Loco",
             "artist": "Vera Loca",
             "reference": "Vera Loca Ao Vivo (c. 2013)",
@@ -3518,6 +3530,9 @@
         {
             "id": "black",
             "number": 5,
+            "label": "5",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Black",
             "artist": "Pearl Jam",
             "reference": "Ten (1991), gravação de estúdio (~5:43), afinação padrão",
@@ -3885,6 +3900,9 @@
         {
             "id": "indios",
             "number": 6,
+            "label": "6",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Índios",
             "artist": "Legião Urbana",
             "reference": "Dois (1986)",
@@ -4165,6 +4183,9 @@
         {
             "id": "in_between_days",
             "number": 7,
+            "label": "7",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "In Between Days",
             "artist": "The Cure",
             "reference": "The Head on the Door (1985)",
@@ -4491,6 +4512,9 @@
         {
             "id": "dont_you_forget_about_me",
             "number": 8,
+            "label": "8",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Don't You (Forget About Me)",
             "artist": "Simple Minds",
             "reference": "Simple Minds, single (1985)",
@@ -4915,7 +4939,10 @@
         },
         {
             "id": "enjoy_the_silence",
-            "number": 9,
+            "number": 10,
+            "label": "10",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Enjoy the Silence",
             "artist": "Depeche Mode",
             "reference": "Violator (1990), versão do single",
@@ -5225,567 +5252,11 @@
             ]
         },
         {
-            "id": "so_far_away",
-            "number": 10,
-            "title": "So Far Away",
-            "artist": "Dire Straits",
-            "reference": "Brothers in Arms (1985)",
-            "key": 4,
-            "minor": false,
-            "bpm": 114,
-            "groove": "rock_basic",
-            "bass": "ROCK_EIGHTHS",
-            "swing": null,
-            "confidence": "MEDIUM",
-            "confidenceLabel": "Média",
-            "notes": "Colcheias retas e relaxadas, sem shuffle. O riff B–A–E–E abre, liga as partes e sustenta o solo final (16 voltas até o fade no álbum; o single é mais curto).",
-            "chords": [
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 9,
-                    "quality": "MIN",
-                    "suffix": "m"
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Interlúdio",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final (solo)",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                3,
-                1,
-                2,
-                3,
-                3,
-                1,
-                2,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4,
-                4
-            ]
-        },
-        {
-            "id": "every_breath_you_take",
-            "number": 11,
-            "title": "Every Breath You Take",
-            "artist": "The Police",
-            "reference": "Synchronicity (1983)",
-            "key": 8,
-            "minor": false,
-            "bpm": 117,
-            "groove": "rock_basic",
-            "bass": "ROCK_EIGHTHS",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "Láb maior com baixo em colcheias na tônica. A ponte vai para E e F# (= Fb e Gb). Db/Cb: o baixo desce para Cb (= B) sob o Db. Bancos de BPM que dizem Db erram o tom. O final é um loop até o fade.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 9,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": "",
-                    "bass": 3
-                },
-                {
-                    "degree": 2,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 8,
-                    "quality": "MAJ",
-                    "suffix": "",
-                    "spellShift": 8,
-                    "spellMinor": false
-                },
-                {
-                    "degree": 10,
-                    "quality": "MAJ",
-                    "suffix": "",
-                    "spellShift": 8,
-                    "spellMinor": false
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso A",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso B",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            2
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            3
-                        ]
-                    ]
-                },
-                {
-                    "name": "Ponte",
-                    "bars": [
-                        [
-                            6
-                        ],
-                        [
-                            6
-                        ],
-                        [
-                            7
-                        ],
-                        [
-                            7
-                        ],
-                        [
-                            6
-                        ],
-                        [
-                            6
-                        ],
-                        [
-                            7
-                        ],
-                        [
-                            7
-                        ],
-                        [
-                            6
-                        ],
-                        [
-                            6
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso A + tag",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                3,
-                1,
-                4,
-                5,
-                3,
-                6,
-                7,
-                7,
-                7,
-                7,
-                7,
-                7,
-                7,
-                7
-            ]
-        },
-        {
             "id": "man_who_sold",
-            "number": 12,
+            "number": 11,
+            "label": "11",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "The Man Who Sold the World",
             "artist": "Nirvana (composição de David Bowie)",
             "reference": "Nirvana, MTV Unplugged in New York (1994)",
@@ -6110,7 +5581,10 @@
         },
         {
             "id": "like_a_rolling_stone",
-            "number": 13,
+            "number": 12,
+            "label": "12",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Like a Rolling Stone",
             "artist": "Bob Dylan",
             "reference": "Highway 61 Revisited (1965)",
@@ -6442,430 +5916,11 @@
             ]
         },
         {
-            "id": "bicho_do_parana",
-            "number": 14,
-            "title": "Bicho do Paraná",
-            "artist": "João Lopes",
-            "reference": "João Lopes (1981)",
-            "key": 7,
-            "minor": false,
-            "bpm": 86,
-            "groove": "country_two_beat",
-            "bass": "COUNTRY",
-            "swing": null,
-            "confidence": "LOW",
-            "confidenceLabel": "Baixa",
-            "notes": "Rock rural em dois tempos: os acordes trocam a cada 2 tempos (dá para contar a 172 com 1 acorde por compasso). A quantidade de repetições veio da cifra e não foi conferida na gravação. A versão rock da Banda Blindagem (~108 BPM, riff em G) é bem diferente.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": ""
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Estrofe",
-                    "bars": [
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            2
-                        ],
-                        [
-                            1,
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Interlúdio",
-                    "bars": [
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Estrofe final",
-                    "bars": [
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            0,
-                            2
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            2,
-                            1
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                1,
-                2,
-                1,
-                2,
-                1,
-                2,
-                3,
-                1,
-                2,
-                4
-            ]
-        },
-        {
-            "id": "i_put_a_spell_on_you",
-            "number": 15,
-            "title": "I Put a Spell on You",
-            "artist": "Creedence Clearwater Revival",
-            "reference": "Creedence Clearwater Revival (1968)",
-            "key": 4,
-            "minor": true,
-            "bpm": 66,
-            "groove": "slow_blues",
-            "bass": "ARPEGGIO",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "Versão do Creedence em 12/8: o BPM conta a semínima pontuada (66 = colcheia a ~198). O disco abre com ~7 s de efeitos sem pulso (fora da cifra). Depois do 1º verso vem 1 compasso de B7; nas outras passagens o fim do verso vira um break de 3 compassos (B7 C | F7M D | G Am).",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 5,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 7,
-                    "quality": "DOM7",
-                    "suffix": "7"
-                },
-                {
-                    "degree": 8,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 1,
-                    "quality": "MAJ7",
-                    "suffix": "7M"
-                },
-                {
-                    "degree": 10,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 3,
-                    "quality": "MAJ",
-                    "suffix": ""
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0,
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Turnaround",
-                    "bars": [
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0,
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Break",
-                    "bars": [
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            4,
-                            5
-                        ],
-                        [
-                            6,
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            1,
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                3,
-                4,
-                1,
-                4,
-                5
-            ]
-        },
-        {
             "id": "let_it_bleed",
-            "number": 16,
+            "number": 13,
+            "label": "13",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Let It Bleed",
             "artist": "The Rolling Stones",
             "reference": "Let It Bleed (1969)",
@@ -7108,490 +6163,11 @@
             ]
         },
         {
-            "id": "dont_let_me_down",
-            "number": 17,
-            "title": "Don't Let Me Down",
-            "artist": "The Beatles",
-            "reference": "The Beatles, single (1969) / Past Masters",
-            "key": 4,
-            "minor": false,
-            "bpm": 76,
-            "groove": "rock_ballad",
-            "bass": "BALLAD",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "Compassos irregulares: o compasso antes de cada frase do verso tem 5 tempos (4 compassos de 5/4 na música). O acorde com baixo em B (A7M/B ou F#m/B, soa como B11) entra no 3º tempo no refrão e só no 4º no verso. O final é o refrão com o solo de piano elétrico de Billy Preston.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 2,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 2,
-                    "quality": "MIN7",
-                    "suffix": "m7"
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ7",
-                    "suffix": "7M",
-                    "bass": 7
-                },
-                {
-                    "degree": 2,
-                    "quality": "MIN",
-                    "suffix": "m",
-                    "bass": 7
-                },
-                {
-                    "degree": 7,
-                    "quality": "DOM7",
-                    "suffix": "7"
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão (para o verso)",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ],
-                    "beats": {
-                        "7": 5
-                    }
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            2
-                        ],
-                        [
-                            2,
-                            2,
-                            2,
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1,
-                            1,
-                            1,
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ],
-                    "beats": {
-                        "3": 5
-                    }
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Ponte",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                1,
-                2,
-                3,
-                5
-            ]
-        },
-        {
-            "id": "wish_you_were_here",
-            "number": 18,
-            "title": "Wish You Were Here",
-            "artist": "Pink Floyd",
-            "reference": "Wish You Were Here (1975)",
-            "key": 7,
-            "minor": false,
-            "bpm": 61,
-            "groove": "rock_ballad",
-            "bass": "BALLAD",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "No disco, baixo e bateria só entram no fim do 1º verso, e o tempo varia de ~57 a ~63 BPM. O riff (Em7–G–A7sus4) tem uma anacruse antes do 1º compasso.",
-            "chords": [
-                {
-                    "degree": 9,
-                    "quality": "MIN7",
-                    "suffix": "m7"
-                },
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 2,
-                    "quality": "SUS4",
-                    "suffix": "7sus4"
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": "",
-                    "bass": 11
-                },
-                {
-                    "degree": 2,
-                    "quality": "MIN",
-                    "suffix": "m"
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Interlúdio",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo final",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                2,
-                1,
-                2,
-                3,
-                4,
-                5
-            ]
-        },
-        {
             "id": "flores_astrais",
-            "number": 19,
+            "number": 14,
+            "label": "14",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Flores Astrais",
             "artist": "Secos & Molhados",
             "reference": "Secos & Molhados (1974), 2º álbum",
@@ -8034,367 +6610,11 @@
             ]
         },
         {
-            "id": "comfortably_numb",
-            "number": 20,
-            "title": "Comfortably Numb",
-            "artist": "Pink Floyd",
-            "reference": "The Wall (1979)",
-            "key": 11,
-            "minor": true,
-            "bpm": 64,
-            "groove": "rock_ballad",
-            "bass": "BALLAD",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "Versos em Si menor e refrão em Ré maior. No verso, o 3º compasso é G (tempos 1–2) e Em (3–4). Bancos de BPM que dizem 127 estão contando em dobro.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 10,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 8,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 5,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 3,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 1,
-                    "quality": "MAJ",
-                    "suffix": ""
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso 1",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            4
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Fecho",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            5,
-                            2
-                        ],
-                        [
-                            4
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo 1",
-                    "bars": [
-                        [
-                            4
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            5
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso 2",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Fecho final",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            5,
-                            2
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            4
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo final",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2,
-                            3
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                3,
-                5,
-                2,
-                6,
-                7
-            ]
-        },
-        {
             "id": "loving_cup",
-            "number": 21,
+            "number": 15,
+            "label": "15",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Loving Cup",
             "artist": "The Rolling Stones",
             "reference": "Exile on Main St. (1972)",
@@ -8643,7 +6863,10 @@
         },
         {
             "id": "canceriano_sem_lar",
-            "number": 22,
+            "number": 16,
+            "label": "16",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Canceriano Sem Lar (Clínica Tobias Blues)",
             "artist": "Raul Seixas",
             "reference": "Uah-Bap-Lu-Bap-Lah-Béin-Bum! (1987)",
@@ -8976,196 +7199,11 @@
             ]
         },
         {
-            "id": "midnight_special",
-            "number": 23,
-            "title": "The Midnight Special",
-            "artist": "Creedence Clearwater Revival",
-            "reference": "Creedence Clearwater Revival, Willy and the Poor Boys (1969)",
-            "key": 2,
-            "minor": false,
-            "bpm": 124,
-            "groove": "rock_basic",
-            "bass": "COUNTRY",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "A música toda gira no ciclo G G D D A7 A7 D D. No disco, o 1º verso é só voz e violão, fora do tempo (~100 BPM) e ficou de fora da cifra; o 1º e o penúltimo refrão vêm sem bateria. Guitarras afinadas um tom abaixo (formas de E/A/B7).",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 0,
-                    "quality": "NC",
-                    "suffix": "N.C."
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 7,
-                    "quality": "DOM7",
-                    "suffix": "7"
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Entrada",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                1,
-                2,
-                1,
-                1,
-                2,
-                1,
-                1,
-                1,
-                1,
-                3
-            ]
-        },
-        {
             "id": "musica_urbana_2",
-            "number": 24,
+            "number": 17,
+            "label": "17",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Música Urbana 2",
             "artist": "Legião Urbana",
             "reference": "Dois (1986)",
@@ -9381,7 +7419,10 @@
         },
         {
             "id": "help_the_poor",
-            "number": 25,
+            "number": 18,
+            "label": "18",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Help the Poor",
             "artist": "B.B. King",
             "reference": "B.B. King, Live at the Regal (1965)",
@@ -9581,666 +7622,11 @@
             ]
         },
         {
-            "id": "sempre_brilhara",
-            "number": 26,
-            "title": "Sempre Brilhará",
-            "artist": "Celso Blues Boy",
-            "reference": "Celso Blues Boy, Vivo (1991)",
-            "key": 7,
-            "minor": false,
-            "bpm": 100,
-            "groove": "blues_rock",
-            "bass": "ROCK_EIGHTHS",
-            "swing": null,
-            "confidence": "LOW",
-            "confidenceLabel": "Baixa",
-            "notes": "Identificada pela letra manuscrita (\"Sempre Brilha...\"): confirme se é esta. Referência ao vivo em G; a versão acústica de 2015 pode estar em A. Os nomes das partes foram deduzidos da letra; no disco, antes da intro, há ~8 compassos de guitarra livre.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 2,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 9,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": ""
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro (guitarra)",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            3
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4,
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Volta",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Pós-refrão",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4,
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4,
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                3,
-                1,
-                2,
-                4,
-                5,
-                2,
-                4,
-                6
-            ]
-        },
-        {
-            "id": "sweet_virginia",
-            "number": 27,
-            "title": "Sweet Virginia",
-            "artist": "The Rolling Stones",
-            "reference": "Exile on Main St. (1972)",
-            "key": 9,
-            "minor": false,
-            "bpm": 107,
-            "groove": "chicago_shuffle",
-            "bass": "TWO_FEEL",
-            "swing": 0.64,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "Country shuffle com baixo \"em dois\" (tônica e quinta nos tempos 1 e 3). A música inteira é um ciclo de 16 compassos (D B A A | D B A A | D B A D | A E A A). Começa com anacruse de 3 colcheias do violão. Violão original com capo 2.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 7,
-                    "quality": "DOM7",
-                    "suffix": "7",
-                    "bass": 5
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 2,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": "",
-                    "bass": 11
-                },
-                {
-                    "degree": 5,
-                    "quality": "MAJ",
-                    "suffix": "",
-                    "bass": 0
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            1,
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Intro (gaita)",
-                    "bars": [
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão final",
-                    "bars": [
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            4
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            3
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            1,
-                            5
-                        ],
-                        [
-                            6
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                2,
-                3,
-                4,
-                3,
-                5
-            ]
-        },
-        {
             "id": "maggie_mgill",
-            "number": 28,
+            "number": 19,
+            "label": "19",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Maggie M'Gill",
             "artist": "The Doors",
             "reference": "Morrison Hotel (1970)",
@@ -10449,297 +7835,11 @@
             ]
         },
         {
-            "id": "roadhouse_blues",
-            "number": 29,
-            "title": "Roadhouse Blues",
-            "artist": "The Doors",
-            "reference": "Morrison Hotel (1970)",
-            "key": 4,
-            "minor": false,
-            "bpm": 120,
-            "groove": "chicago_shuffle",
-            "bass": "BOOGIE",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "Não é blues de 12 com IV e V: os versos são vamp de 12 compassos em E com o riff de boogie. A única mudança é o refrão (A7 ×6, B e o corte C–B). Shuffle de 120 BPM.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "DOM7",
-                    "suffix": "7"
-                },
-                {
-                    "degree": 5,
-                    "quality": "DOM7",
-                    "suffix": "7"
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 8,
-                    "quality": "MAJ",
-                    "suffix": ""
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Interlúdio",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3,
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão final",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                1,
-                3,
-                4,
-                1,
-                2,
-                1,
-                2,
-                1,
-                5,
-                6
-            ]
-        },
-        {
             "id": "sympathy_for_the_devil",
-            "number": 30,
+            "number": 20,
+            "label": "20",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Sympathy for the Devil",
             "artist": "The Rolling Stones",
             "reference": "Beggars Banquet (1968)",
@@ -11047,7 +8147,10 @@
         },
         {
             "id": "dezesseis",
-            "number": 31,
+            "number": 21,
+            "label": "21",
+            "group": "SETLIST",
+            "groupLabel": "Setlist",
             "title": "Dezesseis",
             "artist": "Legião Urbana",
             "reference": "A Tempestade ou O Livro dos Dias (1996)",
@@ -11426,6 +8529,2996 @@
                 5,
                 6,
                 7
+            ]
+        },
+        {
+            "id": "bicho_do_parana",
+            "number": 1,
+            "label": "E1",
+            "group": "EXTRA",
+            "groupLabel": "Extras",
+            "title": "Bicho do Paraná",
+            "artist": "João Lopes",
+            "reference": "João Lopes (1981)",
+            "key": 7,
+            "minor": false,
+            "bpm": 86,
+            "groove": "country_two_beat",
+            "bass": "COUNTRY",
+            "swing": null,
+            "confidence": "LOW",
+            "confidenceLabel": "Baixa",
+            "notes": "Rock rural em dois tempos: os acordes trocam a cada 2 tempos (dá para contar a 172 com 1 acorde por compasso). A quantidade de repetições veio da cifra e não foi conferida na gravação. A versão rock da Banda Blindagem (~108 BPM, riff em G) é bem diferente.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Estrofe",
+                    "bars": [
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            2
+                        ],
+                        [
+                            1,
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Interlúdio",
+                    "bars": [
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Estrofe final",
+                    "bars": [
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            0,
+                            2
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            2,
+                            1
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                1,
+                2,
+                1,
+                2,
+                1,
+                2,
+                3,
+                1,
+                2,
+                4
+            ]
+        },
+        {
+            "id": "i_put_a_spell_on_you",
+            "number": 2,
+            "label": "E2",
+            "group": "EXTRA",
+            "groupLabel": "Extras",
+            "title": "I Put a Spell on You",
+            "artist": "Creedence Clearwater Revival",
+            "reference": "Creedence Clearwater Revival (1968)",
+            "key": 4,
+            "minor": true,
+            "bpm": 66,
+            "groove": "slow_blues",
+            "bass": "ARPEGGIO",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Versão do Creedence em 12/8: o BPM conta a semínima pontuada (66 = colcheia a ~198). O disco abre com ~7 s de efeitos sem pulso (fora da cifra). Depois do 1º verso vem 1 compasso de B7; nas outras passagens o fim do verso vira um break de 3 compassos (B7 C | F7M D | G Am).",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 5,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 7,
+                    "quality": "DOM7",
+                    "suffix": "7"
+                },
+                {
+                    "degree": 8,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 1,
+                    "quality": "MAJ7",
+                    "suffix": "7M"
+                },
+                {
+                    "degree": 10,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 3,
+                    "quality": "MAJ",
+                    "suffix": ""
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0,
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Turnaround",
+                    "bars": [
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0,
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Break",
+                    "bars": [
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            4,
+                            5
+                        ],
+                        [
+                            6,
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            1,
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                3,
+                4,
+                1,
+                4,
+                5
+            ]
+        },
+        {
+            "id": "roadhouse_blues",
+            "number": 3,
+            "label": "E3",
+            "group": "EXTRA",
+            "groupLabel": "Extras",
+            "title": "Roadhouse Blues",
+            "artist": "The Doors",
+            "reference": "Morrison Hotel (1970)",
+            "key": 4,
+            "minor": false,
+            "bpm": 120,
+            "groove": "chicago_shuffle",
+            "bass": "BOOGIE",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Não é blues de 12 com IV e V: os versos são vamp de 12 compassos em E com o riff de boogie. A única mudança é o refrão (A7 ×6, B e o corte C–B). Shuffle de 120 BPM.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "DOM7",
+                    "suffix": "7"
+                },
+                {
+                    "degree": 5,
+                    "quality": "DOM7",
+                    "suffix": "7"
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 8,
+                    "quality": "MAJ",
+                    "suffix": ""
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Interlúdio",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3,
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão final",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                1,
+                3,
+                4,
+                1,
+                2,
+                1,
+                2,
+                1,
+                5,
+                6
+            ]
+        },
+        {
+            "id": "so_far_away",
+            "number": 1,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "So Far Away",
+            "artist": "Dire Straits",
+            "reference": "Brothers in Arms (1985)",
+            "key": 4,
+            "minor": false,
+            "bpm": 114,
+            "groove": "rock_basic",
+            "bass": "ROCK_EIGHTHS",
+            "swing": null,
+            "confidence": "MEDIUM",
+            "confidenceLabel": "Média",
+            "notes": "Colcheias retas e relaxadas, sem shuffle. O riff B–A–E–E abre, liga as partes e sustenta o solo final (16 voltas até o fade no álbum; o single é mais curto).",
+            "chords": [
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 9,
+                    "quality": "MIN",
+                    "suffix": "m"
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Interlúdio",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final (solo)",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                3,
+                1,
+                2,
+                3,
+                3,
+                1,
+                2,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4
+            ]
+        },
+        {
+            "id": "every_breath_you_take",
+            "number": 2,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "Every Breath You Take",
+            "artist": "The Police",
+            "reference": "Synchronicity (1983)",
+            "key": 8,
+            "minor": false,
+            "bpm": 117,
+            "groove": "rock_basic",
+            "bass": "ROCK_EIGHTHS",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Láb maior com baixo em colcheias na tônica. A ponte vai para E e F# (= Fb e Gb). Db/Cb: o baixo desce para Cb (= B) sob o Db. Bancos de BPM que dizem Db erram o tom. O final é um loop até o fade.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 9,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": "",
+                    "bass": 3
+                },
+                {
+                    "degree": 2,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 8,
+                    "quality": "MAJ",
+                    "suffix": "",
+                    "spellShift": 8,
+                    "spellMinor": false
+                },
+                {
+                    "degree": 10,
+                    "quality": "MAJ",
+                    "suffix": "",
+                    "spellShift": 8,
+                    "spellMinor": false
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso A",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso B",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            3
+                        ]
+                    ]
+                },
+                {
+                    "name": "Ponte",
+                    "bars": [
+                        [
+                            6
+                        ],
+                        [
+                            6
+                        ],
+                        [
+                            7
+                        ],
+                        [
+                            7
+                        ],
+                        [
+                            6
+                        ],
+                        [
+                            6
+                        ],
+                        [
+                            7
+                        ],
+                        [
+                            7
+                        ],
+                        [
+                            6
+                        ],
+                        [
+                            6
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso A + tag",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                3,
+                1,
+                4,
+                5,
+                3,
+                6,
+                7,
+                7,
+                7,
+                7,
+                7,
+                7,
+                7,
+                7
+            ]
+        },
+        {
+            "id": "dont_let_me_down",
+            "number": 3,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "Don't Let Me Down",
+            "artist": "The Beatles",
+            "reference": "The Beatles, single (1969) / Past Masters",
+            "key": 4,
+            "minor": false,
+            "bpm": 76,
+            "groove": "rock_ballad",
+            "bass": "BALLAD",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Compassos irregulares: o compasso antes de cada frase do verso tem 5 tempos (4 compassos de 5/4 na música). O acorde com baixo em B (A7M/B ou F#m/B, soa como B11) entra no 3º tempo no refrão e só no 4º no verso. O final é o refrão com o solo de piano elétrico de Billy Preston.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 2,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 2,
+                    "quality": "MIN7",
+                    "suffix": "m7"
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ7",
+                    "suffix": "7M",
+                    "bass": 7
+                },
+                {
+                    "degree": 2,
+                    "quality": "MIN",
+                    "suffix": "m",
+                    "bass": 7
+                },
+                {
+                    "degree": 7,
+                    "quality": "DOM7",
+                    "suffix": "7"
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão (para o verso)",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ],
+                    "beats": {
+                        "7": 5
+                    }
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            2,
+                            2,
+                            2,
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1,
+                            1,
+                            1,
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ],
+                    "beats": {
+                        "3": 5
+                    }
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Ponte",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                1,
+                2,
+                3,
+                5
+            ]
+        },
+        {
+            "id": "wish_you_were_here",
+            "number": 4,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "Wish You Were Here",
+            "artist": "Pink Floyd",
+            "reference": "Wish You Were Here (1975)",
+            "key": 7,
+            "minor": false,
+            "bpm": 61,
+            "groove": "rock_ballad",
+            "bass": "BALLAD",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "No disco, baixo e bateria só entram no fim do 1º verso, e o tempo varia de ~57 a ~63 BPM. O riff (Em7–G–A7sus4) tem uma anacruse antes do 1º compasso.",
+            "chords": [
+                {
+                    "degree": 9,
+                    "quality": "MIN7",
+                    "suffix": "m7"
+                },
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 2,
+                    "quality": "SUS4",
+                    "suffix": "7sus4"
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": "",
+                    "bass": 11
+                },
+                {
+                    "degree": 2,
+                    "quality": "MIN",
+                    "suffix": "m"
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Interlúdio",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                2,
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "id": "comfortably_numb",
+            "number": 5,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "Comfortably Numb",
+            "artist": "Pink Floyd",
+            "reference": "The Wall (1979)",
+            "key": 11,
+            "minor": true,
+            "bpm": 64,
+            "groove": "rock_ballad",
+            "bass": "BALLAD",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Versos em Si menor e refrão em Ré maior. No verso, o 3º compasso é G (tempos 1–2) e Em (3–4). Bancos de BPM que dizem 127 estão contando em dobro.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 10,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 8,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 5,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 3,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 1,
+                    "quality": "MAJ",
+                    "suffix": ""
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso 1",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            4
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Fecho",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            5,
+                            2
+                        ],
+                        [
+                            4
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo 1",
+                    "bars": [
+                        [
+                            4
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            5
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso 2",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Fecho final",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            5,
+                            2
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            4
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2,
+                            3
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                3,
+                5,
+                2,
+                6,
+                7
+            ]
+        },
+        {
+            "id": "midnight_special",
+            "number": 6,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "The Midnight Special",
+            "artist": "Creedence Clearwater Revival",
+            "reference": "Creedence Clearwater Revival, Willy and the Poor Boys (1969)",
+            "key": 2,
+            "minor": false,
+            "bpm": 124,
+            "groove": "rock_basic",
+            "bass": "COUNTRY",
+            "swing": null,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "A música toda gira no ciclo G G D D A7 A7 D D. No disco, o 1º verso é só voz e violão, fora do tempo (~100 BPM) e ficou de fora da cifra; o 1º e o penúltimo refrão vêm sem bateria. Guitarras afinadas um tom abaixo (formas de E/A/B7).",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 0,
+                    "quality": "NC",
+                    "suffix": "N.C."
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 7,
+                    "quality": "DOM7",
+                    "suffix": "7"
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Entrada",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                1,
+                2,
+                1,
+                1,
+                2,
+                1,
+                1,
+                1,
+                1,
+                3
+            ]
+        },
+        {
+            "id": "sempre_brilhara",
+            "number": 7,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "Sempre Brilhará",
+            "artist": "Celso Blues Boy",
+            "reference": "Celso Blues Boy, Vivo (1991)",
+            "key": 7,
+            "minor": false,
+            "bpm": 100,
+            "groove": "blues_rock",
+            "bass": "ROCK_EIGHTHS",
+            "swing": null,
+            "confidence": "LOW",
+            "confidenceLabel": "Baixa",
+            "notes": "Identificada pela letra manuscrita (\"Sempre Brilha...\"): confirme se é esta. Referência ao vivo em G; a versão acústica de 2015 pode estar em A. Os nomes das partes foram deduzidos da letra; no disco, antes da intro, há ~8 compassos de guitarra livre.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 2,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 9,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro (guitarra)",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4,
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Volta",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Pós-refrão",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4,
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4,
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                3,
+                1,
+                2,
+                4,
+                5,
+                2,
+                4,
+                6
+            ]
+        },
+        {
+            "id": "sweet_virginia",
+            "number": 8,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "Sweet Virginia",
+            "artist": "The Rolling Stones",
+            "reference": "Exile on Main St. (1972)",
+            "key": 9,
+            "minor": false,
+            "bpm": 107,
+            "groove": "chicago_shuffle",
+            "bass": "TWO_FEEL",
+            "swing": 0.64,
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Country shuffle com baixo \"em dois\" (tônica e quinta nos tempos 1 e 3). A música inteira é um ciclo de 16 compassos (D B A A | D B A A | D B A D | A E A A). Começa com anacruse de 3 colcheias do violão. Violão original com capo 2.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 7,
+                    "quality": "DOM7",
+                    "suffix": "7",
+                    "bass": 5
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 2,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": "",
+                    "bass": 11
+                },
+                {
+                    "degree": 5,
+                    "quality": "MAJ",
+                    "suffix": "",
+                    "bass": 0
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            1,
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Intro (gaita)",
+                    "bars": [
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão final",
+                    "bars": [
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            4
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            3
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1,
+                            5
+                        ],
+                        [
+                            6
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                2,
+                2,
+                3,
+                4,
+                3,
+                5
             ]
         }
     ],

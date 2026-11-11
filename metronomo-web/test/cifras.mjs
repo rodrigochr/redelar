@@ -50,7 +50,7 @@ for (const screen of SCREENS) {
   for (let i = 0; i < n; i++) {
     const r = await page.evaluate((idx) => {
       const C = window.Cifras;
-      C.go(idx - C.index);
+      C.show(idx);
       const box = document.getElementById('chart');
       const inner = document.getElementById('chart-inner');
       const cut = [...inner.querySelectorAll('.bar b')].filter((b) => b.scrollWidth > b.clientWidth + 1).length;
@@ -70,7 +70,7 @@ for (const screen of SCREENS) {
   const median = [...results].sort((a, b) => a.fs - b.fs)[Math.floor(n / 2)].fs;
   check(smallest.fs >= screen.minFont, `${screen.name}: acorde de ${median}px na média, menor ${smallest.fs}px (${smallest.id}, ${smallest.fit})`);
   for (const id of ['black', 'nucleo_base', 'like_a_rolling_stone', 'dezesseis']) {
-    await page.evaluate((sid) => { const C = window.Cifras; C.go(C.songs.findIndex((s) => s.id === sid) - C.index); }, id);
+    await page.evaluate((sid) => { const C = window.Cifras; C.show(C.songs.findIndex((s) => s.id === sid)); }, id);
     await page.waitForTimeout(400);
     await page.screenshot({ path: join(OUT, `cifras-${screen.name}-${id}.png`) });
   }
@@ -79,27 +79,38 @@ for (const screen of SCREENS) {
 
 // Tom, teclado/pedal, lista e memória do tom por música.
 const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-await page.goto(`${base}#wish-you-were-here`);
+await page.goto(`${base}#flores-astrais`);
 await page.waitForFunction(() => window.Cifras);
 const chords = () => page.evaluate(() => [...document.querySelectorAll('#chart-inner .bar b')].slice(0, 4).map((b) => b.textContent));
-check((await page.textContent('#title')) === 'Wish You Were Here', 'abre a música pelo endereço (#wish-you-were-here)');
-check((await chords()).join(' ') === 'Em7 G Em7 A7sus4', `cifra no tom original (${(await chords()).join(' ')})`);
+check((await page.textContent('#title')) === 'Flores Astrais' && (await page.textContent('#num')) === '14', 'abre a música pelo endereço (#flores-astrais), número da setlist nova');
+check((await chords()).join(' ') === 'D D A/C# A/C#', `cifra no tom original (${(await chords()).join(' ')})`);
 await page.tap('#key-up');
 await page.tap('#key-up');
-check((await chords()).join(' ') === 'F#m7 A F#m7 B7sus4' && (await page.textContent('#key-name')) === 'A', `sobe 2 semitons (${(await chords()).join(' ')})`);
+check((await chords()).join(' ') === 'E E B/D# B/D#' && (await page.textContent('#key-name')) === 'E', `sobe 2 semitons (${(await chords()).join(' ')})`);
 await page.keyboard.press('ArrowRight');
-check((await page.textContent('#title')) === 'Flores Astrais', 'pedal/seta para a direita: próxima música');
+check((await page.textContent('#title')) === 'Loving Cup', 'pedal/seta para a direita: próxima música da setlist');
 await page.keyboard.press('PageUp');
-check((await page.textContent('#title')) === 'Wish You Were Here' && (await page.textContent('#key-name')) === 'A', 'volta e o tom escolhido continua guardado');
+check((await page.textContent('#title')) === 'Flores Astrais' && (await page.textContent('#key-name')) === 'E', 'volta e o tom escolhido continua guardado');
 await page.reload();
 await page.waitForFunction(() => window.Cifras);
-check((await page.textContent('#key-name')) === 'A', 'tom guardado depois de recarregar a página');
+check((await page.textContent('#key-name')) === 'E', 'tom guardado depois de recarregar a página');
 await page.tap('#key-label');
-check((await page.textContent('#key-name')) === 'G', 'toque no tom volta ao original');
+check((await page.textContent('#key-name')) === 'D', 'toque no tom volta ao original');
+// Depois da última da setlist vêm os extras; as que saíram da setlist ficam fora do "próxima".
+await page.goto(`${base}#dezesseis`);
+await page.waitForFunction(() => window.Cifras);
+await page.keyboard.press('ArrowRight');
+check((await page.textContent('#title')) === 'Bicho do Paraná' && (await page.textContent('#num')) === 'E1', 'depois da 21ª vem o 1º extra (E1)');
+await page.keyboard.press('ArrowRight');
+await page.keyboard.press('ArrowRight');
+await page.keyboard.press('ArrowRight');
+check((await page.textContent('#title')) === 'Núcleo Base', 'depois do último extra volta ao começo da setlist');
 await page.tap('#open-list');
 check(await page.isVisible('#list'), 'abre a lista da setlist');
 await page.screenshot({ path: join(OUT, 'cifras-lista.png') });
-await page.tap('#setlist [data-index="29"]');
+const sympathy = await page.evaluate(() => window.Cifras.songs.findIndex((s) => s.id === 'sympathy_for_the_devil'));
+check(await page.isVisible('#setlist .grp'), 'lista separa extras e as que saíram da setlist');
+await page.tap(`#setlist [data-index="${sympathy}"]`);
 check((await page.textContent('#title')) === 'Sympathy for the Devil' && (await page.isHidden('#list')), 'escolhe música na lista');
 await page.tap('#stage-btn');
 check(await page.evaluate(() => document.documentElement.classList.contains('stage')), 'modo palco');

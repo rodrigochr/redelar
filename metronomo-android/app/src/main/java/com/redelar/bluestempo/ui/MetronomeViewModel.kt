@@ -19,6 +19,7 @@ import com.redelar.bluestempo.model.Preset
 import com.redelar.bluestempo.model.ProgressionType
 import com.redelar.bluestempo.model.Song
 import com.redelar.bluestempo.model.SongBook
+import com.redelar.bluestempo.model.SongGroup
 import com.redelar.bluestempo.model.Subdivision
 import com.redelar.bluestempo.model.defaultAccents
 import kotlinx.coroutines.flow.StateFlow
@@ -156,7 +157,9 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     override fun stepSong(delta: Int) {
-        val list = SongBook.all
+        // Anterior/próxima percorre a setlist e os extras (as que saíram só pela lista).
+        val currentSong = repo.current.song
+        val list = if (currentSong?.group == SongGroup.OTHER) SongBook.all else SongBook.all.filter { it.group != SongGroup.OTHER }
         val current = list.indexOfFirst { it.id == repo.current.songId }
         val next = if (current < 0) (if (delta > 0) 0 else list.lastIndex) else Math.floorMod(current + delta, list.size)
         selectSong(list[next])

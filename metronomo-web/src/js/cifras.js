@@ -18,8 +18,22 @@ const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)
 
 const hashOf = (song) => song.id.replace(/_/g, '-');
 const fromHash = () => SONG_LIST.findIndex((s) => `#${hashOf(s)}` === location.hash);
+// A música atual é guardada pelo id (a ordem da setlist pode mudar).
+if (state.id && SONG_LIST.some((s) => s.id === state.id)) state.index = SONG_LIST.findIndex((s) => s.id === state.id);
 if (fromHash() >= 0) state.index = fromHash();
 state.index = Math.min(Math.max(0, state.index | 0), SONG_LIST.length - 1);
+
+/** Sequência do "anterior/próxima": setlist e extras (uma música que saiu da setlist só pela lista). */
+function navOrder() {
+  const all = SONG_LIST.map((s, i) => i);
+  return SONG_LIST[state.index].group === 'OTHER' ? all : all.filter((i) => SONG_LIST[i].group !== 'OTHER');
+}
+const stepIndex = (delta) => {
+  const nav = navOrder();
+  const pos = nav.indexOf(state.index);
+  return nav[mod((pos < 0 ? 0 : pos) + delta, nav.length)];
+};
+const numberOf = (song) => song.label || '–';
 
 const current = () => SONG_LIST[state.index];
 const shiftOf = (song) => {
@@ -163,7 +177,7 @@ function render(direction = 0) {
   const shift = shiftOf(song);
   const g = grooveById(song.groove);
   document.title = `${song.title} · Cifras da Setlist`;
-  $('num').textContent = song.number;
+  $('num').textContent = numberOf(song);
   $('title').textContent = song.title;
   $('meta').textContent = `${song.artist} · ${song.bpm} BPM · ${g.meter} · ${g.name}`;
   $('key-name').textContent = keyName(key, song.minor);
@@ -180,8 +194,9 @@ function render(direction = 0) {
   }
   const inner = $('chart-inner');
   inner.innerHTML = chartHtml(song, key, analysis);
-  const next = SONG_LIST[(state.index + 1) % SONG_LIST.length];
-  $('next-song').innerHTML = `Próxima › <b>${next.number}. ${esc(next.title)}</b> · ${esc(keyName(keyOf(next), next.minor))} · ${next.bpm} BPM`;
+  const next = SONG_LIST[stepIndex(1)];
+  const nextNum = next.label ? `${next.label}. ` : '';
+  $('next-song').innerHTML = `Próxima › <b>${esc(nextNum)}${esc(next.title)}</b> · ${esc(keyName(keyOf(next), next.minor))} · ${next.bpm} BPM`;
   fit();
   if (direction) {
     inner.style.setProperty('--dx', `${Math.sign(direction) * 24}px`);
@@ -189,6 +204,7 @@ function render(direction = 0) {
     void inner.offsetWidth;
     inner.classList.add('enter');
   }
+  state.id = song.id;
   const hash = `#${hashOf(song)}`;
   if (location.hash !== hash) {
     try { history.replaceState(null, '', hash); } catch (e) { location.hash = hash; }
@@ -197,7 +213,7 @@ function render(direction = 0) {
 }
 
 function go(delta) {
-  state.index = mod(state.index + delta, SONG_LIST.length);
+  state.index = stepIndex(delta);
   render(delta);
 }
 
@@ -217,10 +233,13 @@ function resetKey() {
 // ------------------------------------------------------------------ lista e notas
 
 function openList() {
+  const GROUPS = { EXTRA: 'Extras', OTHER: 'Fora da setlist' };
   $('setlist').innerHTML = SONG_LIST.map((s, i) => {
     const shift = shiftOf(s);
-    return `<li><button type="button" data-index="${i}" aria-current="${i === state.index}">
-      <span class="n">${s.number}</span>
+    const head = s.group !== 'SETLIST' && (i === 0 || SONG_LIST[i - 1].group !== s.group)
+      ? `<li class="grp">${esc(GROUPS[s.group] || s.groupLabel)}</li>` : '';
+    return `${head}<li><button type="button" data-index="${i}" aria-current="${i === state.index}">
+      <span class="n">${esc(numberOf(s))}</span>
       <span class="t"><strong>${esc(s.title)}</strong><small>${esc(s.artist)}</small></span>
       <span class="k">${esc(keyName(keyOf(s), s.minor))}<small>${shift ? `${shift > 0 ? '+' : ''}${shift} · ` : ''}${s.bpm}</small></span>
     </button></li>`;
@@ -436,4 +455,6 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit).catch
 render();
 
 // Exposto para testes automatizados.
-window.Cifras = { go, transpose, fit, get index() { return state.index; }, songs: SONG_LIST, analysisOf };
+/** Abre a música de índice [i] da lista (usado pelos testes). */
+function show(i) { state.index = i; render(); }
+window.Cifras = { go, show, transpose, fit, get index() { return state.index; }, songs: SONG_LIST, analysisOf };

@@ -7,6 +7,13 @@ enum class Confidence(val label: String) {
     LOW("Baixa"),
 }
 
+/** Onde a música está: na setlist (numerada), nos extras ou fora da setlist (guardada). */
+enum class SongGroup(val label: String) {
+    SETLIST("Setlist"),
+    EXTRA("Extras"),
+    OTHER("Fora da setlist"),
+}
+
 /** Um compasso da cifra: acordes (divididos em partes iguais) e, se diferente da levada, quantos tempos. */
 class SongBar(val chords: List<Chord>, val beats: Int? = null)
 
@@ -43,7 +50,16 @@ class Song(
     val form: List<SongSection>,
     val notes: String,
     val confidence: Confidence,
+    val group: SongGroup = SongGroup.SETLIST,
 ) {
+    /** Número mostrado: "9" na setlist, "E2" nos extras, nada para as que saíram. */
+    val label: String
+        get() = when (group) {
+            SongGroup.SETLIST -> "$number"
+            SongGroup.EXTRA -> "E$number"
+            SongGroup.OTHER -> ""
+        }
+
     val parts: List<SongPart>
     val bars: List<SongBar>
 

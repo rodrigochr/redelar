@@ -287,17 +287,19 @@ const TEMPO_STEPS = [50, 60, 70, 80, 90, 100];
 
 function songsTab() {
   const song = songById(settings.songId);
-  const list = SONG_LIST.map((x) => {
+  const list = SONG_LIST.map((x, i) => {
     const on = !!song && x.id === song.id;
-    return `<button type="button" class="song${on ? ' on' : ''}" data-action="song" data-id="${esc(x.id)}" aria-pressed="${on}">
-      <span class="song-n">${x.number}</span>
+    const head = x.group !== 'SETLIST' && (i === 0 || SONG_LIST[i - 1].group !== x.group)
+      ? `<p class="label song-group">${esc(x.groupLabel)}</p>` : '';
+    return `${head}<button type="button" class="song${on ? ' on' : ''}" data-action="song" data-id="${esc(x.id)}" aria-pressed="${on}">
+      <span class="song-n">${esc(x.label || '–')}</span>
       <span class="song-main"><strong>${esc(x.title)}</strong><small>${esc(x.artist)} · ${esc(grooveById(x.groove).name)}</small></span>
       <span class="song-meta"><b>${esc(x.keyName)}</b><small>${x.bpm}</small></span></button>`;
   }).join('');
   const top = song ? songPanel(song)
     : '<p class="hint intro">Escolha uma música: o app ajusta andamento, tom, levada e baixo e mostra a cifra compasso a compasso enquanto toca.</p>';
   return top + section('Setlist', `<div class="songs">${list}</div>`,
-    song ? `${SONG_LIST.length} músicas · toque na música selecionada para tirá-la` : `${SONG_LIST.length} músicas · toque para carregar`);
+    `${SONG_LIST.filter((x) => x.group === 'SETLIST').length} músicas + extras · ${song ? 'toque na música selecionada para tirá-la' : 'toque para carregar'}`);
 }
 
 function songPanel(song) {
@@ -755,10 +757,13 @@ const ACTIONS = {
     $('#tab').scrollTop = 0;
   },
   'song-step': (d) => {
-    const i = SONG_LIST.findIndex((x) => x.id === settings.songId);
+    // Anterior/próxima percorre a setlist e os extras (as que saíram só pela lista).
+    const cur = songById(settings.songId);
+    const nav = cur && cur.group === 'OTHER' ? SONG_LIST : SONG_LIST.filter((x) => x.group !== 'OTHER');
+    const i = nav.findIndex((x) => x.id === settings.songId);
     const delta = Number(d.v);
-    const next = i < 0 ? (delta > 0 ? 0 : SONG_LIST.length - 1) : mod(i + delta, SONG_LIST.length);
-    selectSong(SONG_LIST[next]);
+    const next = i < 0 ? (delta > 0 ? 0 : nav.length - 1) : mod(i + delta, nav.length);
+    selectSong(nav[next]);
   },
   'song-leave': () => leaveSong(),
   'song-part': (d) => update({ songPart: Number(d.v) }),

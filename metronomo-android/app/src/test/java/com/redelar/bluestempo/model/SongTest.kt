@@ -77,7 +77,12 @@ class SongTest {
         val ids = mutableSetOf<String>()
         SongBook.all.forEachIndexed { i, song ->
             assertTrue("id repetido: ${song.id}", ids.add(song.id))
-            if (i > 0) assertTrue("numeração fora de ordem: ${song.id}", song.number > SongBook.all[i - 1].number)
+            // Ordem: setlist, extras e as que saíram; numeração crescente dentro de cada grupo.
+            if (i > 0) {
+                val prev = SongBook.all[i - 1]
+                assertTrue("grupo fora de ordem: ${song.id}", song.group.ordinal >= prev.group.ordinal)
+                if (song.group == prev.group) assertTrue("numeração fora de ordem: ${song.id}", song.number > prev.number)
+            }
             assertEquals("levada de ${song.id}", song.grooveId, GrooveLibrary.byId(song.grooveId).id)
             assertTrue("${song.id}: andamento", song.bpm in AppSettings.MIN_BPM..AppSettings.MAX_BPM)
             assertTrue("${song.id}: sem compassos", song.length > 0)

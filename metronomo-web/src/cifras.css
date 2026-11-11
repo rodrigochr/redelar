@@ -225,6 +225,9 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 .setlist button:active, .setlist button:hover { background: var(--accent-soft); }
 .setlist button[aria-current="true"] { background: var(--accent-soft); }
 .setlist .n { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 15px; }
+.setlist .grp {
+  padding: 14px 10px 4px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+}
 .setlist .t { min-width: 0; display: grid; }
 .setlist .t strong { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .setlist .t small { color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

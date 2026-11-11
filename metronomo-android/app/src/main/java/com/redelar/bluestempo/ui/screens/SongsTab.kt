@@ -43,6 +43,7 @@ import com.redelar.bluestempo.model.NoteNames
 import com.redelar.bluestempo.model.PlayMode
 import com.redelar.bluestempo.model.Song
 import com.redelar.bluestempo.model.SongBook
+import com.redelar.bluestempo.model.SongGroup
 import com.redelar.bluestempo.ui.MetronomeActions
 import com.redelar.bluestempo.model.GrooveLibrary
 import com.redelar.bluestempo.ui.components.BarGrid
@@ -78,9 +79,14 @@ fun SongsTab(settings: AppSettings, engine: EngineState, vm: MetronomeActions) {
             subtitle = "${SongBook.all.size} músicas • " +
                 if (song != null) "toque na música selecionada para tirá-la" else "toque para carregar",
         ) {
-            SongBook.all.forEach { s ->
-                // Tocar de novo na música selecionada tira a seleção.
-                SongRow(s, selected = s.id == song?.id, onClick = { if (s.id == song?.id) vm.leaveSong() else vm.selectSong(s) })
+            SongBook.all.groupBy { it.group }.forEach { (group, songs) ->
+                if (group != SongGroup.SETLIST) {
+                    Text(group.label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                }
+                songs.forEach { s ->
+                    // Tocar de novo na música selecionada tira a seleção.
+                    SongRow(s, selected = s.id == song?.id, onClick = { if (s.id == song?.id) vm.leaveSong() else vm.selectSong(s) })
+                }
             }
         }
     }
@@ -251,7 +257,7 @@ private fun SongRow(song: Song, selected: Boolean, onClick: () -> Unit) {
     ) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(
-                "${song.number}",
+                song.label,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.width(30.dp),

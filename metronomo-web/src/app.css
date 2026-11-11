@@ -327,6 +327,7 @@ select {
 /* músicas */
 .intro { padding: 4px 4px 0; }
 .songs { display: grid; gap: 8px; }
+.song-group { margin: 10px 2px 0; color: var(--amber); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .song {
   display: grid;
   grid-template-columns: 30px 1fr auto;

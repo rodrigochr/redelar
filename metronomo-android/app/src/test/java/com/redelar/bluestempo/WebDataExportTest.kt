@@ -151,6 +151,9 @@ class WebDataExportTest {
                 add(buildJsonObject {
                     put("id", song.id)
                     put("number", song.number)
+                    put("label", song.label)
+                    put("group", song.group.name)
+                    put("groupLabel", song.group.label)
                     put("title", song.title)
                     put("artist", song.artist)
                     put("reference", song.reference)
