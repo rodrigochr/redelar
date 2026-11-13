@@ -154,9 +154,13 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 .bar .x, .bar .m {
   position: absolute; font: 600 calc(var(--fs) * 0.4)/1 var(--font-body); font-variant-numeric: tabular-nums;
 }
-.bar .x { right: calc(var(--fs) * 0.1); top: calc(var(--fs) * 0.08); color: var(--repeat); }
+/* Repetições (×2, ×4…): grandes e em destaque, para ler de longe. */
+.bar .x {
+  right: calc(var(--fs) * 0.08); top: 50%; transform: translateY(-50%);
+  font: 800 calc(var(--fs) * 0.62)/1 var(--font-chord); letter-spacing: 0.01em; color: var(--repeat);
+}
 /* Espaço reservado para as marcas, para nunca cobrirem o acorde. */
-.bar.has-x { padding-right: calc(var(--fs) * 0.62); }
+.bar.has-x { padding-right: calc(var(--fs) * 0.95); }
 .bar.has-m { padding-left: calc(var(--fs) * 0.62); }
 .bar .m { left: calc(var(--fs) * 0.1); bottom: calc(var(--fs) * 0.06); color: var(--muted); }
 

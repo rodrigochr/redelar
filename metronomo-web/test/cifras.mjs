@@ -103,7 +103,6 @@ await page.keyboard.press('ArrowRight');
 check((await page.textContent('#title')) === 'Bicho do Paraná' && (await page.textContent('#num')) === 'E1', 'depois da 21ª vem o 1º extra (E1)');
 await page.keyboard.press('ArrowRight');
 await page.keyboard.press('ArrowRight');
-await page.keyboard.press('ArrowRight');
 check((await page.textContent('#title')) === 'Núcleo Base', 'depois do último extra volta ao começo da setlist');
 await page.tap('#open-list');
 check(await page.isVisible('#list'), 'abre a lista da setlist');

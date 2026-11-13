@@ -7722,31 +7722,26 @@
             ]
         },
         {
-            "id": "help_the_poor",
+            "id": "roadhouse_blues",
             "number": 18,
             "label": "18",
             "group": "SETLIST",
             "groupLabel": "Setlist",
-            "title": "Help the Poor",
-            "artist": "B.B. King",
-            "reference": "B.B. King, Live at the Regal (1965)",
-            "key": 2,
-            "minor": true,
-            "bpm": 118,
-            "groove": "rumba_blues",
-            "bass": "TRESILLO",
+            "title": "Roadhouse Blues",
+            "artist": "The Doors",
+            "reference": "Morrison Hotel (1970)",
+            "key": 4,
+            "minor": false,
+            "bpm": 120,
+            "groove": "chicago_shuffle",
+            "bass": "BOOGIE",
             "swing": null,
-            "confidence": "MEDIUM",
-            "confidenceLabel": "Média",
-            "notes": "Não é blues de 12: verso de 16 compassos em menor e ponte de 8. Versão ao vivo do Live at the Regal; o single de estúdio (1964) tem o mesmo tom e harmonia, mas é mais lento (~102 BPM). O iv aparece como G7 nesta cifra; Gm7 também funciona.",
+            "confidence": "HIGH",
+            "confidenceLabel": "Alta",
+            "notes": "Não é blues de 12 com IV e V: os versos são vamp de 12 compassos em E com o riff de boogie. A única mudança é o refrão (A7 ×6, B e o corte C–B). Shuffle de 120 BPM.",
             "chords": [
                 {
                     "degree": 0,
-                    "quality": "MIN",
-                    "suffix": "m"
-                },
-                {
-                    "degree": 7,
                     "quality": "DOM7",
                     "suffix": "7"
                 },
@@ -7754,12 +7749,46 @@
                     "degree": 5,
                     "quality": "DOM7",
                     "suffix": "7"
+                },
+                {
+                    "degree": 7,
+                    "quality": "MAJ",
+                    "suffix": ""
+                },
+                {
+                    "degree": 8,
+                    "quality": "MAJ",
+                    "suffix": ""
                 }
             ],
             "sections": [
                 {
                     "name": "Intro",
                     "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
                         [
                             0
                         ],
@@ -7796,28 +7825,16 @@
                             0
                         ],
                         [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
                             0
                         ],
                         [
                             0
                         ],
                         [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
                             0
                         ],
                         [
-                            1
+                            0
                         ],
                         [
                             0
@@ -7828,36 +7845,7 @@
                     ]
                 },
                 {
-                    "name": "Ponte",
-                    "bars": [
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ]
-                    ]
-                },
-                {
-                    "name": "Vamp final",
+                    "name": "Interlúdio",
                     "bars": [
                         [
                             0
@@ -7870,7 +7858,42 @@
                         ],
                         [
                             0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão",
+                    "bars": [
+                        [
+                            1
                         ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            3,
+                            2
+                        ]
+                    ]
+                },
+                {
+                    "name": "Solo",
+                    "bars": [
                         [
                             0
                         ],
@@ -7900,12 +7923,71 @@
                         ],
                         [
                             0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Refrão final",
+                    "bars": [
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
                         ]
                     ]
                 },
                 {
                     "name": "Final",
                     "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
                         [
                             0
                         ],
@@ -7918,11 +8000,17 @@
             "form": [
                 0,
                 1,
-                1,
                 2,
                 1,
                 3,
-                4
+                4,
+                1,
+                2,
+                1,
+                2,
+                1,
+                5,
+                6
             ]
         },
         {
@@ -9261,298 +9349,6 @@
                 1,
                 4,
                 5
-            ]
-        },
-        {
-            "id": "roadhouse_blues",
-            "number": 3,
-            "label": "E3",
-            "group": "EXTRA",
-            "groupLabel": "Extras",
-            "title": "Roadhouse Blues",
-            "artist": "The Doors",
-            "reference": "Morrison Hotel (1970)",
-            "key": 4,
-            "minor": false,
-            "bpm": 120,
-            "groove": "chicago_shuffle",
-            "bass": "BOOGIE",
-            "swing": null,
-            "confidence": "HIGH",
-            "confidenceLabel": "Alta",
-            "notes": "Não é blues de 12 com IV e V: os versos são vamp de 12 compassos em E com o riff de boogie. A única mudança é o refrão (A7 ×6, B e o corte C–B). Shuffle de 120 BPM.",
-            "chords": [
-                {
-                    "degree": 0,
-                    "quality": "DOM7",
-                    "suffix": "7"
-                },
-                {
-                    "degree": 5,
-                    "quality": "DOM7",
-                    "suffix": "7"
-                },
-                {
-                    "degree": 7,
-                    "quality": "MAJ",
-                    "suffix": ""
-                },
-                {
-                    "degree": 8,
-                    "quality": "MAJ",
-                    "suffix": ""
-                }
-            ],
-            "sections": [
-                {
-                    "name": "Intro",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Verso",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Interlúdio",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            3,
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Solo",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                },
-                {
-                    "name": "Refrão final",
-                    "bars": [
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            1
-                        ],
-                        [
-                            2
-                        ],
-                        [
-                            2
-                        ]
-                    ]
-                },
-                {
-                    "name": "Final",
-                    "bars": [
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ],
-                        [
-                            0
-                        ]
-                    ]
-                }
-            ],
-            "form": [
-                0,
-                1,
-                2,
-                1,
-                3,
-                4,
-                1,
-                2,
-                1,
-                2,
-                1,
-                5,
-                6
             ]
         },
         {
@@ -11823,6 +11619,210 @@
                 4,
                 3,
                 5
+            ]
+        },
+        {
+            "id": "help_the_poor",
+            "number": 9,
+            "label": "",
+            "group": "OTHER",
+            "groupLabel": "Fora da setlist",
+            "title": "Help the Poor",
+            "artist": "B.B. King",
+            "reference": "B.B. King, Live at the Regal (1965)",
+            "key": 2,
+            "minor": true,
+            "bpm": 118,
+            "groove": "rumba_blues",
+            "bass": "TRESILLO",
+            "swing": null,
+            "confidence": "MEDIUM",
+            "confidenceLabel": "Média",
+            "notes": "Não é blues de 12: verso de 16 compassos em menor e ponte de 8. Versão ao vivo do Live at the Regal; o single de estúdio (1964) tem o mesmo tom e harmonia, mas é mais lento (~102 BPM). O iv aparece como G7 nesta cifra; Gm7 também funciona.",
+            "chords": [
+                {
+                    "degree": 0,
+                    "quality": "MIN",
+                    "suffix": "m"
+                },
+                {
+                    "degree": 7,
+                    "quality": "DOM7",
+                    "suffix": "7"
+                },
+                {
+                    "degree": 5,
+                    "quality": "DOM7",
+                    "suffix": "7"
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Intro",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Verso",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Ponte",
+                    "bars": [
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            2
+                        ],
+                        [
+                            1
+                        ],
+                        [
+                            1
+                        ]
+                    ]
+                },
+                {
+                    "name": "Vamp final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                },
+                {
+                    "name": "Final",
+                    "bars": [
+                        [
+                            0
+                        ],
+                        [
+                            0
+                        ]
+                    ]
+                }
+            ],
+            "form": [
+                0,
+                1,
+                1,
+                2,
+                1,
+                3,
+                4
             ]
         }
     ],
