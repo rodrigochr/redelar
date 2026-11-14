@@ -181,6 +181,7 @@ function render(direction = 0) {
   $('title').textContent = song.title;
   $('meta').textContent = `${song.artist} · ${song.bpm} BPM · ${g.meter} · ${g.name}`;
   $('key-name').textContent = keyName(key, song.minor);
+  $('app').classList.toggle('shifted', shift !== 0);
   $('key-shift').textContent = shift ? `${shift > 0 ? '+' : ''}${shift} · orig. ${song.keyName}` : 'original';
   $('key-label').setAttribute('aria-label', shift ? `Tom ${keyName(key, song.minor)}, ${shift > 0 ? 'mais' : 'menos'} ${Math.abs(shift)} semitom. Toque para voltar a ${song.keyName}` : `Tom original ${song.keyName}`);
   $('road').innerHTML = roadmap(song).map((it, i) =>
@@ -196,7 +197,7 @@ function render(direction = 0) {
   inner.innerHTML = chartHtml(song, key, analysis);
   const next = SONG_LIST[stepIndex(1)];
   const nextNum = next.label ? `${next.label}. ` : '';
-  $('next-song').innerHTML = `Próxima › <b>${esc(nextNum)}${esc(next.title)}</b> · ${esc(keyName(keyOf(next), next.minor))} · ${next.bpm} BPM`;
+  $('next-song').innerHTML = `Próxima › <b>${esc(nextNum)}${esc(next.title)}</b> · <span class="${shiftOf(next) ? 'shifted' : ''}">${esc(keyName(keyOf(next), next.minor))}${shiftOf(next) ? ' (tom alterado)' : ''}</span> · ${next.bpm} BPM`;
   fit();
   if (direction) {
     inner.style.setProperty('--dx', `${Math.sign(direction) * 24}px`);
@@ -238,7 +239,7 @@ function openList() {
     const shift = shiftOf(s);
     const head = s.group !== 'SETLIST' && (i === 0 || SONG_LIST[i - 1].group !== s.group)
       ? `<li class="grp">${esc(GROUPS[s.group] || s.groupLabel)}</li>` : '';
-    return `${head}<li><button type="button" data-index="${i}" aria-current="${i === state.index}">
+    return `${head}<li${shift ? ' class="shifted"' : ''}><button type="button" data-index="${i}" aria-current="${i === state.index}">
       <span class="n">${esc(numberOf(s))}</span>
       <span class="t"><strong>${esc(s.title)}</strong><small>${esc(s.artist)}</small></span>
       <span class="k">${esc(keyName(keyOf(s), s.minor))}<small>${shift ? `${shift > 0 ? '+' : ''}${shift} · ` : ''}${s.bpm}</small></span>

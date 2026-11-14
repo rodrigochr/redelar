@@ -94,6 +94,15 @@ check((await page.textContent('#title')) === 'Flores Astrais' && (await page.tex
 await page.reload();
 await page.waitForFunction(() => window.Cifras);
 check((await page.textContent('#key-name')) === 'E', 'tom guardado depois de recarregar a página');
+check(await page.evaluate(() => document.getElementById('app').classList.contains('shifted')), 'tom alterado: cores de destaque na música');
+await page.tap('#open-list');
+check(await page.evaluate(() => {
+  const li = document.querySelector('#setlist li.shifted');
+  return !!li && li.textContent.includes('Flores Astrais') && document.querySelectorAll('#setlist li.shifted').length === 1;
+}), 'tom alterado: destaque na lista da setlist');
+await page.screenshot({ path: join(OUT, 'cifras-lista-tom.png') });
+await page.tap('[data-close="list"]');
+await page.screenshot({ path: join(OUT, 'cifras-tom-alterado.png') });
 await page.tap('#key-label');
 check((await page.textContent('#key-name')) === 'D', 'toque no tom volta ao original');
 // Depois da última da setlist vêm os extras; as que saíram da setlist ficam fora do "próxima".
