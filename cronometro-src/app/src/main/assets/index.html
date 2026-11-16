@@ -516,7 +516,7 @@ function playSound(id,force){
   var fn=SOUNDS[id]; if(!fn) return;
   try{ fn(actx.currentTime+0.02,cfg.volume); }catch(e){}
 }
-function buzz(p){ if(!cfg.vibrate) return; try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+function buzz(p){ if(!cfg.vibrate) return; try{ if(window.AndroidVibe){ window.AndroidVibe.vibrate([].concat(p).join(',')); return; } if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
 function alertSetStart(){ playSound(cfg.sounds.setStart); buzz([250,120,250,120,400]); }
 function alertSetEnd(){ playSound(cfg.sounds.setEnd); buzz([300,100,300]); }
 function alertDone(){ playSound(cfg.sounds.done); buzz([400,150,400]); }

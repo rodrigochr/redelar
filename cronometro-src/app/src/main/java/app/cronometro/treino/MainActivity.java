@@ -1,11 +1,16 @@
 package app.cronometro.treino;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.media.AudioAttributes;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -15,6 +20,30 @@ import android.webkit.WebViewClient;
 /** Casca nativa mínima: abre a página offline (assets/index.html) em tela cheia, com a tela sempre ligada. */
 public class MainActivity extends Activity {
     private WebView web;
+
+    /** Ponte para a página: vibra pelo serviço nativo (navigator.vibrate não é confiável no WebView). */
+    private class VibeBridge {
+        @JavascriptInterface
+        public void vibrate(String csv) {
+            try {
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (v == null || !v.hasVibrator() || csv == null || csv.trim().isEmpty()) return;
+                String[] parts = csv.split(",");
+                long[] t = new long[parts.length + 1];   // formato nativo começa com uma pausa
+                t[0] = 0;
+                for (int i = 0; i < parts.length; i++) {
+                    t[i + 1] = Math.max(0, Math.min(5000, Long.parseLong(parts[i].trim())));
+                }
+                // Atributo de alarme: vibra mesmo com "vibração ao toque" desligada nos ajustes.
+                AudioAttributes attrs = new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build();
+                v.vibrate(VibrationEffect.createWaveform(t, -1), attrs);
+            } catch (Exception ignored) {
+            }
+        }
+    }
 
     private boolean isNight() {
         int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -54,6 +83,7 @@ public class MainActivity extends Activity {
         web.setWebViewClient(new WebViewClient());
         web.setWebChromeClient(new WebChromeClient());
         web.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        web.addJavascriptInterface(new VibeBridge(), "AndroidVibe");
 
         setContentView(web);
         applyChrome();
