@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Chave de assinatura fixa, fora do projeto. Senha lida de ~/.android/cronometro-treino.pass
+def keystoreFile = file("${System.getProperty('user.home')}/.android/cronometro-treino.jks")
+def passFile = file("${System.getProperty('user.home')}/.android/cronometro-treino.pass")
+
+android {
+    namespace 'app.cronometro.treino'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'app.cronometro.treino'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        release {
+            if (keystoreFile.exists() && passFile.exists()) {
+                def pass = passFile.text.trim()
+                storeFile keystoreFile
+                storePassword pass
+                keyAlias 'cronometro'
+                keyPassword pass
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    androidResources {
+        noCompress 'woff2'
+    }
+}
