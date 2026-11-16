@@ -89,18 +89,22 @@ input[type="range"]{width:100%;min-height:32px;accent-color:var(--ink);margin:0}
 .savestate{font-size:13px;color:var(--muted)}
 
 /* ---------- Treino ---------- */
-.rbar{display:flex;align-items:center;gap:12px;padding:14px 16px 0}
+.rbar{display:flex;align-items:center;gap:12px;padding:14px 16px 0;flex-shrink:0}
 .rname{flex:1;min-width:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rname small{color:var(--muted);font-weight:500}
 .rclock{font-family:var(--display);font-weight:800;font-size:24px;font-variant-numeric:tabular-nums;color:var(--muted)}
 .ghost{background:transparent;border:1.5px solid var(--line);border-radius:10px;padding:8px 14px;min-height:44px;font-weight:600}
-.rmain{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:8px 16px}
+.rmain{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:12px;padding:8px 16px;overflow-y:auto}
+/* centraliza quando sobra espaço; quando falta, rola em vez de vazar sobre o cabeçalho e os chips */
+.rmain>:first-child{margin-top:auto}
+.rmain>:last-child{margin-bottom:auto}
+.rmain>*{flex-shrink:0}
 .phase{font-family:var(--display);font-weight:900;font-size:30px;letter-spacing:.14em;text-transform:uppercase}
-.ring{position:relative;width:min(76vw,40vh,320px);aspect-ratio:1}
+.ring{position:relative;width:min(76vw,32vh,320px);aspect-ratio:1}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg);display:block}
 .ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:.9}
 .tiny{font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.numeral{font-family:var(--display);font-weight:900;font-size:min(30vw,17vh,140px);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.numeral{font-family:var(--display);font-weight:900;font-size:min(30vw,14vh,140px);font-variant-numeric:tabular-nums;letter-spacing:.01em}
 .nextline{min-height:24px;color:var(--muted);text-align:center;text-wrap:balance}
 .actions{width:100%;display:flex;flex-direction:column;gap:10px}
 .trio{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px}
@@ -108,7 +112,7 @@ input[type="range"]{width:100%;min-height:32px;accent-color:var(--ink);margin:0}
 .trio button:active,.alt:active{background:var(--line)}
 .alt.solid{background:var(--ink);color:var(--bg)}
 .undo{align-self:center;background:transparent;border:0;color:var(--muted);text-decoration:underline;min-height:44px;padding:0 12px}
-.chips{list-style:none;margin:0;padding:12px 16px calc(14px + env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;gap:6px;justify-content:center;border-top:1.5px solid var(--line)}
+.chips{list-style:none;margin:0;padding:12px 16px calc(14px + env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;gap:6px;justify-content:center;border-top:1.5px solid var(--line);flex-shrink:0;max-height:30vh;overflow-y:auto}
 .chip{min-width:34px;height:34px;padding:0 6px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:18px;border:2px solid var(--c);color:var(--c);font-variant-numeric:tabular-nums}
 .chip.gap{margin-left:14px}
 .chip.done{background:var(--c);color:var(--on-accent)}
