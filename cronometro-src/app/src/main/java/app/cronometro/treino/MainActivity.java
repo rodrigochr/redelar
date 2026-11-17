@@ -1,12 +1,11 @@
 package app.cronometro.treino;
 
+import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.content.res.Configuration;
-import android.media.AudioAttributes;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,28 +20,21 @@ import android.webkit.WebViewClient;
 public class MainActivity extends Activity {
     private WebView web;
 
-    /** Ponte para a página: vibra pelo serviço nativo (navigator.vibrate não é confiável no WebView). */
+    /** Ponte para a página: som e vibração nativos (WebView é pausado com a tela desligada). */
     private class VibeBridge {
         @JavascriptInterface
-        public void vibrate(String csv) {
-            try {
-                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                if (v == null || !v.hasVibrator() || csv == null || csv.trim().isEmpty()) return;
-                String[] parts = csv.split(",");
-                long[] t = new long[parts.length + 1];   // formato nativo começa com uma pausa
-                t[0] = 0;
-                for (int i = 0; i < parts.length; i++) {
-                    t[i + 1] = Math.max(0, Math.min(5000, Long.parseLong(parts[i].trim())));
-                }
-                // Atributo de alarme: vibra mesmo com "vibração ao toque" desligada nos ajustes.
-                AudioAttributes attrs = new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build();
-                v.vibrate(VibrationEffect.createWaveform(t, -1), attrs);
-            } catch (Exception ignored) {
-            }
-        }
+        public void vibrate(String csv) { AlertEngine.vibrateCsv(csv); }
+
+        /** JSON {start,end,done: wav em base64, vibrate: bool}. */
+        @JavascriptInterface
+        public void config(String json) { AlertEngine.config(json); }
+
+        /** JSON [{t: epochMs, k: "start"|"end"|"done"}]: substitui o cronograma de alertas. */
+        @JavascriptInterface
+        public void schedule(String json) { AlertEngine.schedule(json); }
+
+        @JavascriptInterface
+        public void alertNow(String kind) { AlertEngine.alertNow(kind); }
     }
 
     private boolean isNight() {
@@ -70,6 +62,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        AlertEngine.init(this);
+        // Android 13+: sem esta permissão o aviso "treino em andamento" fica oculto (o serviço funciona do mesmo jeito).
+        if (Build.VERSION.SDK_INT >= 33
+                && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+        }
 
         web = new WebView(this);
         WebSettings s = web.getSettings();
@@ -113,6 +111,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        AlertEngine.cancelAll();
         if (web != null) {
             web.destroy();
             web = null;

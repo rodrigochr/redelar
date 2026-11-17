@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Único permissão: vibrar. Sem internet: o app funciona 100% offline. -->
+    <!-- Sem internet: o app funciona 100% offline. -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Alertas (som/vibração) com a tela desligada: serviço em primeiro plano + CPU acordada durante o treino. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +16,11 @@
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+
+        <service
+            android:name=".TimerService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
 
         <activity
             android:name=".MainActivity"

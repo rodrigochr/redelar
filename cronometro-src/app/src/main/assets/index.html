@@ -517,9 +517,59 @@ function playSound(id,force){
   try{ fn(actx.currentTime+0.02,cfg.volume); }catch(e){}
 }
 function buzz(p){ if(!cfg.vibrate) return; try{ if(window.AndroidVibe){ window.AndroidVibe.vibrate([].concat(p).join(',')); return; } if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
-function alertSetStart(){ playSound(cfg.sounds.setStart); buzz([250,120,250,120,400]); }
-function alertSetEnd(){ playSound(cfg.sounds.setEnd); buzz([300,100,300]); }
-function alertDone(){ playSound(cfg.sounds.done); buzz([400,150,400]); }
+/* No app Android, o som e a vibração do treino são disparados pelo lado nativo (serviço em primeiro plano),
+   porque o WebView é pausado com a tela desligada. A página só envia o cronograma dos próximos alertas. */
+var nativeReady=false;
+function nativeOn(){ return nativeReady && !!window.AndroidVibe && window.AndroidVibe.schedule!==undefined; }
+function wavB64(buf){
+  var d=buf.getChannelData(0), n=d.length, last=0, i;
+  for(i=n-1;i>=0;i--){ if(Math.abs(d[i])>0.003){ last=i; break; } }
+  n=Math.min(n,last+Math.round(buf.sampleRate*0.05)+1);
+  var bytes=new Uint8Array(44+n*2), v=new DataView(bytes.buffer);
+  function w(o,t){ for(var k=0;k<t.length;k++) v.setUint8(o+k,t.charCodeAt(k)); }
+  w(0,'RIFF'); v.setUint32(4,36+n*2,true); w(8,'WAVE'); w(12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,buf.sampleRate,true); v.setUint32(28,buf.sampleRate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); w(36,'data'); v.setUint32(40,n*2,true);
+  for(i=0;i<n;i++){ var x=Math.max(-1,Math.min(1,d[i])); v.setInt16(44+i*2,x<0?x*32768:x*32767,true); }
+  var bin='', CH=0x8000; for(i=0;i<bytes.length;i+=CH) bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+CH));
+  return btoa(bin);
+}
+/* Renderiza o mesmo som (SOUNDS) num AudioContext offline e devolve um WAV em base64 ('' = sem som). */
+function renderWav(id){
+  if(!cfg.sound || !id || id==='nenhum' || !SOUNDS[id]) return Promise.resolve('');
+  var AC=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+  if(!AC) return Promise.reject(new Error('sem OfflineAudioContext'));
+  var rate=22050, off=new AC(1,Math.ceil(3.4*rate),rate), saved=actx;
+  actx=off;
+  try{ SOUNDS[id](0.02,cfg.volume); } finally{ actx=saved; }
+  return off.startRendering().then(wavB64);
+}
+function prepareNative(){
+  nativeReady=false;
+  if(!window.AndroidVibe || window.AndroidVibe.schedule===undefined) return Promise.resolve();
+  return Promise.all([renderWav(cfg.sounds.setStart),renderWav(cfg.sounds.setEnd),renderWav(cfg.sounds.done)]).then(function(w){
+    window.AndroidVibe.config(JSON.stringify({start:w[0],end:w[1],done:w[2],vibrate:!!cfg.vibrate}));
+    nativeReady=true;
+  }).catch(function(){ nativeReady=false; });
+}
+/* Eventos futuros, assumindo que ninguém mexe no cronômetro: simula o treino com a mesma lógica do tick(). */
+function nativeEvents(){
+  var out=[]; if(!run||run.paused||run.phase==='done') return out;
+  var c=JSON.parse(JSON.stringify(run)), guard=0;
+  while(c.phase!=='done' && guard++<600){
+    var at=c.end, e=tick(c,steps,at); if(!e) break;
+    out.push({t:at,k:e==='set-ended'?'end':(e==='rest-ended'?'start':'done')});
+  }
+  return out;
+}
+var skipSync=false; /* fim por cronômetro: o nativo ainda vai disparar o último alerta, não cancelar */
+function syncNative(){
+  if(skipSync || !nativeOn()) return;
+  try{ window.AndroidVibe.schedule(JSON.stringify((view==='run'&&run&&run.phase!=='done')?nativeEvents():[])); }catch(e){}
+}
+/* sched=true: alerta vindo do cronômetro (no Android o nativo já o dispara no horário); false: ação imediata. */
+function alertSetStart(sched){ if(nativeOn()){ if(!sched) window.AndroidVibe.alertNow('start'); return; } playSound(cfg.sounds.setStart); buzz([250,120,250,120,400]); }
+function alertSetEnd(sched){ if(nativeOn()){ if(!sched) window.AndroidVibe.alertNow('end'); return; } playSound(cfg.sounds.setEnd); buzz([300,100,300]); }
+function alertDone(sched){ if(nativeOn()){ if(!sched) window.AndroidVibe.alertNow('done'); return; } playSound(cfg.sounds.done); buzz([400,150,400]); }
 function lockScreen(){ try{ if(navigator.wakeLock){ navigator.wakeLock.request('screen').then(function(l){wl=l;}).catch(function(){}); } }catch(e){} }
 function unlockScreen(){ try{ if(wl) wl.release(); }catch(e){} wl=null; }
 document.addEventListener('visibilitychange',function(){ if(!document.hidden && view==='run' && run && run.phase!=='done') lockScreen(); });
@@ -706,12 +756,14 @@ function renderAll(){
   $('#run').hidden=!(view==='run' && run.phase!=='done');
   $('#done').hidden=!(view==='run' && run.phase==='done');
   if(view==='cfg') renderCfg(); else if(run.phase==='done') renderDone(); else renderRun();
+  syncNative();
 }
 
 function startWorkout(){
   ensureAudio(); lockScreen();
   steps=buildSteps(cfg); run=initRun(Date.now(),steps); view='run';
-  alertSetStart(); renderAll();
+  renderAll();
+  prepareNative().then(function(){ if(view==='run' && run){ syncNative(); alertSetStart(); } });
 }
 function leaveRun(){ unlockScreen(); run=null; view='cfg'; applyPending(); renderAll(); }
 
@@ -743,9 +795,9 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !$('#mod
 setInterval(function(){
   if(view!=='run' || !run || run.phase==='done') return;
   var now=Date.now(), ev=tick(run,steps,now);
-  if(ev==='done'){ unlockScreen(); alertDone(); renderAll(); return; }
-  if(ev==='set-ended'){ alertSetEnd(); renderRun(); return; }
-  if(ev==='rest-ended'){ alertSetStart(); renderRun(); return; }
+  if(ev==='done'){ unlockScreen(); alertDone(true); skipSync=true; try{ renderAll(); } finally{ skipSync=false; } return; }
+  if(ev==='set-ended'){ alertSetEnd(true); renderRun(); return; }
+  if(ev==='rest-ended'){ alertSetStart(true); renderRun(); return; }
   updateRun(now);
 },100);
 
