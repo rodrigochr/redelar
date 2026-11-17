@@ -31,7 +31,7 @@ final class AlertEngine {
     private static Handler handler;
     private static final Object TOKEN = new Object();
     private static final Object STOP_TOKEN = new Object();
-    private static byte[] wavStart, wavEnd, wavDone;
+    private static byte[] wavStart, wavEnd, wavDone, wavTick;
     private static boolean vibrate = true;
 
     private AlertEngine() {}
@@ -50,6 +50,7 @@ final class AlertEngine {
             wavStart = decode(o.optString("start"));
             wavEnd = decode(o.optString("end"));
             wavDone = decode(o.optString("done"));
+            wavTick = decode(o.optString("tick"));
             vibrate = o.optBoolean("vibrate", true);
         } catch (Exception ignored) {
         }
@@ -84,7 +85,7 @@ final class AlertEngine {
                     long t = (long) e.optDouble("t", 0);
                     final String k = e.optString("k");
                     long delay = t - wallNow;
-                    if (delay < -2000) continue;               // já passou há tempo demais
+                    if (delay < (("tick".equals(k)) ? -300 : -2000)) continue;   // já passou há tempo demais
                     final long at = upNow + Math.max(0, delay);
                     handler.postAtTime(new Runnable() {
                         @Override
@@ -132,6 +133,7 @@ final class AlertEngine {
     private static void fire(String kind) {
         byte[] wav;
         long[] pat;
+        if ("tick".equals(kind)) { playWav(wavTick); return; }   // contagem final: só som
         if ("end".equals(kind)) { wav = wavEnd; pat = VIB_END; }
         else if ("done".equals(kind)) { wav = wavDone; pat = VIB_DONE; }
         else { wav = wavStart; pat = VIB_START; }

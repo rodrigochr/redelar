@@ -248,7 +248,7 @@ var SOUND_EVENTS=[
   {k:'tick',label:'Contagem final (3, 2, 1)',def:'bipe'},
   {k:'done',label:'Fim do treino',def:'fanfarra'}
 ];
-var SOUND_OPTIONS=[['nenhum','Nenhum'],['bipe','Bipe curto'],['duplo','Dupla grave'],['triplo','Tripla aguda'],['digital','Digital'],['campainha','Campainha'],['sino','Sino'],['gongo','Gongo'],['apito','Apito'],['buzina','Buzina'],['fanfarra','Fanfarra']];
+var SOUND_OPTIONS=[['nenhum','Nenhum'],['bipe','Bipe curto'],['duplo','Dupla grave'],['triplo','Tripla aguda'],['digital','Digital'],['campainha','Campainha'],['sino','Sino'],['gongo','Gongo'],['apito','Apito'],['buzina','Buzina'],['fanfarra','Fanfarra'],['ultra','ULTRA alto: bipe'],['alarme','ULTRA alto: alarme'],['sirene','ULTRA alto: sirene']];
 function soundValid(id){ return SOUND_OPTIONS.some(function(o){return o[0]===id;}); }
 /* Aceita qualquer versão antiga da configuração e completa o que faltar com padrões. */
 function sanitizeCfg(c){
@@ -496,6 +496,13 @@ function tone(t,freq,dur,vol,type,endFreq,lp){
   else g.connect(actx.destination);
   o.start(t); o.stop(t+dur+0.03);
 }
+/* Som "ultra alto": onda quadrada em volume cheio, sem decaimento, em ~3 kHz (onde o ouvido é mais sensível e o alto-falante rende mais). */
+function loud(t,freq,dur,vol,endFreq){
+  var o=actx.createOscillator(), g=actx.createGain();
+  o.type='square'; o.frequency.setValueAtTime(freq,t); if(endFreq) o.frequency.linearRampToValueAtTime(endFreq,t+dur);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.005); g.gain.setValueAtTime(vol,t+dur-0.01); g.gain.linearRampToValueAtTime(0,t+dur);
+  o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+dur+0.02);
+}
 function bell(t,f,dur,v){ [[1,1,1],[2.76,0.5,0.7],[5.4,0.28,0.5],[8.93,0.14,0.35]].forEach(function(p){ tone(t,f*p[0],dur*p[2],0.3*v*p[1],'sine'); }); }
 var SOUNDS={
   nenhum:function(){},
@@ -508,6 +515,9 @@ var SOUNDS={
   gongo:function(t,v){ bell(t,160,2.6,v*1.2); },
   apito:function(t,v){ tone(t,2300,0.22,0.22*v,'sine',2900); tone(t+0.3,2300,0.35,0.22*v,'sine',2900); },
   buzina:function(t,v){ tone(t,196,0.7,0.3*v,'sawtooth',null,1400); },
+  ultra:function(t,v){ loud(t,3000,0.2,0.95*v); loud(t+0.28,3000,0.2,0.95*v); },
+  alarme:function(t,v){ for(var i=0;i<5;i++) loud(t+i*0.26,2800,0.18,0.95*v); },
+  sirene:function(t,v){ for(var i=0;i<3;i++) loud(t+i*0.46,1800,0.46,0.95*v,3200); },
   fanfarra:function(t,v){ tone(t,660,0.15,0.3*v); tone(t+0.2,880,0.15,0.3*v); tone(t+0.4,1320,0.5,0.3*v); }
 };
 function playSound(id,force){
@@ -546,17 +556,20 @@ function renderWav(id){
 function prepareNative(){
   nativeReady=false;
   if(!window.AndroidVibe || window.AndroidVibe.schedule===undefined) return Promise.resolve();
-  return Promise.all([renderWav(cfg.sounds.setStart),renderWav(cfg.sounds.setEnd),renderWav(cfg.sounds.done)]).then(function(w){
-    window.AndroidVibe.config(JSON.stringify({start:w[0],end:w[1],done:w[2],vibrate:!!cfg.vibrate}));
+  return Promise.all([renderWav(cfg.sounds.setStart),renderWav(cfg.sounds.setEnd),renderWav(cfg.sounds.done),renderWav(cfg.sounds.tick)]).then(function(w){
+    window.AndroidVibe.config(JSON.stringify({start:w[0],end:w[1],done:w[2],tick:w[3],vibrate:!!cfg.vibrate}));
     nativeReady=true;
   }).catch(function(){ nativeReady=false; });
 }
 /* Eventos futuros, assumindo que ninguém mexe no cronômetro: simula o treino com a mesma lógica do tick(). */
 function nativeEvents(){
   var out=[]; if(!run||run.paused||run.phase==='done') return out;
-  var c=JSON.parse(JSON.stringify(run)), guard=0;
+  var c=JSON.parse(JSON.stringify(run)), guard=0, phaseStart=c.end-c.total;
   while(c.phase!=='done' && guard++<600){
-    var at=c.end, e=tick(c,steps,at); if(!e) break;
+    var at=c.end;
+    for(var q=3;q>=1;q--){ if(at-q*1000>=phaseStart) out.push({t:at-q*1000,k:'tick'}); } /* contagem final 3, 2, 1 */
+    var e=tick(c,steps,at); if(!e) break;
+    phaseStart=at;
     out.push({t:at,k:e==='set-ended'?'end':(e==='rest-ended'?'start':'done')});
   }
   return out;
@@ -736,7 +749,7 @@ function updateRun(now){
   var rem=remaining(run,now), secs=Math.ceil(rem/1000);
   var t=$('#rtime'); if(t) t.textContent=fmt(secs);
   var r=$('#ring'); if(r){ var p=clamp(rem/run.total,0,1); r.setAttribute('stroke-dashoffset',(C*(1-p)).toFixed(2)); }
-  if(!run.paused && secs>=1 && secs<=3 && run.lastBeep!==secs){ run.lastBeep=secs; playSound(cfg.sounds.tick); }
+  if(!run.paused && secs>=1 && secs<=3 && run.lastBeep!==secs){ run.lastBeep=secs; if(!nativeOn()) playSound(cfg.sounds.tick); }
 }
 
 function renderDone(){
